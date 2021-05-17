@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 2,
     color: '#FF6F61'
+  },
+  searchBar: {
+    
+    color: '#FF6F61'
   }
 });
 
