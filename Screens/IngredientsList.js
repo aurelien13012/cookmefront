@@ -53,7 +53,7 @@ export default function IngredientsList(props) {
               <ListItem.Title
                 style={styles.ingredientsListTitle}
               >
-                Légumes
+                Légumes 
               </ListItem.Title>
             </ListItem.Content>
           </>

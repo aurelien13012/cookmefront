@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
 
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -29,10 +32,9 @@ const styles = StyleSheet.create({
     padding: 2,
     color: '#FF6F61'
   },
-  headerNav : {
-    // fontFamily : "Source Sans Pro",
-    // src : 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap'
-    }
+  body : {
+    fontFamily : 'SourceSansPro_400Regular_Italic'
+  }
 });
 
 export default styles;

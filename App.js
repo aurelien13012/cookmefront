@@ -2,7 +2,23 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Ionicons, MaterialCommunityIcons, Entypo} from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  SourceSansPro_200ExtraLight,
+  SourceSansPro_200ExtraLight_Italic,
+  SourceSansPro_300Light,
+  SourceSansPro_300Light_Italic,
+  SourceSansPro_400Regular,
+  SourceSansPro_400Regular_Italic,
+  SourceSansPro_600SemiBold,
+  SourceSansPro_600SemiBold_Italic,
+  SourceSansPro_700Bold,
+  SourceSansPro_700Bold_Italic,
+  SourceSansPro_900Black,
+  SourceSansPro_900Black_Italic,
+} from '@expo-google-fonts/source-sans-pro';
 
 import Account from './Screens/Account';
 import Confirmation from './Screens/Confirmation';
@@ -13,7 +29,6 @@ import MyRecipes from './Screens/MyRecipes';
 import NewRecipe from './Screens/NewRecipe';
 import Recipe from './Screens/Recipe';
 import RecipesList from './Screens/RecipesList';
-import styles from './stylesheets/styles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -62,7 +77,7 @@ const BottomNavigator = () => {
               <MaterialCommunityIcons name="chef-hat" size={25} color={color} />
             )
           } else if (route.name === 'My Account') {
-            return(
+            return (
               <MaterialCommunityIcons name="account-circle-outline" size={25} color={color} />
             )
           }
@@ -71,8 +86,11 @@ const BottomNavigator = () => {
       tabBarOptions={{
         activeTintColor: '#FF6F61',
         inactiveTintColor: 'black',
+        labelStyle : {
+          fontFamily : 'SourceSansPro_300Light'
+        },
         style: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#FFFFFF'
         }
       }}
     >
@@ -86,9 +104,26 @@ const BottomNavigator = () => {
 }
 
 function App() {
+  let [fontsLoaded] = useFonts({
+    SourceSansPro_200ExtraLight,
+    SourceSansPro_200ExtraLight_Italic,
+    SourceSansPro_300Light,
+    SourceSansPro_300Light_Italic,
+    SourceSansPro_400Regular,
+    SourceSansPro_400Regular_Italic,
+    SourceSansPro_600SemiBold,
+    SourceSansPro_600SemiBold_Italic,
+    SourceSansPro_700Bold,
+    SourceSansPro_700Bold_Italic,
+    SourceSansPro_900Black,
+    SourceSansPro_900Black_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading /> 
+  }
   return (
     <NavigationContainer>
-      <Stack.Navigator style = {styles.container.headerNav} screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -96,4 +131,10 @@ function App() {
 }
 
 
+
 export default App;
+
+// options = {{
+//   headerTitleStyle : {
+//     fontFamily : 'SourceSansPro_300Light_Italic',
+//     }}}
