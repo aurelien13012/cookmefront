@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {Button, SearchBar, Input} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import styles from '../stylesheet/styles';
+import styles from '../stylesheets/styles';
 
 function RecipesList(props) {
     const [searchRecipesList, setSearchRecipesList] = useState('')
