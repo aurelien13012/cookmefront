@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
 
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -54,6 +57,9 @@ const styles = StyleSheet.create({
   },
   ingredientsListItemButtonTitle: {
     color: '#FF6F61'
+  },
+  body : {
+    fontFamily : 'SourceSansPro_400Regular_Italic'
   }
 });
 

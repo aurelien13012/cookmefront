@@ -1,10 +1,24 @@
 import React from 'react';
-
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {Ionicons, MaterialCommunityIcons, Entypo} from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  SourceSansPro_200ExtraLight,
+  SourceSansPro_200ExtraLight_Italic,
+  SourceSansPro_300Light,
+  SourceSansPro_300Light_Italic,
+  SourceSansPro_400Regular,
+  SourceSansPro_400Regular_Italic,
+  SourceSansPro_600SemiBold,
+  SourceSansPro_600SemiBold_Italic,
+  SourceSansPro_700Bold,
+  SourceSansPro_700Bold_Italic,
+  SourceSansPro_900Black,
+  SourceSansPro_900Black_Italic,
+} from '@expo-google-fonts/source-sans-pro';
 
 import Account from './Screens/Account';
 import Confirmation from './Screens/Confirmation';
@@ -15,7 +29,6 @@ import MyRecipes from './Screens/MyRecipes';
 import NewRecipe from './Screens/NewRecipe';
 import Recipe from './Screens/Recipe';
 import RecipesList from './Screens/RecipesList';
-
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -46,35 +59,38 @@ const BottomNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
-          let iconName;
 
           if (route.name == 'Fridge') {
-            // iconName = 'fridge-outline';
             return (
-              <MaterialCommunityIcons name="fridge-outline" size={25} color='#FFFFFF' />
+              <MaterialCommunityIcons name="fridge-outline" size={25} color={color} />
             )
           } else if (route.name == 'Recipes') {
             return (
-              <Entypo name="open-book" size={24} color='#FFFFFF' />
+              <Entypo name="open-book" size={25} color={color} />
             )
           } else if (route.name === 'Favorites') {
             return (
-              <Ionicons name="heart-outline" size={25} color='#FFFFFF' />
+              <Ionicons name="heart-outline" size={25} color={color} />
             )
           } else if (route.name === 'My Recipes') {
             return (
-              <MaterialCommunityIcons name="chef-hat" size={25} color='#FFFFFF' />
+              <MaterialCommunityIcons name="chef-hat" size={25} color={color} />
             )
           } else if (route.name === 'My Account') {
-            iconName = '';
+            return (
+              <MaterialCommunityIcons name="account-circle-outline" size={25} color={color} />
+            )
           }
         },
       })}
       tabBarOptions={{
-        activeTintColor: '#009788',
-        inactiveTintColor: '#FFFFFF',
+        activeTintColor: '#FF6F61',
+        inactiveTintColor: 'black',
+        labelStyle : {
+          fontFamily : 'SourceSansPro_300Light'
+        },
         style: {
-          backgroundColor: '#111224',
+          backgroundColor: '#FFFFFF'
         }
       }}
     >
@@ -88,13 +104,37 @@ const BottomNavigator = () => {
 }
 
 function App() {
+  let [fontsLoaded] = useFonts({
+    SourceSansPro_200ExtraLight,
+    SourceSansPro_200ExtraLight_Italic,
+    SourceSansPro_300Light,
+    SourceSansPro_300Light_Italic,
+    SourceSansPro_400Regular,
+    SourceSansPro_400Regular_Italic,
+    SourceSansPro_600SemiBold,
+    SourceSansPro_600SemiBold_Italic,
+    SourceSansPro_700Bold,
+    SourceSansPro_700Bold_Italic,
+    SourceSansPro_900Black,
+    SourceSansPro_900Black_Italic,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading /> 
+  }
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
+
+
 export default App;
+
+// options = {{
+//   headerTitleStyle : {
+//     fontFamily : 'SourceSansPro_300Light_Italic',
+//     }}}
