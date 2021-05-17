@@ -1,15 +1,27 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
+import React, {useState} from 'react';
+
+import {View} from 'react-native';
+import {Button, SearchBar, Input} from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import styles from '../stylesheet/styles';
 
 function RecipesList(props) {
- return (
-   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#fff'}}>   
-        <Text>recipes List</Text>
-        <Button title = 'recipe'//bouton pour le click sur une recette
+    const [searchRecipesList, setSearchRecipesList] = useState('')
+
+    return (
+        <View style={styles.container}>
+            <SearchBar
+                placeholder="Recherche..."
+                onChangeText={setSearchRecipesList}
+                value={searchRecipesList}
+                style={styles.searchbar}
+            />
+           <Button title = 'recipe'//bouton pour le click sur une recette
         onPress={()=> props.navigation.navigate('Recipe')}
-        />   
-   </View>
- );
+        /> 
+        </View>
+    );
 }
 
 export default RecipesList;
