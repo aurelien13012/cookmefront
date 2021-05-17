@@ -81,7 +81,7 @@ export default function IngredientsList(props) {
         containerStyle={styles.headerContainer}
       />
 
-<List.Accordion
+    <List.Accordion
         title="Légumes"
         expanded={vegetablesExpanded}
         onPress={() => {setVegetablesExpanded(!vegetablesExpanded)}}
