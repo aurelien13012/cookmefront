@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
 
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -11,28 +14,57 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     backgroundColor: '#FF6F61',
-    paddingTop: 35
   },
   headerTitle: {
     fontSize: 24,
     color: '#fff'
   },
-  ingredientsListTitle: {
-    color: '#FF6F61'
+  ingredientsAccordionTitle: {
+    color: '#FF6F61',
+    marginLeft: 10,
   },
   ingredientsAccordion: {
-    marginLeft: 20,
-    marginRight: 20,
+    margin: 20,
     borderColor: '#FF6F61',
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: 10,
-    padding: 2,
+    backgroundColor: 'white'
+    // padding: 0,
+  },
+  ingredientsListContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  ingredientsListItemButtonSelected: {
+    backgroundColor: '#FF6F61',
+    margin: 5,
+    borderRadius: 10,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+  },
+  ingredientsListItemButton: {
+    backgroundColor: '#fff',
+    color: '#FF6F61',
+    margin: 5,
+    borderRadius: 10,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+  },
+  ingredientsListItemButtonTitle: {
     color: '#FF6F61'
   },
   searchBar: {
     
     color: '#FF6F61'
+  },
+  
+  body : {
+    fontFamily : 'SourceSansPro_400Regular_Italic'
   }
 });
 

@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from '../stylesheets/styles';
 
-
 function RecipesList(props) {
     const [searchRecipesList, setSearchRecipesList] = useState('')
 
