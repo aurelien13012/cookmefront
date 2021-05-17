@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     backgroundColor: '#FF6F61',
-    paddingTop: 35
   },
   headerTitle: {
     fontSize: 24,
@@ -29,7 +28,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 2,
     color: '#FF6F61'
-  }
+  },
+  headerNav : {
+    // fontFamily : "Source Sans Pro",
+    // src : 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap'
+    }
 });
 
 export default styles;

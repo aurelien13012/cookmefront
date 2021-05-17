@@ -1,6 +1,4 @@
 import React from 'react';
-
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -15,7 +13,7 @@ import MyRecipes from './Screens/MyRecipes';
 import NewRecipe from './Screens/NewRecipe';
 import Recipe from './Screens/Recipe';
 import RecipesList from './Screens/RecipesList';
-
+import styles from './stylesheets/styles';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -46,35 +44,35 @@ const BottomNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
-          let iconName;
 
           if (route.name == 'Fridge') {
-            // iconName = 'fridge-outline';
             return (
-              <MaterialCommunityIcons name="fridge-outline" size={25} color='#FFFFFF' />
+              <MaterialCommunityIcons name="fridge-outline" size={25} color={color} />
             )
           } else if (route.name == 'Recipes') {
             return (
-              <Entypo name="open-book" size={24} color='#FFFFFF' />
+              <Entypo name="open-book" size={25} color={color} />
             )
           } else if (route.name === 'Favorites') {
             return (
-              <Ionicons name="heart-outline" size={25} color='#FFFFFF' />
+              <Ionicons name="heart-outline" size={25} color={color} />
             )
           } else if (route.name === 'My Recipes') {
             return (
-              <MaterialCommunityIcons name="chef-hat" size={25} color='#FFFFFF' />
+              <MaterialCommunityIcons name="chef-hat" size={25} color={color} />
             )
           } else if (route.name === 'My Account') {
-            iconName = '';
+            return(
+              <MaterialCommunityIcons name="account-circle-outline" size={25} color={color} />
+            )
           }
         },
       })}
       tabBarOptions={{
-        activeTintColor: '#009788',
-        inactiveTintColor: '#FFFFFF',
+        activeTintColor: '#FF6F61',
+        inactiveTintColor: 'black',
         style: {
-          backgroundColor: '#111224',
+          backgroundColor: '#FFFFFF',
         }
       }}
     >
@@ -90,11 +88,12 @@ const BottomNavigator = () => {
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator style = {styles.container.headerNav} screenOptions={{ headerShown: false }}>
         <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
 
 export default App;
