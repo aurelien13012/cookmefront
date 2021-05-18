@@ -193,9 +193,11 @@ function Recipe(props) {
         >
           <List.Item
             title='Beurre (100g)'
+            titleStyle={styles.body}
           />
           <List.Item
             title='Farine (250g)'
+            titleStyle={styles.body}
           />
         </List.Accordion>
 
@@ -209,9 +211,11 @@ function Recipe(props) {
         >
           <List.Item
             title='1. blabla'
+            titleStyle={styles.body}
           />
           <List.Item
             title='2. bloublou'
+            titleStyle={styles.body}
           />
         </List.Accordion>  
 
