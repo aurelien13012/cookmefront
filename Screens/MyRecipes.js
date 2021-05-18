@@ -39,6 +39,7 @@ function MyRecipes(props) {
     setSearchMyRecipesList(search)
   }
 
+  //fonction utilitaires
   const myOwnRecipes = () => {
     if (myRecipesList.length === 0) {
       return (

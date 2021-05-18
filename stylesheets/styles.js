@@ -15,6 +15,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'SourceSansPro_700Bold'
   },
+  headerTitleNewRecipe: {
+    fontSize: 20,
+    color: '#fff',
+    fontFamily: 'SourceSansPro_700Bold'
+  },
   accordionContainer: {
     margin: 20,
     borderColor: '#FF6F61',
@@ -96,8 +101,39 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro_600SemiBold',
     fontSize : 40
   },
+  addNew : {
+    backgroundColor: '#FF6F61',
+    color: '#FF6F61',
+    marginTop: 15,
+    // marginLeft : 125,
+    borderRadius: 50,
+    width : 20,
+    height : 20,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    padding : 2
+  },
+  addNewRecipeTitle : {
+    color: '#fff',
+    fontFamily: 'SourceSansPro_600SemiBold',
+    fontSize : 15
+  },
   searchBar: {
     color: '#FF6F61'
+  },
+  NewRecipeContainer: {
+    display : 'flex',
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop : 10 
+  },
+  NewResultContainer: {
+    display : 'flex',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop : 10 
   },
   body : {
     fontFamily : 'SourceSansPro_400Regular_Italic'
