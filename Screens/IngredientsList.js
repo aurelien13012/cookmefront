@@ -1,24 +1,26 @@
-import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import {Header} from 'react-native-elements';
-import {ListItem, Avatar, Button, ButtonGroup} from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import { View } from 'react-native';
+import { Header, Button } from 'react-native-elements';
 import { List } from 'react-native-paper';
 
 import styles from '../stylesheets/styles'
 
 export default function IngredientsList(props) {
 
+  //////// VARIABLES D'ETAT
   const [vegetablesExpanded, setVegetablesExpanded] = useState(false);
   const [meatsExpanded, setMeatsExpanded] = useState(false);
   const [vegetablesList, setVegetablesList] = useState([]);
   const [meatsList, setMeatsList] = useState([]);
 
-
+  //////// USE EFFECTS
+  // Charger les données
   useEffect(() => {
     setVegetablesList(vegetablesListData);
     setMeatsList(meatsListData)
   }, [])
 
+  //// DONNEES EN DUR
   const vegetablesListData = [
     {
       name: 'Courgette',
@@ -57,20 +59,24 @@ export default function IngredientsList(props) {
     },
   ];
 
-  function handleButtonVegetables(array, index) {
+  ////// FUNCTION UTILITAIRES
+  const handleButtonVegetables = (array, index) => {
     const vegetablesListCopy = [...vegetablesList];
+    // Toggle le boolééen "selected"
     vegetablesListCopy[index].selected = !vegetablesListCopy[index].selected
     setVegetablesList(vegetablesListCopy);
     console.log('click on ' + vegetablesListCopy[index].name + '; selected: ' + vegetablesListCopy[index].selected);
   }
 
-  function handleButtonMeats(array, index) {
+  const handleButtonMeats = (array, index) => {
     const meatsListCopy = [...meatsList];
+    // Toggle le boolééen "selected"
     meatsListCopy[index].selected = !meatsListCopy[index].selected
     setMeatsList(meatsListCopy);
     console.log('click on ' + meatsListCopy[index].name + '; selected: ' + meatsListCopy[index].selected);
   }
 
+  //// RENDER
   return (
     <View style={styles.containerIngredients}>
       <Header
@@ -85,18 +91,18 @@ export default function IngredientsList(props) {
         title="Légumes"
         expanded={vegetablesExpanded}
         onPress={() => {setVegetablesExpanded(!vegetablesExpanded)}}
-        style={styles.ingredientsAccordion}
-        titleStyle={styles.ingredientsAccordionTitle}
+        style={styles.accordionContainer}
+        titleStyle={styles.accordionTitle}
       >
         <View
-          style={styles.ingredientsListContainer}
+          style={styles.accordionItemsContainer}
         >
           {vegetablesList.map((item, index) => (
             <Button
               title={item.name}
-              buttonStyle={item.selected ? styles.ingredientsListItemButtonSelected : styles.ingredientsListItemButton}
+              buttonStyle={item.selected ? styles.accordionItemSelected : styles.accordionItem}
               onPress={() => handleButtonVegetables(vegetablesList, index)}
-              titleStyle={item.selected ? {} : styles.ingredientsListItemButtonTitle}
+              titleStyle={item.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
             />
           ))}
         </View>
@@ -106,18 +112,18 @@ export default function IngredientsList(props) {
         title="Viandes"
         expanded={meatsExpanded}
         onPress={() => {setMeatsExpanded(!meatsExpanded)}}
-        style={styles.ingredientsAccordion}
-        titleStyle={styles.ingredientsAccordionTitle}
+        style={styles.accordionContainer}
+        titleStyle={styles.accordionTitle}
       >
         <View
-          style={styles.ingredientsListContainer}
+          style={styles.accordionItemsContainer}
         >
           {meatsList.map((item, index) => (
             <Button
               title={item.name}
-              buttonStyle={item.selected ? styles.ingredientsListItemButtonSelected : styles.ingredientsListItemButton}
+              buttonStyle={item.selected ? styles.accordionItemSelected : styles.accordionItem}
               onPress={() => handleButtonMeats(meatsList, index)}
-              titleStyle={item.selected ? {} : styles.ingredientsListItemButtonTitle}
+              titleStyle={item.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
             />
           ))}
         </View>
