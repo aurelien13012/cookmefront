@@ -1,18 +1,45 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text } from 'react-native';
+import { Button, Overlay, Image } from 'react-native-elements';
 
-function Login(props) {
- return (
-   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#fff'}}>   
-        <Text>Login</Text>
-        <Button title = 'sign-up' //il faudra faire des redirections pour pointer ou lutilisateur va aller suite à son signup
-        onPress={()=> props.navigation.navigate('My Recipes', {screen : 'My Recipes'})}
+function ConfirmMyRecipe(props) {
+
+  const [visible, setVisible] = useState(false);
+  
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
+
+
+  return (
+    <View>   
+      <Button title="Open Overlay" onPress={toggleOverlay} />
+
+      <Overlay 
+        isVisible={visible} 
+        onBackdropPress={toggleOverlay}
+        overlayStyle={{
+          width: 300,
+          height: 400,
+          display: 'flex',
+          alignItems: 'center'  
+        }}
+      >
+        <Image
+          source={require('../assets/chef.png')}
+          style={{
+            width: 250,
+            height: 290,
+            marginTop: 0
+          }}
         />
-        <Button title = 'sign-in' //il faudra faire des redirections pour pointer ou lutilisateur va aller suite à son signin
-        onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Favorites'})}
-        />
-   </View>
- );
+        <Text>Félicitations !</Text>
+        <Text>Votre recette est en ligne</Text>
+        <Button title="Voir ma recette"/>
+      </Overlay>
+    </View>
+  );
 }
 
-export default Login;
+export default ConfirmMyRecipe;

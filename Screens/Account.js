@@ -1,10 +1,20 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+import ConfirmMyRecipe from '../Components/ConfirmMyRecipe'
+
 function Account(props) {
  return (
-   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#fff'}}>   
-        <Text>Account</Text>
+   <View>   
+        <Text
+          style={{
+            backgroundColor: 'red',
+            marginTop: 50
+          }}
+        >
+          Account
+        </Text>
+        <ConfirmMyRecipe/>
    </View>
  );
 }
