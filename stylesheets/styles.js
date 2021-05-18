@@ -15,6 +15,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'SourceSansPro_700Bold'
   },
+  headerTitleNewRecipe: {
+    fontSize: 20,
+    color: '#fff',
+    fontFamily: 'SourceSansPro_700Bold'
+  },
   accordionContainer: {
     margin: 20,
     borderColor: '#FF6F61',
@@ -85,6 +90,121 @@ const styles = StyleSheet.create({
     flexDirection : 'row',
     justifyContent : 'space-between',
     marginTop : 10,
+  },
+  itemMyRecipes : {
+    backgroundColor: '#fff',
+    color: '#FF6F61',
+    margin: 5,
+    borderRadius: 10,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+  },
+  itemMyRecipesTitle : {
+      color : '#FF6F61',
+      fontFamily : 'SourceSansPro_600SemiBold'
+  },
+  noRecipes : {
+    color : '#FF6F61',
+    fontFamily : 'SourceSansPro_600SemiBold',
+    margin : 15,
+    textAlign : 'center'
+  },
+  addRecipe : {
+    backgroundColor: '#FF6F61',
+    color: '#FF6F61',
+    marginTop: 100,
+    marginLeft : 125,
+    borderRadius: 50,
+    width : 100,
+    height : 100,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    padding : 20
+  },
+  addRecipeTitle : {
+    color: '#fff',
+    fontFamily: 'SourceSansPro_600SemiBold',
+    fontSize : 40
+  },
+  addNew : {
+    backgroundColor: '#FF6F61',
+    color: '#FF6F61',
+    marginTop: 15,
+    // marginLeft : 125,
+    borderRadius: 50,
+    width : 20,
+    height : 20,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    padding : 2
+  },
+  addNewRecipeTitle : {
+    color: '#fff',
+    fontFamily: 'SourceSansPro_600SemiBold',
+    fontSize : 15
+  },
+  searchBar: {
+    color: '#FF6F61'
+  },
+  NewRecipeContainer: {
+    display : 'flex',
+    flexDirection: 'row',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop : 10 
+  },
+  NewResultContainer: {
+    display : 'flex',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop : 10 
+  },
+  body : {
+    fontFamily: 'SourceSansPro_400Regular',
+    fontSize: 20
+  },
+  recipePic: {
+    width: '100%', 
+    height: 300
+  },
+  infoBoxContainer:{
+    width: '80%',
+    // height: 100,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    // position: 'absolute',
+    // top: 0,
+    // left: 40,
+    marginTop: -50,
+    // marginLeft: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    // display: 'flex',
+    // flexDirection: 'row',
+  },
+  infoBoxTitle: {
+    fontSize: 26,
+    color: '#FF6F61',
+    fontFamily: 'SourceSansPro_700Bold',
+    marginLeft: 10,
+    width: '80%',
+  },
+  recipeMiniPic: {
+    width: 150,
+    height: 100,
+    margin: 5
   }
 });
 
