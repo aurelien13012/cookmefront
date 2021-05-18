@@ -64,6 +64,41 @@ const styles = StyleSheet.create({
   },
   body : {
     fontFamily : 'SourceSansPro_400Regular_Italic'
+  },
+  recipePic: {
+    width: '100%', 
+    height: 300
+  },
+  infoBoxContainer:{
+    width: '80%',
+    // height: 100,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    // position: 'absolute',
+    // top: 0,
+    // left: 40,
+    marginTop: -50,
+    // marginLeft: 40,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    // display: 'flex',
+    // flexDirection: 'row',
+  },
+  infoBoxTitle: {
+    fontSize: 26,
+    color: '#FF6F61',
+    fontFamily: 'SourceSansPro_700Bold',
+    marginLeft: 10,
+    width: '80%',
   }
 });
 
