@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
     color: '#FF6F61'
   },
   body : {
-    fontFamily : 'SourceSansPro_400Regular_Italic'
+    fontFamily: 'SourceSansPro_400Regular',
+    fontSize: 20
   },
   recipePic: {
     width: '100%', 
@@ -99,6 +100,11 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro_700Bold',
     marginLeft: 10,
     width: '80%',
+  },
+  recipeMiniPic: {
+    width: 150,
+    height: 100,
+    margin: 5
   }
 });
 

@@ -1,20 +1,33 @@
-import React from 'react';
-import { View, Text, Button } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, Button, ScrollView } from 'react-native';
 import { Image, Icon, LinearProgress } from 'react-native-elements';
+import { List } from 'react-native-paper';
 
 import styles from '../stylesheets/styles'
 
 function Recipe(props) {
 
+  ////// VARIABLES D'ETATS
+  // Pour les acccordéons
+  const [ingredientsExpanded, setIngredientsExpanded] = useState(false);
+  const [stepsExpanded, setStepsExpanded] = useState(false);
+  const [picsExpanded, setPicsExpanded] = useState(false);
+
 
   return (
-    <View
+ 
+    <ScrollView    
       style={{backgroundColor: 'white', height: '100%'}}
-    >   
+    > 
+    {/* Conteneur principal    */}
+
+      {/* Image de fond */}
       <Image
         source={require('../assets/pate_pesto.jpg')}
         style={styles.recipePic}
       />
+
+      {/* Centrage boite d'information */}
       <View
         style={{
           display: 'flex',
@@ -22,9 +35,11 @@ function Recipe(props) {
           justifyContent: 'center'
         }}
       >
+        {/* Conteneur boite d'information */}
         <View
           style={styles.infoBoxContainer}
         >
+          {/* 1ere ligne */}
           <View
             style={{
               display: 'flex',
@@ -49,6 +64,7 @@ function Recipe(props) {
             />
           </View>
           
+          {/* 2eme ligne */}
           <View
             style={{
               display: 'flex',
@@ -77,6 +93,7 @@ function Recipe(props) {
             </Text>
           </View>
           
+          {/* 3eme ligne */}
           <View
             style={{
               display: 'flex',
@@ -129,30 +146,118 @@ function Recipe(props) {
 
       </View>
       
+      {/* Conteneur du corps de la recette */}
       <View
         style={{
           marginLeft: 20,
           marginRight: 20,
-          marginTop: 15
+          marginTop: 15,
+          marginBottom: 20
         }}
       >
+        {/* Conteneur Nombre de personnes */}
         <View
           style={{
             display: 'flex',
             flexDirection: 'row',
           }}
         >
-          <Text>
+          <Text style={styles.body}>
             Nombre de personnes : 4
           </Text>
-
+          <Icon
+            name="pluscircleo"
+            type="antdesign"
+            style={{
+              marginLeft: 10,
+              marginTop: 0
+            }}
+          />
+          <Icon
+            name="minuscircleo"
+            type="antdesign"
+            style={{
+              marginLeft: 10,
+              marginTop: 0
+            }}
+          />  
         </View>
+
+        {/* Liste des ingrédients nécessaires */}
+        <List.Accordion
+          title="Ingrédients"
+          expanded={ingredientsExpanded}
+          onPress={() => {setIngredientsExpanded(!ingredientsExpanded)}}
+          style={styles.accordionContainer}
+          titleStyle={styles.accordionTitle}
+        >
+          <List.Item
+            title='Beurre (100g)'
+          />
+          <List.Item
+            title='Farine (250g)'
+          />
+        </List.Accordion>
+
+        {/* Liste des étapes */}
+        <List.Accordion
+          title="Etapes"
+          expanded={stepsExpanded}
+          onPress={() => {setStepsExpanded(!stepsExpanded)}}
+          style={styles.accordionContainer}
+          titleStyle={styles.accordionTitle}
+        >
+          <List.Item
+            title='1. blabla'
+          />
+          <List.Item
+            title='2. bloublou'
+          />
+        </List.Accordion>  
+
+        {/* Liste des photos */}
+        <List.Accordion
+          title="Images"
+          expanded={picsExpanded}
+          onPress={() => {setPicsExpanded(!picsExpanded)}}
+          style={styles.accordionContainer}
+          titleStyle={styles.accordionTitle}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              width: '100%',
+              justifyContent: 'center'
+            }}
+          >
+            <Image 
+              source={require('../assets/pate_pesto.jpg')}
+              style={styles.recipeMiniPic}
+            />
+            <Image 
+              source={require('../assets/pate_pesto.jpg')}
+              style={styles.recipeMiniPic}
+            />
+            <Image  
+              source={require('../assets/pate_pesto.jpg')}
+              style={styles.recipeMiniPic}
+            />
+            <Image 
+              source={require('../assets/pate_pesto.jpg')}
+              style={styles.recipeMiniPic}
+            />
+ 
+          </View>
+
+        </List.Accordion>  
 
       </View>
     
 
 
-    </View>
+    </ScrollView>
   );
 }
 
