@@ -59,6 +59,43 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'SourceSansPro_600SemiBold'
   },
+  itemMyRecipes : {
+    backgroundColor: '#fff',
+    color: '#FF6F61',
+    margin: 5,
+    borderRadius: 10,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+  },
+  itemMyRecipesTitle : {
+      color : '#FF6F61',
+      fontFamily : 'SourceSansPro_600SemiBold'
+  },
+  noRecipes : {
+    color : '#FF6F61',
+    fontFamily : 'SourceSansPro_600SemiBold',
+    margin : 15,
+    textAlign : 'center'
+  },
+  addRecipe : {
+    backgroundColor: '#FF6F61',
+    color: '#FF6F61',
+    marginTop: 100,
+    marginLeft : 125,
+    borderRadius: 50,
+    width : 100,
+    height : 100,
+    borderColor: '#FF6F61',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    padding : 20
+  },
+  addRecipeTitle : {
+    color: '#fff',
+    fontFamily: 'SourceSansPro_600SemiBold',
+    fontSize : 40
+  },
   searchBar: {
     color: '#FF6F61'
   },
