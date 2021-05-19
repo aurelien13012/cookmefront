@@ -40,7 +40,7 @@ function MyRecipes(props) {
   }
 
   //fonction utilitaires
-  const myOwnRecipes = () => {
+  const getMyOwnRecipes = () => {
     if (myRecipesList.length === 0) {
       return (
         <View>
@@ -85,7 +85,7 @@ function MyRecipes(props) {
         value={searchMyRecipesList}
       />
 
-      {myOwnRecipes()}
+      {getMyOwnRecipes()}
 
       <Button
         title='+'//bouton pour le click pour ajouter une nouvelle recette
