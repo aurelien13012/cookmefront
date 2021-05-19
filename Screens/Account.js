@@ -1,22 +1,22 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React from "react";
+import { View, Text } from "react-native";
 
-import ConfirmMyRecipe from '../Components/ConfirmMyRecipe'
+import Confirmation from "../Components/Confirmation";
 
 function Account(props) {
- return (
-   <View>   
-        <Text
-          style={{
-            backgroundColor: 'red',
-            marginTop: 50
-          }}
-        >
-          Account
-        </Text>
-        <ConfirmMyRecipe/>
-   </View>
- );
+  return (
+    <View>
+      <Text
+        style={{
+          backgroundColor: "red",
+          marginTop: 50,
+        }}
+      >
+        Account
+      </Text>
+      <Confirmation />
+    </View>
+  );
 }
 
 export default Account;

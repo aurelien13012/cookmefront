@@ -226,6 +226,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
+    margin: 5
+  },
+  buttonRegular: {
+    borderRadius: 15,
+    backgroundColor: '#FF6F61',
+  },
+  buttonRegularTitle: {
+    fontFamily: 'SourceSansPro_600SemiBold',
   }
 });
 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View,  ScrollView} from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { Header, Button, Text, Input } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
-import styles from '../stylesheets/styles'
+import styles from '../stylesheets/styles';
+import Confirmation from '../Components/Confirmation';
 
 function NewRecipe(props) {
 
@@ -23,22 +24,28 @@ function NewRecipe(props) {
 
   const onSubmitIngredient = (ingredient) => {
     console.log('click ok', ingredient)
-    const listIngredient = [...newIngredientsList]
-    listIngredient.push(ingredient)
-    setNewIngredientList(listIngredient)
-    setIngredientsList('')
+    if (ingredient.length > 0) {
+      const listIngredient = [...newIngredientsList]
+      listIngredient.push(ingredient)
+      setNewIngredientList(listIngredient)
+      setIngredientsList('')
+    }
   }
 
   const onSubmitSteps = (steps) => {
     console.log('click ok', steps)
-    const listSteps = [...newStepsList]
-    listSteps.push(steps)
-    setNewStepsList(listSteps)
-    setStepsList('')
+    if (steps.length > 0) {
+      const listSteps = [...newStepsList]
+      listSteps.push(steps)
+      setNewStepsList(listSteps)
+      setStepsList('')
+    }
   }
 
+  const isRecipeName = newRecipeName.length > 0;
+
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {/* en-tête de page donnant le nom de la page */}
       <Header
         centerComponent={{
@@ -46,124 +53,132 @@ function NewRecipe(props) {
           style: styles.headerTitleNewRecipe
         }}
         containerStyle={styles.headerContainer}
+        centerContainerStyle={{ flex: 0 }}
       />
 
-<ScrollView>
+      <ScrollView>
 
-      {/* input pour entrer le nom de la recette*/}
-      <View style={styles.NewRecipeContainer}>
+        {/* input pour entrer le nom de la recette*/}
+        <View style={styles.NewRecipeContainer}>
 
-        <FontAwesome name="pencil" size={35} color='#FF6F61' />
+          <FontAwesome name="pencil" size={35} color='#FF6F61' />
 
-        <Input
-          containerStyle={{ marginLeft: 40, width: '70%' }}
-          inputStyle={{ marginLeft: 10 }}
-          placeholder='Nom de ma recette'
-          onChangeText={(val) => setRecipeName(val)}
-          value={recipeName}
-        />
+          <Input
+            containerStyle={{ marginLeft: 40, width: '70%' }}
+            inputStyle={{ marginLeft: 10 }}
+            placeholder='Nom de ma recette'
+            onChangeText={(val) => setRecipeName(val)}
+            value={recipeName}
+          />
 
-        <Button
-          title='+' //bouton pour le click pour ajouter un nom de recette
-          titleStyle={styles.addNewRecipeTitle}
-          buttonStyle={styles.addNew}
-          onPress={() => { onSubmitRecipeName(recipeName) }}
-        />
-      </View>
-      <View style={styles.NewResultContainer}>
+          <Button
+            title='+' //bouton pour le click pour ajouter un nom de recette
+            titleStyle={styles.addNewRecipeTitle}
+            buttonStyle={styles.addNew}
+            onPress={() => { onSubmitRecipeName(recipeName) }}
+          />
+        </View>
 
-        <Text style={styles.noRecipes}>{newRecipeName}</Text>
+        <View style={styles.NewResultContainer}>
 
-      </View>
+          {isRecipeName && <Text>{newRecipeName}</Text>}
 
-      {/* Ajouter des ingrédients */}
-      <View style={styles.NewRecipeContainer}>
+        </View>
 
-        <MaterialCommunityIcons name="food-variant" size={35} color='#FF6F61' />
+        {/* Ajouter des ingrédients */}
+        <View style={styles.NewRecipeContainer}>
 
-        <Input
-          containerStyle={{ marginLeft: 35, width: '70%' }}
-          inputStyle={{ marginLeft: 10 }}
-          placeholder='Ajouter un ingrédient'
-          onChangeText={(val) => setIngredientsList(val)}
-          value={ingredientsList}
-        />
+          <MaterialCommunityIcons name="food-variant" size={35} color='#FF6F61' />
 
-        <Button
-          title='+' //bouton pour le click pour ajouter un ingrédient
-          titleStyle={styles.addNewRecipeTitle}
-          buttonStyle={styles.addNew}
-          onPress={() => { onSubmitIngredient(ingredientsList) }}
-        />
+          <Input
+            containerStyle={{ marginLeft: 35, width: '70%' }}
+            inputStyle={{ marginLeft: 10 }}
+            placeholder='Ajouter un ingrédient'
+            onChangeText={(val) => setIngredientsList(val)}
+            value={ingredientsList}
+          />
 
-      </View>
-      <View style={styles.NewResultContainer}>
+          <Button
+            title='+' //bouton pour le click pour ajouter un ingrédient
+            titleStyle={styles.addNewRecipeTitle}
+            buttonStyle={styles.addNew}
+            onPress={() => { onSubmitIngredient(ingredientsList) }}
+          />
 
-        {newIngredientsList.map((ingredient, i) => {
-          return (
-            <Text style={styles.noRecipes}>{i + 1}.{ingredient}</Text>
-          )
-        })}
+        </View>
+        <View style={styles.NewResultContainer}>
 
-      </View>
+          {newIngredientsList.map((ingredient, i) => {
+            return (
+              <Text style={styles.noRecipes}>{i + 1}.{ingredient}</Text>
+            )
+          })}
 
-      {/* Ajouter des étapes */}
-      <View style={styles.NewRecipeContainer}>
+        </View>
 
-        <FontAwesome name="pencil" size={35} color='#FF6F61' />
+        {/* Ajouter des étapes */}
+        <View style={styles.NewRecipeContainer}>
 
-        <Input
-          containerStyle={{ marginLeft: 40, width: '70%' }}
-          inputStyle={{ marginLeft: 10 }}
-          placeholder='Ajouter une étape'
-          onChangeText={(val) => setStepsList(val)}
-          value = {stepsList}
-        />
+          <FontAwesome name="pencil" size={35} color='#FF6F61' />
 
-        <Button
-          title='+' //bouton pour le click pour ajouter une étapes
-          titleStyle={styles.addNewRecipeTitle}
-          buttonStyle={styles.addNew}
-          onPress={() => { onSubmitSteps(stepsList) }}
-        />
+          <Input
+            containerStyle={{ marginLeft: 40, width: '70%' }}
+            inputStyle={{ marginLeft: 10 }}
+            placeholder='Ajouter une étape'
+            onChangeText={(val) => setStepsList(val)}
+            value={stepsList}
+          />
 
-      </View>
+          <Button
+            title='+' //bouton pour le click pour ajouter une étapes
+            titleStyle={styles.addNewRecipeTitle}
+            buttonStyle={styles.addNew}
+            onPress={() => { onSubmitSteps(stepsList) }}
+          />
 
-      <View style={styles.NewResultContainer}>
+        </View>
 
-        {newStepsList.map((steps, i) => {
-          return (
-            <Text style={styles.noRecipes}>{i + 1}.{steps}</Text>
-          )
-        })}
+        <View style={styles.NewResultContainer}>
 
-      </View>
+          {newStepsList.map((steps, i) => {
+            return (
+              <Text style={styles.noRecipes}>{i + 1}.{steps}</Text>
+            )
+          })}
 
-      {/* Ajouter des photos */}
-      <View style={styles.NewRecipeContainer}>
+        </View>
 
-        <MaterialIcons name="add-a-photo" size={35} color='#FF6F61' />
+        {/* Ajouter des photos */}
+        <View style={styles.NewRecipeContainer}>
 
-        <Input
-          containerStyle={{ marginLeft: 35, width: '70%' }}
-          inputStyle={{ marginLeft: 10 }}
-          placeholder='Ajouter une photo'
-          onChangeText={(val) => setRecipeName(val)}
-        />
+          <MaterialIcons name="add-a-photo" size={35} color='#FF6F61' />
 
-        <Button
-          title='+' //bouton pour le click pour ajouter une étapes
-          titleStyle={styles.addNewRecipeTitle}
-          buttonStyle={styles.addNew}
-        />
-      </View>
+          <Input
+            containerStyle={{ marginLeft: 35, width: '70%' }}
+            inputStyle={{ marginLeft: 10 }}
+            placeholder='Ajouter une photo'
+            onChangeText={(val) => setRecipeName(val)}
+          />
+
+          <Button
+            title='+' //bouton pour le click pour ajouter une étapes
+            titleStyle={styles.addNewRecipeTitle}
+            buttonStyle={styles.addNew}
+          />
+        </View>
+
+      </ScrollView>
 
       <View>
-      <Button title='Je valide ma recette'//Il faudra faire une redirection et non un bouton pour la confirmation
-        onPress={() => props.navigation.navigate('Confirmation')}
-        />
+        {/* <Button
+          title='Je valide ma recette'//Il faudra faire une redirection et non un bouton pour la confirmation
+          titleStyle={styles.itemMyRecipesTitle}
+          buttonStyle={styles.itemMyRecipes}
+          onPress={() => props.navigation.navigate('Confirmation')}
+        /> */}
+      <Confirmation/>
       </View>
-</ScrollView>
+
 
     </View>
   );
