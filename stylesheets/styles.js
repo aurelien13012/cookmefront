@@ -64,6 +64,33 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'SourceSansPro_600SemiBold'
   },
+  body : {
+    fontFamily : 'SourceSansPro_400Regular_Italic'
+  },
+  cardText : {
+    color: '#FF6F61',
+    fontFamily: 'SourceSansPro_600SemiBold',
+    textAlign: 'center',
+  },
+  cardImage : {
+    height : 100, 
+    width : '80%',
+    marginLeft: 30 
+  },
+  image : {
+    height : 20, 
+    width : '20%',
+  },
+  cardName : {
+    color: '#FF6F61',
+    fontFamily: 'SourceSansPro_600SemiBold',
+  },
+  cardLigne : {
+    display : 'flex',
+    flexDirection : 'row',
+    justifyContent : 'space-between',
+    marginTop : 10,
+  },
   itemMyRecipes : {
     backgroundColor: '#fff',
     color: '#FF6F61',
