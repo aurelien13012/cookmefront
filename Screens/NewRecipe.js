@@ -11,9 +11,10 @@ function NewRecipe(props) {
   //UseState
   const [recipeName, setRecipeName] = useState('');
   const [newRecipeName, setNewRecipeName] = useState('');
-  const [ingredientsList, setIngredientsList] = useState('');
+  const [num, setNum] = useState('0');
+  const [ingredientInput, setIngredientInput] = useState('');
   const [newIngredientsList, setNewIngredientList] = useState([]);
-  const [stepsList, setStepsList] = useState('');
+  const [stepInput, setStepInput] = useState('');
   const [newStepsList, setNewStepsList] = useState([]);
 
   const onSubmitRecipeName = (name) => {
@@ -22,14 +23,44 @@ function NewRecipe(props) {
     setRecipeName('')
   }
 
-  const onSubmitIngredient = (ingredient) => {
-    console.log('click ok', ingredient)
-    if (ingredient.length > 0) {
-      const listIngredient = [...newIngredientsList]
-      listIngredient.push(ingredient)
-      setNewIngredientList(listIngredient)
-      setIngredientsList('')
+  const onIncreaseNumb = () => {
+    setNum(num + 1)
+  }
+
+  const onDecreaseNumb = () => {
+    if (num === 0) {
+      setNum('0')
+    } else {
+      setNum(num - 1)
     }
+  }
+
+  const onSubmitIngredient = (name) => {
+    console.log('click ok', name)
+    if (name.length > 0) {
+      const listIngredient = [...newIngredientsList]
+      listIngredient.push({ name, quantity: '', unit: '' })
+      setNewIngredientList(listIngredient)
+      setIngredientInput('')
+    }
+  }
+
+  const onChangeQuantity = (quantity, i) => {
+    // listIngredient.push({ quantity: quantity })
+    console.log('quantity', quantity)
+    console.log('i',i)
+    const newIngredientsListCopy = [...newIngredientsList]
+    newIngredientsListCopy[i].quantity = quantity
+    setNewIngredientList(newIngredientsListCopy)
+  }
+
+  const onChangeUnit = (unit, i) => {
+    // listIngredient.push({ quantity: quantity })
+    console.log('quantity', unit)
+    console.log('i',i)
+    const newIngredientsListCopy = [...newIngredientsList]
+    newIngredientsListCopy[i].unit = unit
+    setNewIngredientList(newIngredientsListCopy)
   }
 
   const onSubmitSteps = (steps) => {
@@ -38,12 +69,13 @@ function NewRecipe(props) {
       const listSteps = [...newStepsList]
       listSteps.push(steps)
       setNewStepsList(listSteps)
-      setStepsList('')
+      setStepInput('')
     }
   }
 
   const isRecipeName = newRecipeName.length > 0;
 
+  console.log('listingredient', newIngredientsList)
   return (
     <View style={{ flex: 1 }}>
       {/* en-tête de page donnant le nom de la page */}
@@ -85,6 +117,29 @@ function NewRecipe(props) {
 
         </View>
 
+        {/* input pour entrer le nombre de personne*/}
+        <View style={styles.NewRecipeContainer}>
+
+          <MaterialCommunityIcons style={{ marginRight: 60 }} name="human-male-female" size={35} color='#FF6F61' />
+
+
+          <Text style={{ marginTop: 10, marginBottom: 20, fontSize: 20 }}>{num}</Text>
+
+          <Button
+            title='-' //bouton pour le click pour ajouter des personnes
+            titleStyle={styles.addNewRecipeTitle}
+            buttonStyle={[styles.addNew, { marginRight: 8 }, { marginLeft: 160 }]}
+            onPress={() => { onDecreaseNumb() }}
+          />
+
+          <Button
+            title='+' //bouton pour le click pour ajouter des personnes
+            titleStyle={styles.addNewRecipeTitle}
+            buttonStyle={styles.addNew}
+            onPress={() => { onIncreaseNumb(num) }}
+          />
+        </View>
+
         {/* Ajouter des ingrédients */}
         <View style={styles.NewRecipeContainer}>
 
@@ -94,15 +149,15 @@ function NewRecipe(props) {
             containerStyle={{ marginLeft: 35, width: '70%' }}
             inputStyle={{ marginLeft: 10 }}
             placeholder='Ajouter un ingrédient'
-            onChangeText={(val) => setIngredientsList(val)}
-            value={ingredientsList}
+            onChangeText={(val) => setIngredientInput(val)}
+            value={ingredientInput}
           />
 
           <Button
             title='+' //bouton pour le click pour ajouter un ingrédient
             titleStyle={styles.addNewRecipeTitle}
             buttonStyle={styles.addNew}
-            onPress={() => { onSubmitIngredient(ingredientsList) }}
+            onPress={() => { onSubmitIngredient(ingredientInput) }}
           />
 
         </View>
@@ -110,7 +165,23 @@ function NewRecipe(props) {
 
           {newIngredientsList.map((ingredient, i) => {
             return (
-              <Text style={styles.noRecipes}>{i + 1}.{ingredient}</Text>
+              <View style={styles.NewRecipeContainer}>
+                <Text style={styles.noRecipes}>{i + 1}.{ingredient.name}</Text>
+
+                <Input
+                  placeholder='Qty'
+                  containerStyle={{ marginLeft: 50, width: '20%' }}
+                  onChangeText={(val) => onChangeQuantity(val, i)}
+                  value={ingredient.quantity}
+                />
+
+                <Input
+                  placeholder='Unit'
+                  containerStyle={{ marginLeft: 35, width: '20%' }}
+                  onChangeText={(val) => onChangeUnit(val, i)}
+                  value={ingredient.unit}
+                />
+              </View>
             )
           })}
 
@@ -125,15 +196,15 @@ function NewRecipe(props) {
             containerStyle={{ marginLeft: 40, width: '70%' }}
             inputStyle={{ marginLeft: 10 }}
             placeholder='Ajouter une étape'
-            onChangeText={(val) => setStepsList(val)}
-            value={stepsList}
+            onChangeText={(val) => setStepInput(val)}
+            value={stepInput}
           />
 
           <Button
             title='+' //bouton pour le click pour ajouter une étapes
             titleStyle={styles.addNewRecipeTitle}
             buttonStyle={styles.addNew}
-            onPress={() => { onSubmitSteps(stepsList) }}
+            onPress={() => { onSubmitSteps(stepInput) }}
           />
 
         </View>
@@ -176,7 +247,7 @@ function NewRecipe(props) {
           buttonStyle={styles.itemMyRecipes}
           onPress={() => props.navigation.navigate('Confirmation')}
         /> */}
-      <Confirmation/>
+        <Confirmation />
       </View>
 
 
