@@ -16,7 +16,12 @@ function Confirmation(props) {
 
   return (
     <View>   
-      <Button title="Open Overlay" onPress={toggleOverlay} />
+      <Button
+          title='Je valide ma recette'//Il faudra faire une redirection et non un bouton pour la confirmation
+          titleStyle={styles.buttonRegularTitle}
+          buttonStyle={[styles.buttonRegular, {margin : 5}]}
+          onPress={toggleOverlay}
+        />
 
       <Overlay 
         isVisible={visible} 

@@ -3,7 +3,8 @@ import { View, ScrollView } from 'react-native';
 import { Header, Button, Text, Input } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
-import styles from '../stylesheets/styles'
+import styles from '../stylesheets/styles';
+import Confirmation from '../Components/Confirmation';
 
 function NewRecipe(props) {
 
@@ -169,12 +170,13 @@ function NewRecipe(props) {
       </ScrollView>
 
       <View>
-        <Button
+        {/* <Button
           title='Je valide ma recette'//Il faudra faire une redirection et non un bouton pour la confirmation
           titleStyle={styles.itemMyRecipesTitle}
           buttonStyle={styles.itemMyRecipes}
           onPress={() => props.navigation.navigate('Confirmation')}
-        />
+        /> */}
+      <Confirmation/>
       </View>
 
 
