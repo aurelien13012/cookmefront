@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { View, Text } from "react-native";
 import { Card, Header, Button, Overlay, Input } from "react-native-elements";
-
+import {connect} from 'react-redux';
 
 import styles from "../stylesheets/styles";
 
@@ -26,40 +26,12 @@ function Login(props) {
 
   var handleSubmitSignup = async () => {
     
-    const data = await fetch('/sign-up', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: `usernameFromFront=${signUpUsername}&emailFromFront=${signUpEmail}&passwordFromFront=${signUpPassword}`
-    })
-
-    const body = await data.json()
-
-    if(body.result == true){
-      props.addToken(body.token)
-      setUserExists(true)
-      
-    } else {
-      setErrorsSignup(body.error)
-    }
+    
   }
 
   var handleSubmitSignin = async () => {
 
-    const data = await fetch('/sign-in', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`
-    })
-
-    const body = await data.json()
-
-    if(body.result == true){
-      props.addToken(body.token)
-      setUserExists(true)
-      
-    }  else {
-      setErrorsSignin(body.error)
-    }
+    
   }
 
   return (
@@ -91,7 +63,7 @@ function Login(props) {
           <Button
             title="Valider"
             buttonStyle={{ backgroundColor: "#FF6F61" }}
-            onPress={() => handleSubmit()}
+            onPress={() => handleSubmitSignIn()}
             type="solid"
           />
         </View>
@@ -145,4 +117,15 @@ function Login(props) {
   );
 }
 
-export default Login;
+function mapDispatchToProps(dispatch){
+  return {
+    addToken: function(token){
+      dispatch({type: 'addToken', token: token})
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Login)
