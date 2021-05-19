@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-import ConfirmMyRecipe from "../Components/ConfirmMyRecipe";
+import Confirmation from "../Components/Confirmation";
 
 function Account(props) {
   return (
@@ -14,7 +14,7 @@ function Account(props) {
       >
         Account
       </Text>
-      <ConfirmMyRecipe />
+      <Confirmation />
     </View>
   );
 }

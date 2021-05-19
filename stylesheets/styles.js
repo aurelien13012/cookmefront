@@ -205,6 +205,13 @@ const styles = StyleSheet.create({
     width: 150,
     height: 100,
     margin: 5
+  },
+  buttonRegular: {
+    borderRadius: 15,
+    backgroundColor: '#FF6F61',
+  },
+  buttonRegularTitle: {
+    fontFamily: 'SourceSansPro_600SemiBold',
   }
 });
 
