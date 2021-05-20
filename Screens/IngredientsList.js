@@ -1,84 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { Header, Button } from 'react-native-elements';
 import { List } from 'react-native-paper';
 
 import styles from '../stylesheets/styles'
+// import {IP} from 'react-native-dotenv';
 
 export default function IngredientsList(props) {
 
   //////// VARIABLES D'ETAT
-  const [vegetablesExpanded, setVegetablesExpanded] = useState(false);
-  const [meatsExpanded, setMeatsExpanded] = useState(false);
-  const [vegetablesList, setVegetablesList] = useState([]);
-  const [meatsList, setMeatsList] = useState([]);
+  const [ingredientsList, setIngredientsList] = useState({});
+  const [categories, setCategories] = useState([]);
+
+  // console.log({IP});
 
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
-    setVegetablesList(vegetablesListData);
-    setMeatsList(meatsListData)
+    const getAllIngredients = async () => {
+      console.log('before fetch');
+      const rawData = await fetch('http://192.168.1.12:3000/ingredients/allIngredients');  
+      console.log('after fetch');
+      const data = await rawData.json();
+      // console.log('data', data);
+      const formatedData = formatData(data);
+      setIngredientsList(formatedData);
+      createCategories(formatedData);
+
+      return data;
+    }
+    getAllIngredients();
+
   }, [])
 
-  //// DONNEES EN DUR
-  const vegetablesListData = [
-    {
-      name: 'Courgette',
-      selected: false
-    },
-    {
-      name: 'Brocolis',
-      selected: false
-    },
-    {
-      name: 'Epinards',
-      selected: false
-    },
-    {
-      name: 'Haricots verts',
-      selected: false
-    },
-    {
-      name: 'Concombre',
-      selected: false
-    },
-  ];
 
-  const meatsListData = [
-    {
-      name: 'Poulet',
-      selected: false
-    },
-    {
-      name: 'Boeuf',
-      selected: false
-    },
-    {
-      name: 'Porc',
-      selected: false
-    },
-  ];
+
+  // Formate les données pour être affichées facilement
+  const formatData = (data) => {
+    formatedData = {};
+    data.map((ingredient, index) => {
+      formatedData[ingredient.category] = [];
+    });
+
+    data.map((ingredient, index) => {
+      formatedData[ingredient.category].push({
+        name: ingredient.name,
+        selected: false
+      });
+    });
+
+    // console.log('formatedData', formatedData);
+    return formatedData;
+  }
+
+  const createCategories = (data) => {
+    const rawCategories = Object.keys(data);
+    const formatedCategories = rawCategories.map((category, index) => {
+      return {
+        name: category,
+        expanded: false
+      }
+    })
+    // console.log('categories', formatedCategories);
+    setCategories(formatedCategories);
+  }
+
+  console.log('categories', categories);
+  console.log('ingredientsList', ingredientsList);
+
+
 
   ////// FUNCTION UTILITAIRES
-  const handleButtonVegetables = (array, index) => {
-    const vegetablesListCopy = [...vegetablesList];
-    // Toggle le boolééen "selected"
-    vegetablesListCopy[index].selected = !vegetablesListCopy[index].selected
-    setVegetablesList(vegetablesListCopy);
-    console.log('click on ' + vegetablesListCopy[index].name + '; selected: ' + vegetablesListCopy[index].selected);
+
+
+  const toggleCategoryExpanded = (index) => {
+    const categoriesCopy = [...categories];
+    categoriesCopy[index].expanded = !categoriesCopy[index].expanded;
+    setCategories(categoriesCopy);
   }
 
-  const handleButtonMeats = (array, index) => {
-    const meatsListCopy = [...meatsList];
-    // Toggle le boolééen "selected"
-    meatsListCopy[index].selected = !meatsListCopy[index].selected
-    setMeatsList(meatsListCopy);
-    console.log('click on ' + meatsListCopy[index].name + '; selected: ' + meatsListCopy[index].selected);
+  const toggleIngredientSelected = (category, index) => {
+    const ingredientsListCopy = {...ingredientsList};
+    ingredientsListCopy[category][index].selected = !ingredientsListCopy[category][index].selected;
+    setIngredientsList(ingredientsListCopy);
   }
+
+
 
   //// RENDER
   return (
-    <View style={styles.containerIngredients}>
+    <ScrollView style={styles.containerIngredients}>
       <Header
         centerComponent={{
           text: 'Mes ingrédients',
@@ -87,54 +98,36 @@ export default function IngredientsList(props) {
         containerStyle={styles.headerContainer}
       />
 
-    <List.Accordion
-        title="Légumes"
-        expanded={vegetablesExpanded}
-        onPress={() => {setVegetablesExpanded(!vegetablesExpanded)}}
-        style={styles.accordionContainer}
-        titleStyle={styles.accordionTitle}
-      >
-        <View
-          style={styles.accordionItemsContainer}
+    {categories.map((category, index) => {
+      return(
+        <List.Accordion
+          title={category.name}
+          expanded={category.expanded}
+          onPress={() => {toggleCategoryExpanded(index)}}
+          style={styles.accordionContainer}
+          titleStyle={styles.accordionTitle}
         >
-          {vegetablesList.map((item, index) => (
-            <Button
-              title={item.name}
-              buttonStyle={item.selected ? styles.accordionItemSelected : styles.accordionItem}
-              onPress={() => handleButtonVegetables(vegetablesList, index)}
-              titleStyle={item.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
-            />
-          ))}
-        </View>
-      </List.Accordion> 
-
-      <List.Accordion
-        title="Viandes"
-        expanded={meatsExpanded}
-        onPress={() => {setMeatsExpanded(!meatsExpanded)}}
-        style={styles.accordionContainer}
-        titleStyle={styles.accordionTitle}
-      >
-        <View
-          style={styles.accordionItemsContainer}
-        >
-          {meatsList.map((item, index) => (
-            <Button
-              title={item.name}
-              buttonStyle={item.selected ? styles.accordionItemSelected : styles.accordionItem}
-              onPress={() => handleButtonMeats(meatsList, index)}
-              titleStyle={item.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
-            />
-          ))}
-        </View>
-      </List.Accordion> 
-
-      
+          <View
+            style={styles.accordionItemsContainer}
+          >
+            {ingredientsList[category.name].map((ingredient, index) => (
+              <Button
+                title={ingredient.name}
+                buttonStyle={ingredient.selected ? styles.accordionItemSelected : styles.accordionItem}
+                onPress={() => toggleIngredientSelected(category.name, index)}
+                titleStyle={ingredient.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
+              />
+            ))}
+          </View>
+        </List.Accordion>
+      )
+    })}
+     
 
       <Button title = 'Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
         onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Recipes'})}
       />
-    </View>
+    </ScrollView>
   );
 }
 
