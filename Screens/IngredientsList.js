@@ -4,7 +4,7 @@ import { Header, Button } from 'react-native-elements';
 import { List } from 'react-native-paper';
 
 import styles from '../stylesheets/styles'
-// import {IP} from 'react-native-dotenv';
+import env from '../env.json';
 
 export default function IngredientsList(props) {
 
@@ -12,47 +12,76 @@ export default function IngredientsList(props) {
   const [ingredientsList, setIngredientsList] = useState({});
   const [categories, setCategories] = useState([]);
 
-  // console.log({IP});
-
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
+    // Charge tous les ingrédients de la bdd
     const getAllIngredients = async () => {
-      console.log('before fetch');
-      const rawData = await fetch('http://192.168.1.12:3000/ingredients/allIngredients');  
-      console.log('after fetch');
+      const rawData = await fetch(`http://${env.ip}:3000/ingredients/allIngredients`);  
       const data = await rawData.json();
-      // console.log('data', data);
+      // Formate les données pour être facilement affichable
       const formatedData = formatData(data);
-      setIngredientsList(formatedData);
-      createCategories(formatedData);
+      return formatedData;
+    }
 
+    // Charge les ingrédients de l'utilisateur
+    const getMyFridge = async () => {
+      const rawData = await fetch(`http://${env.ip}:3000/ingredients/myFridge`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `userTokenFromFront=${env.token}`
+      }); 
+      const data = await rawData.json();
       return data;
     }
-    getAllIngredients();
 
+    // Fonction globale qui appelle les autres
+    const getData = async () => {
+      const formatedData = await getAllIngredients(); 
+      const myFridge = await getMyFridge();
+
+      // Update la propriété "selected" si l'utilisateur à l'ingrédient dans son fridge
+      myFridge.map((ingredient) => {
+        const ingredientsName =  formatedData[ingredient.category].map((ingredient) => {
+          return ingredient.name
+        })
+        const index = ingredientsName.indexOf(ingredient.name);
+        formatedData[ingredient.category][index].selected = true;
+      })
+
+      // Update la variable d'état
+      setIngredientsList(formatedData);
+      // Crée un array de catégories pour l'affichage
+      createCategories(formatedData);
+    }
+
+    // Appel de la fonction
+    getData();
   }, [])
 
-
-
+  ////// FUNCTION UTILITAIRES
   // Formate les données pour être affichées facilement
   const formatData = (data) => {
-    formatedData = {};
+    // Le format est le suivant: {category: [{name: 'poire', selected: false}]}
+    // On crée un objet de base
+    let formatedData = {};
+    // pour chaque category trouvée, on crée un tableau
     data.map((ingredient, index) => {
       formatedData[ingredient.category] = [];
     });
 
+    // On remplit le tableau de chaque catégorie avec un objet {name, selected} pour chaque ingrédient correspondant
     data.map((ingredient, index) => {
       formatedData[ingredient.category].push({
         name: ingredient.name,
         selected: false
       });
     });
-
-    // console.log('formatedData', formatedData);
     return formatedData;
   }
 
+  // Fonction pour créer un array de catégories avec la propriété "expanded" pour gérer les accordéons
   const createCategories = (data) => {
     const rawCategories = Object.keys(data);
     const formatedCategories = rawCategories.map((category, index) => {
@@ -61,31 +90,49 @@ export default function IngredientsList(props) {
         expanded: false
       }
     })
-    // console.log('categories', formatedCategories);
     setCategories(formatedCategories);
   }
 
-  console.log('categories', categories);
-  console.log('ingredientsList', ingredientsList);
-
-
-
-  ////// FUNCTION UTILITAIRES
-
-
+  // Plie ou déplie l'accordéon
   const toggleCategoryExpanded = (index) => {
     const categoriesCopy = [...categories];
     categoriesCopy[index].expanded = !categoriesCopy[index].expanded;
     setCategories(categoriesCopy);
   }
 
+  // Selectionne/Déselectionne l'ingrédient
   const toggleIngredientSelected = (category, index) => {
     const ingredientsListCopy = {...ingredientsList};
     ingredientsListCopy[category][index].selected = !ingredientsListCopy[category][index].selected;
+
+    if (ingredientsListCopy[category][index].selected) {
+      addIngredientToDB(ingredientsListCopy[category][index].name);
+    } else {
+      removeIngredientFromDB(ingredientsListCopy[category][index].name);
+    }
+
     setIngredientsList(ingredientsListCopy);
   }
 
+  // Ajoute l'ingrédient au fridge de l'utilisateur en bdd
+  const addIngredientToDB = async (name) => {
+    await fetch(`http://${env.ip}:3000/ingredients/addToMyFridge`,
+    {
+      method: 'PUT',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: `nameFromFront=${name}&userTokenFromFront=${env.token}`
+     });  
+  }
 
+  // Supprime l'ingrédient du fridge de l'utilisateur en bdd
+  const removeIngredientFromDB = async (name) => {
+    await fetch(`http://${env.ip}:3000/ingredients/deleteFromFridge`,
+    {
+      method: 'DELETE',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: `nameFromFront=${name}&userTokenFromFront=${env.token}`
+     });  
+  }
 
   //// RENDER
   return (
@@ -103,7 +150,7 @@ export default function IngredientsList(props) {
         <List.Accordion
           title={category.name}
           expanded={category.expanded}
-          onPress={() => {toggleCategoryExpanded(index)}}
+          onPress={() => toggleCategoryExpanded(index)}
           style={styles.accordionContainer}
           titleStyle={styles.accordionTitle}
         >
