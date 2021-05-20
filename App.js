@@ -1,3 +1,6 @@
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']);
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -20,6 +23,10 @@ import {
   SourceSansPro_900Black_Italic,
 } from '@expo-google-fonts/source-sans-pro';
 
+import {Provider} from 'react-redux'
+import {createStore, combineReducers} from 'redux'
+import token from './Reducers/token'
+
 import Account from './Screens/Account';
 import Confirmation from './Screens/Confirmation';
 import Favorites from './Screens/Favorites';
@@ -33,12 +40,14 @@ import RecipesList from './Screens/RecipesList';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+const store = createStore(combineReducers({token}))
+
 const NavRecipe = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Recipes' component={RecipesList} />
       <Stack.Screen name='Recipe' component={Recipe} />
-      <Stack.Screen name='Login' component={Login} />
+      {/* <Stack.Screen name='Login' component={Login} /> */}
     </Stack.Navigator>
   )
 }
@@ -123,11 +132,14 @@ function App() {
     return <AppLoading /> 
   }
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen name = 'Login' component={Login}/>
         <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

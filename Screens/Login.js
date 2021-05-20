@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { View, Text } from "react-native";
-import { Card, Header, Button, Overlay, Input } from "react-native-elements";
+import { Text, View} from "react-native";
+import { Header, Button, Overlay, Input } from "react-native-elements";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
+
+import env from '../env.json';
 
 import styles from "../stylesheets/styles";
 
 function Login(props) {
-  const [visible, setVisible] = useState(false);
-  const [signUpUsername, setSignUpUsername] = useState('')
+  //////varible d'état
+  const [visibleSignIn, setVisibleSignIn] = useState(false);
+  const [visibleSignUp, setVisibleSignUp] = useState(false);
+
+  const [signUpFirstName, setSignUpFirstName] = useState('')
+  const [signUpSurName, setSignUpSurName] = useState('')
   const [signUpEmail, setSignUpEmail] = useState('')
   const [signUpPassword, setSignUpPassword] = useState('')
 
@@ -20,19 +27,67 @@ function Login(props) {
   const [listErrorsSignin, setErrorsSignin] = useState([])
   const [listErrorsSignup, setErrorsSignup] = useState([])
 
-  const toggleOverlay = () => {
-    setVisible(!visible);
+  //affiche lorsqu'il n'apparait pas ou le contraire
+  const toggleOverlaySignIn = () => {
+    setVisibleSignIn(!visibleSignIn);
   };
 
-  var handleSubmitSignup = async () => {
+  const toggleOverlaySignUp = () => {
+    setVisibleSignUp(!visibleSignUp);
+  };
+
+  // bouton valider enregistre les données du signup gère aussi l'overlay et les message d'erreurs
+  let handleSubmitSignup = async () => {
     
-    
+    const data = await fetch(`http://${env.ip}:3000/users/signup`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: `firstNameFromFront=${signUpFirstName}&surNameFromFront=${signUpSurName}&emailFromFront=${signUpEmail}&passwordFromFront=${signUpPassword}`
+    })
+
+    const body = await data.json()
+
+    if(body.result == true){
+      props.addToken(body.token)
+      setUserExists(true)
+      props.navigation.navigate('BottomNavigator', {screen : 'Fridge'})
+      toggleOverlaySignUp() 
+      
+    } else {
+      setErrorsSignup(body.error)
+    }
   }
 
-  var handleSubmitSignin = async () => {
+  //// bouton valider lit les données pour signin gère aussi l'overlay et les message d'erreurs
+  let handleSubmitSignIn = async () => {
 
-    
+    const data = await fetch(`http://${env.ip}:3000/users/signin`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`
+    })
+
+    const body = await data.json()
+
+    if(body.result == true){
+      props.addToken(body.token)
+      setUserExists(true)
+      console.log('ready to redirect')
+      props.navigation.navigate('BottomNavigator', {screen : 'Fridge'})
+      toggleOverlaySignIn()
+
+    }  else {
+      setErrorsSignin(body.error)
+    }
   }
+
+  var tabErrorsSignin = listErrorsSignin.map((error,i) => {
+    return(<Text>{error}</Text>)
+  })
+
+  var tabErrorsSignup = listErrorsSignup.map((error,i) => {
+    return(<Text>{error}</Text>)
+  })
 
   return (
     <View style = {{flex : 1}}>
@@ -45,75 +100,134 @@ function Login(props) {
         containerStyle={styles.headerContainer}
       />
 
-      <Button title="S'identifier" onPress={toggleOverlay} style={styles.buttonSignIn}/>
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay} fullScreen={true}>
+      {/* Bouton pour un user déja enregistré qui veut se connecter */}
+      <Button title="Se connecter" onPress={toggleOverlaySignIn} style={styles.buttonSignIn}/>
+      {/* overlay pour remplir ces infos mail et mot de passe */}
+      <Overlay isVisible={visibleSignIn} onBackdropPress={toggleOverlaySignIn} fullScreen={true}>
         <View style={styles.inputView}>
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Email"
-            onChangeText={(email) => setEmail(email)}
+            autoCapitalize = 'none'
+            leftIcon={
+              <Icon
+                name='envelope'
+                size={24}
+                color='grey'
+              />
+            }
+            value = {signInEmail}
+            onChangeText={(email) => setSignInEmail(email)}
           />
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Password"
             secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
+            leftIcon={
+              <Icon
+                name='lock'
+                size={24}
+                color='grey'
+              />
+            }
+            value = {signInPassword}
+            onChangeText={(password) => setSignInPassword(password)}
           />
-
+          {tabErrorsSignin}
+          {/* bouton de validation */}
           <Button
             title="Valider"
             buttonStyle={{ backgroundColor: "#FF6F61" }}
             onPress={() => handleSubmitSignIn()}
             type="solid"
           />
+          {/* bouton d'annulation */}
+          <Button 
+            style={styles.buttonCancel}
+            title="cancel"
+            buttonStyle={{ backgroundColor: "#FF6F61"}}
+            onPress={() => toggleOverlaySignIn()}
+            type="solid"
+          />
         </View>
       </Overlay>
       
-      <Button title="S'enregistrer" onPress={toggleOverlay} style={styles.buttonSignUp}/>
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay} fullScreen={true}>
+      {/* Bouton pour un user qui veut s'enregistrer */}
+      <Button title="S'enregistrer" onPress={toggleOverlaySignUp} style={styles.buttonSignUp}/>
+      <Overlay isVisible={visibleSignUp} onBackdropPress={toggleOverlaySignUp} fullScreen={true}>
         <View style={styles.inputView}>
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Prénom"
-            onChangeText={(firstName) => setFirstName(firstName)}
+            leftIcon={
+              <Icon
+                name='user'
+                size={24}
+                color='grey'
+              />
+            }
+            value = {signUpFirstName}
+            onChangeText={(firstName) => setSignUpFirstName(firstName)}
           />
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Nom"
-            onChangeText={(surName) => setSurName(surName)}
+            leftIcon={
+              <Icon
+                name='user'
+                size={24}
+                color='grey'
+              />
+            }
+            value = {signUpSurName}
+            onChangeText={(surName) => setSignUpSurName(surName)}
           />
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Email"
-            onChangeText={(email) => setEmail(email)}
+            autoCapitalize = 'none'
+            leftIcon={
+              <Icon
+                name='envelope'
+                size={24}
+                color='grey'
+              />
+            }
+            value = {signUpEmail}
+            onChangeText={(email) => setSignUpEmail(email)}
           />
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Password"
             secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
+            leftIcon={
+              <Icon
+                name='lock'
+                size={24}
+                color='grey'
+              />
+            }
+            value = {signUpPassword}
+            onChangeText={(password) => setSignUpPassword(password)}
           />
-
+          {tabErrorsSignup}
           <Button
             title="Valider"
             buttonStyle={{ backgroundColor: "#FF6F61" }}
             onPress={() => handleSubmitSignup()}
             type="solid"
           />
+          <Button 
+            style={styles.buttonCancel}
+            title="cancel"
+            buttonStyle={{ backgroundColor: "#FF6F61"}}
+            onPress={() => toggleOverlaySignUp()}
+            type="solid"
+          />
         </View>
       </Overlay>
   
     </View>
-
-      // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'#fff'}}>   
-      // <Text>Login</Text>
-      // <Button title = 'sign-up' //il faudra faire des redirections pour pointer ou lutilisateur va aller suite à son signup
-      //   onPress={()=> props.navigation.navigate('My Recipes', {screen : 'My Recipes'})}
-      // />
-      // <Button title = 'sign-in' //il faudra faire des redirections pour pointer ou lutilisateur va aller suite à son signin
-      //   onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Favorites'})}
-      // /> 
-    
   );
 }
 
