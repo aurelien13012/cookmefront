@@ -234,6 +234,14 @@ const styles = StyleSheet.create({
   },
   buttonRegularTitle: {
     fontFamily: 'SourceSansPro_600SemiBold',
+  },
+  buttonCancel: {
+    borderRadius: 25,
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    margin: 5,
   }
 });
 
