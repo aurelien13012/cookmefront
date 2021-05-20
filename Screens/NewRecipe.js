@@ -117,7 +117,7 @@ function NewRecipe(props) {
 
         </View>
 
-        {/* input pour entrer le nombre de personne*/}
+        {/* entrer le nombre de personne*/}
         <View style={styles.NewRecipeContainer}>
 
           <MaterialCommunityIcons style={{ marginRight: 60 }} name="human-male-female" size={35} color='#FF6F61' />
@@ -241,12 +241,6 @@ function NewRecipe(props) {
       </ScrollView>
 
       <View>
-        {/* <Button
-          title='Je valide ma recette'//Il faudra faire une redirection et non un bouton pour la confirmation
-          titleStyle={styles.itemMyRecipesTitle}
-          buttonStyle={styles.itemMyRecipes}
-          onPress={() => props.navigation.navigate('Confirmation')}
-        /> */}
         <Confirmation />
       </View>
 
