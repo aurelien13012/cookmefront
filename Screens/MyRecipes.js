@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Header, SearchBar, ListItem, Button, Text } from 'react-native-elements';
+import { connect } from 'react-redux';
+import env from '../env.json';
 
 import styles from '../stylesheets/styles'
 
@@ -10,27 +12,25 @@ function MyRecipes(props) {
   const [searchMyRecipesList, setSearchMyRecipesList] = useState('');
   const [myRecipesList, setMyRecipesList] = useState([]);
 
-  //Données en dur
-  const myRecipe = [
-    {
-      name: 'Tournedos'
-    },
-    {
-      name: 'Salade Niçoise'
-    },
-    {
-      name: 'Pot au feu'
-    },
-    {
-      name: 'Salade Césare'
-    }
-  ]
-
   //UseEffect
   useEffect(() => {
-    setMyRecipesList(myRecipe);
-    console.log('myrecipelist', myRecipesList.length)
-    console.log('recipelist', myRecipesList)
+    console.log('in use effect')
+    const findMyRecipes = async () => {
+      const dataRecipes = await fetch(`http://${env.ip}:3000/myRecipes?tokenFromFront=${env.token}`)
+      const body = await dataRecipes.json()
+      console.log('body', body)
+      setMyRecipesList(body);
+
+      // const bodyId = body.map((recipe, i) => {
+      //   console.log('recipebody', recipe)
+      //   return (
+      //     recipe._id
+      //   )
+      // })
+      // console.log(bodyId)
+      // props.saveRecipeId(bodyId)
+    }
+    findMyRecipes()
   }, [])
 
 
@@ -54,7 +54,7 @@ function MyRecipes(props) {
             title={item.name}
             titleStyle={styles.itemMyRecipesTitle}
             buttonStyle={styles.itemMyRecipes}
-            onPress={() => props.navigation.navigate('Recipe')}
+            onPress={() => {props.navigation.navigate('Recipe'); props.recipeId(item._id)}}
           />
         )
         )
@@ -98,4 +98,18 @@ function MyRecipes(props) {
   );
 }
 
-export default MyRecipes;
+function mapStateToProps(state) {
+  return { token: state.token }
+}
+
+function mapDispactchToProps(dispatch) {
+  return {
+    recipeId: function (recipeId) {
+      dispatch({ type: 'saveRecipeId', recipeId })
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps, mapDispactchToProps
+)(MyRecipes);
