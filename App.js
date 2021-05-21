@@ -23,9 +23,10 @@ import {
   SourceSansPro_900Black_Italic,
 } from '@expo-google-fonts/source-sans-pro';
 
-import {Provider} from 'react-redux'
-import {createStore, combineReducers} from 'redux'
-import token from './Reducers/token'
+import {Provider} from 'react-redux';
+import {createStore, combineReducers} from 'redux';
+import token from './Reducers/token';
+import recipeid from './Reducers/recipeid';
 
 import Account from './Screens/Account';
 import Confirmation from './Screens/Confirmation';
@@ -40,7 +41,7 @@ import RecipesList from './Screens/RecipesList';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const store = createStore(combineReducers({token}))
+const store = createStore(combineReducers({token, recipeid}))
 
 const NavRecipe = () => {
   return (
@@ -59,7 +60,6 @@ const NavMyRecipe = () => {
       <Stack.Screen name='My Recipes' component={MyRecipes} />
       <Stack.Screen name='Recipe' component={Recipe} />
       <Stack.Screen name='New Recipe' component={NewRecipe} />
-      <Stack.Screen name='Confirmation' component={Confirmation} />
     </Stack.Navigator>
   )
 }
@@ -135,7 +135,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name = 'Login' component={Login}/>
+        {/* <Stack.Screen name = 'Login' component={Login}/> */}
         <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
