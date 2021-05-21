@@ -28,7 +28,6 @@ import {createStore, combineReducers} from 'redux'
 import token from './Reducers/token'
 
 import Account from './Screens/Account';
-import Confirmation from './Screens/Confirmation';
 import Favorites from './Screens/Favorites';
 import IngredientsList from './Screens/IngredientsList';
 import Login from './Screens/Login';
@@ -59,7 +58,6 @@ const NavMyRecipe = () => {
       <Stack.Screen name='My Recipes' component={MyRecipes} />
       <Stack.Screen name='Recipe' component={Recipe} />
       <Stack.Screen name='New Recipe' component={NewRecipe} />
-      <Stack.Screen name='Confirmation' component={Confirmation} />
     </Stack.Navigator>
   )
 }
@@ -135,7 +133,7 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name = 'Login' component={Login}/>
+        {/* <Stack.Screen name = 'Login' component={Login}/> */}
         <Stack.Screen name='BottomNavigator' component={BottomNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
