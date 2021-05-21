@@ -121,7 +121,7 @@ export default function IngredientsList(props) {
       method: 'PUT',
       headers: {'Content-Type':'application/x-www-form-urlencoded'},
       body: `nameFromFront=${name}&userTokenFromFront=${env.token}`
-     });  
+    });  
   }
 
   // Supprime l'ingrédient du fridge de l'utilisateur en bdd
@@ -131,7 +131,7 @@ export default function IngredientsList(props) {
       method: 'DELETE',
       headers: {'Content-Type':'application/x-www-form-urlencoded'},
       body: `nameFromFront=${name}&userTokenFromFront=${env.token}`
-     });  
+    });  
   }
 
   //// RENDER
@@ -169,7 +169,6 @@ export default function IngredientsList(props) {
         </List.Accordion>
       )
     })}
-     
 
       <Button title = 'Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
         onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Recipes'})}

@@ -29,7 +29,6 @@ import token from './Reducers/token';
 import recipeid from './Reducers/recipeid';
 
 import Account from './Screens/Account';
-import Confirmation from './Screens/Confirmation';
 import Favorites from './Screens/Favorites';
 import IngredientsList from './Screens/IngredientsList';
 import Login from './Screens/Login';
