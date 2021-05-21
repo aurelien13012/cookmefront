@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, Button, ScrollView } from 'react-native';
 import { Image, Icon, LinearProgress } from 'react-native-elements';
 import { List } from 'react-native-paper';
 
-import styles from '../stylesheets/styles'
+import styles from '../stylesheets/styles';
+import env from '../env.json';
 
 function Recipe(props) {
 
@@ -12,7 +13,37 @@ function Recipe(props) {
   const [ingredientsExpanded, setIngredientsExpanded] = useState(false);
   const [stepsExpanded, setStepsExpanded] = useState(false);
   const [picsExpanded, setPicsExpanded] = useState(false);
+  const [recipe, setRecipe] = useState({});
 
+  const idRecipe = '60a794f5b672a34d448d7452';
+
+  useEffect(() => {
+    const getRecipeData = async () => {
+      const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `idFromFront=${idRecipe}`
+      });  
+      const data = await rawData.json();
+      console.log('data', data);
+      setRecipe(data.response);
+
+      return data;
+    }
+    getRecipeData();
+  }, [])
+
+  if (Object.keys(recipe).length === 0) {
+    console.log('in safe path');
+    return (
+      <View>
+        <Text>
+          Chargement...
+        </Text>
+      </View>
+    )
+  }
 
   return (
  
@@ -50,7 +81,7 @@ function Recipe(props) {
             <Text
               style={styles.infoBoxTitle}
             >
-              Pates au pesto 
+              {recipe.name} 
             </Text>
             <Icon
               name="heart-outline"
@@ -163,8 +194,16 @@ function Recipe(props) {
           }}
         >
           <Text style={styles.body}>
-            Nombre de personnes : 4
+            Nombre de personnes : {recipe.numOfPersons}
           </Text>
+          <Icon
+            name="minuscircleo"
+            type="antdesign"
+            style={{
+              marginLeft: 10,
+              marginTop: 0
+            }}
+          /> 
           <Icon
             name="pluscircleo"
             type="antdesign"
@@ -173,14 +212,6 @@ function Recipe(props) {
               marginTop: 0
             }}
           />
-          <Icon
-            name="minuscircleo"
-            type="antdesign"
-            style={{
-              marginLeft: 10,
-              marginTop: 0
-            }}
-          />  
         </View>
 
         {/* Liste des ingrédients nécessaires */}
@@ -191,14 +222,14 @@ function Recipe(props) {
           style={styles.accordionContainer}
           titleStyle={styles.accordionTitle}
         >
-          <List.Item
-            title='Beurre (100g)'
-            titleStyle={styles.body}
-          />
-          <List.Item
-            title='Farine (250g)'
-            titleStyle={styles.body}
-          />
+          {recipe.ingredients.map((ingredient, index) => {
+            return (
+              <List.Item
+                title={`${ingredient.ingredientsIds.name} (${ingredient.quantity} ${ingredient.unit})`}
+                titleStyle={styles.body}
+              />
+            )
+          })}
         </List.Accordion>
 
         {/* Liste des étapes */}
@@ -209,14 +240,14 @@ function Recipe(props) {
           style={styles.accordionContainer}
           titleStyle={styles.accordionTitle}
         >
-          <List.Item
-            title='1. blabla'
-            titleStyle={styles.body}
-          />
-          <List.Item
-            title='2. bloublou'
-            titleStyle={styles.body}
-          />
+          {recipe.steps.map((step, index) => {
+            return (
+              <List.Item
+                title={`${index+1}. ${step}`}
+                titleStyle={styles.body}
+              />
+            )
+          })}
         </List.Accordion>  
 
         {/* Liste des photos */}
