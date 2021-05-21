@@ -5,6 +5,7 @@ import { Button, SearchBar, Card, Header } from "react-native-elements";
 import { List } from "react-native-paper";
 
 import styles from "../stylesheets/styles";
+import env from '../env.json';
 
 function RecipesList(props) {
   const [searchRecipesList, setSearchRecipesList] = useState("");
@@ -20,9 +21,24 @@ function RecipesList(props) {
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
+    // Charge tous les recettes de la bdd
+    const getAllRecipes = async () => {
+    //onsole.log('fetch')
+    const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipesList`);  
+    // console.log('afterFetch')
+    // console.log('rawData', rawData)
+    const data = await rawData.json();
+    //console.log('data', data)
+    setRecipesList(data);
+    }
+
+    // Update la variable d'état  
     setIngredientsList(ingredientsListData);
-    setRecipesList(recipesListData);
-  }, []);
+    
+
+    // Appel de la fonction
+    getAllRecipes();
+  },[]);
 
   //// DONNEES EN DUR
   const ingredientsListData = [
@@ -36,16 +52,16 @@ function RecipesList(props) {
     },
   ];
 
-  const recipesListData = [
-    {
-      name: "Pate au beurre",
-      imgRecipe: require("../assets/pates-au-beurre.jpg"),
-    },
-    {
-      name: "Pate à la bolognaise",
-      imgRecipe: require("../assets/pates-bolognaise.jpg"),
-    },
-  ];
+  // const recipesListData = [
+  //   {
+  //     name: "Pate au beurre",
+  //     imgRecipe: require("../assets/pates-au-beurre.jpg"),
+  //   },
+  //   {
+  //     name: "Pate à la bolognaise",
+  //     imgRecipe: require("../assets/pates-bolognaise.jpg"),
+  //   },
+  // ];
 
   ////// FUNCTION UTILITAIRES
   const handleButtonIngredients = (array, index) => {
@@ -127,7 +143,7 @@ function RecipesList(props) {
         </List.Accordion>
 
         <Card style={styles.cardContainer}>
-          <Card.Title>Recettes avec pates :</Card.Title>
+          <Card.Title>Toutes les recettes :</Card.Title>
           <Card.Divider />
           {recipesList.map((item, index) => (
             <View key={index} style={styles.cardLigne}>
@@ -135,22 +151,7 @@ function RecipesList(props) {
               <Image
                 style={styles.image}
                 resizeMode="cover"
-                source={item.imgRecipe}
-              />
-            </View>
-          ))}
-        </Card>
-
-        <Card style={styles.cardContainer}>
-          <Card.Title>Recettes avec pates :</Card.Title>
-          <Card.Divider />
-          {recipesList.map((item, index) => (
-            <View key={index} style={styles.cardLigne}>
-              <Text style={styles.cardName}>{item.name}</Text>
-              <Image
-                style={styles.image}
-                resizeMode="cover"
-                source={item.imgRecipe}
+                source={require("../assets/pates-au-beurre.jpg")}
               />
             </View>
           ))}
