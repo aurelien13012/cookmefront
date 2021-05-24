@@ -1,29 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Header, Button, Text, Input } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
 import qs from 'qs';
 import env from '../env.json';
 
-
 import styles from '../stylesheets/styles';
 import Confirmation from '../Components/Confirmation';
+import PictureScreen from '../Components/PictureScreen';
 
 function NewRecipe(props) {
 
   //UseState
   const [recipeName, setRecipeName] = useState('');
   const [newRecipeName, setNewRecipeName] = useState('');
-  const [num, setNum] = useState(2);
+  const [num, setNum] = useState(0);
   const [ingredientInput, setIngredientInput] = useState('');
   const [newIngredientsList, setNewIngredientList] = useState([]);
   const [stepInput, setStepInput] = useState('');
   const [newStepsList, setNewStepsList] = useState([]);
 
   const onSubmitRecipeName = (name) => {
-    console.log('click détecté', name)
+    console.log('click détecté name', name)
     setNewRecipeName(name.toUpperCase())
     setRecipeName('')
   }
@@ -51,18 +52,16 @@ function NewRecipe(props) {
   }
 
   const onChangeQuantity = (quantity, i) => {
-    // listIngredient.push({ quantity: quantity })
     console.log('quantity', quantity)
-    console.log('i',i)
+    console.log('i', i)
     const newIngredientsListCopy = [...newIngredientsList]
     newIngredientsListCopy[i].quantity = quantity
     setNewIngredientList(newIngredientsListCopy)
   }
 
   const onChangeUnit = (unit, i) => {
-    // listIngredient.push({ quantity: quantity })
     console.log('quantity', unit)
-    console.log('i',i)
+    console.log('i', i)
     const newIngredientsListCopy = [...newIngredientsList]
     newIngredientsListCopy[i].unit = unit
     setNewIngredientList(newIngredientsListCopy)
@@ -80,29 +79,45 @@ function NewRecipe(props) {
 
   const onSubmitRecipe = async () => {
     console.log('onsubmitrecipe executé')
+    console.log('recipeName', newRecipeName)
+    let data = new FormData();
+    data.append('food', {
+      uri : props.picture.uri,
+      type: 'image/jpeg',
+      name: 'avatar.jpg',
+    });
+    data.append('recipeFromFront', newRecipeName)
+    data.append('numbsFromFront', num)
+    data.append('userTokenFromFront', env.token)
+    data.append('steps', JSON.stringify(newStepsList))
+    data.append('ingredients', JSON.stringify(newIngredientsList))
+
     const bodyObj = {
-      recipeFromFront : newRecipeName,
-      steps : newStepsList,
-      numbsFromFront : num,
-      ingredients : newIngredientsList,
-      userTokenFromFront : env.token
+      recipeFromFront: newRecipeName,
+      steps: newStepsList,
+      numbsFromFront: num,
+      ingredients: newIngredientsList,
+      userTokenFromFront: env.token,
     }
-    const bodyStr = qs.stringify(bodyObj, {arrayFormat:'brackets'}); //array format brackets : change le format du string : steps[0]=a en steps[]=a
+    const bodyStr = qs.stringify(bodyObj, { arrayFormat: 'brackets' }); //array format brackets : change le format du string : steps[0]=a en steps[]=a
     // https://github.com/ljharb/qs/issues/46#issuecomment-70061976
     console.log('bodystr', bodyStr);
 
-    const res = await fetch (`http://${env.ip}:3000/addRecipe`, {
-      method:'POST',
-      headers : {'Content-Type': 'application/x-www-form-urlencoded'},
-      body : bodyStr
+    const res = await fetch(`http://${env.ip}:3000/addRecipe`, {
+      method: 'POST',
+      // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      // body: `${bodyStr}&pictureFromFront=${data}`
+      body: data
+
     })
-    const data = await res.json();
-    console.log('datarecipe', data);
+    const dataResult = await res.json();
+    console.log('datarecipe', dataResult);
   }
 
   const isRecipeName = newRecipeName.length > 0;
 
-  console.log('listingredient', newIngredientsList)
+  // console.log('listingredient', newIngredientsList)
+  
   return (
     <View style={{ flex: 1 }}>
       {/* en-tête de page donnant le nom de la page */}
@@ -255,20 +270,21 @@ function NewRecipe(props) {
             containerStyle={{ marginLeft: 35, width: '70%' }}
             inputStyle={{ marginLeft: 10 }}
             placeholder='Ajouter une photo'
-            onChangeText={(val) => setRecipeName(val)}
           />
 
           <Button
-            title='+' //bouton pour le click pour ajouter une étapes
+            title='+' //bouton pour le click pour ajouter une photo
             titleStyle={styles.addNewRecipeTitle}
             buttonStyle={styles.addNew}
+            onPress={() => props.navigation.navigate('Picture')}
           />
+
         </View>
 
       </ScrollView>
 
       <View>
-        <Confirmation propsSubmitMyRecipe={onSubmitRecipe}/>
+        <Confirmation propsSubmitMyRecipe={onSubmitRecipe} />
       </View>
 
 
@@ -277,7 +293,7 @@ function NewRecipe(props) {
 }
 
 function mapStateToProps(state) {
-  return { token: state.token }
+  return { token: state.token, picture : state.picture}
 }
 
 export default connect(
