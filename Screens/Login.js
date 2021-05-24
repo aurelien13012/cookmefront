@@ -21,8 +21,8 @@ function Login(props) {
 
   const [signInEmail, setSignInEmail] = useState('')
   const [signInPassword, setSignInPassword] = useState('')
-
-  const [userExists, setUserExists] = useState(false)
+  
+  //  const [userExists, setUserExists] = useState(false)
 
   const [listErrorsSignin, setErrorsSignin] = useState([])
   const [listErrorsSignup, setErrorsSignup] = useState([])
@@ -49,7 +49,7 @@ function Login(props) {
 
     if(body.result == true){
       props.addToken(body.token)
-      setUserExists(true)
+      // setUserExists(true)
       props.navigation.navigate('BottomNavigator', {screen : 'Fridge'})
       toggleOverlaySignUp() 
       
@@ -71,7 +71,7 @@ function Login(props) {
 
     if(body.result == true){
       props.addToken(body.token)
-      setUserExists(true)
+      // setUserExists(true)
       console.log('ready to redirect')
       props.navigation.navigate('BottomNavigator', {screen : 'Fridge'})
       toggleOverlaySignIn()
