@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, Button, ScrollView } from 'react-native';
 import { Image, Icon, LinearProgress } from 'react-native-elements';
 import { List } from 'react-native-paper';
+import { connect } from 'react-redux';
 
 import styles from '../stylesheets/styles';
 import env from '../env.json';
@@ -20,7 +21,11 @@ function Recipe(props) {
   const [nbPerson, setNbPerson] = useState(4);
   const [rate, setRate] = useState(0.5)
 
+  ///// VARIABLES REDUX
   const idRecipe = '60a7b2d33a185c39987353d2';
+  // const idRecipe = props.idRecipe;
+  // const token = env.token;
+  const token = props.token;
 
   useEffect(() => {
     const getRecipeData = async () => {
@@ -28,13 +33,17 @@ function Recipe(props) {
       {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `idFromFront=${idRecipe}`
+        body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
       });  
       const data = await rawData.json();
-      console.log('data', data);
-      const recipeFromDB = data.response;
+      const recipeFromDB = data.recipe;
+      const userFromDB = data.user;
+      console.log('recipe', recipeFromDB);
+      console.log('user', userFromDB);
       setRecipe(recipeFromDB);
-      setNbPerson(recipeFromDB.numOfPersons)
+      setNbPerson(recipeFromDB.numOfPersons);
+      const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id)
+      setIsFav(isFavFromDB);
       return data;
     }
     getRecipeData();
@@ -57,7 +66,7 @@ function Recipe(props) {
         {
           method: 'DELETE',
           headers: {'Content-Type':'application/x-www-form-urlencoded'},
-          body: `idFromFront=${idRecipe}&userTokenFromFront=${env.token}`
+          body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
         }
       );
     } else {
@@ -65,7 +74,7 @@ function Recipe(props) {
         {
           method: 'POST',
           headers: {'Content-Type':'application/x-www-form-urlencoded'},
-          body: `idFromFront=${idRecipe}&userTokenFromFront=${env.token}`
+          body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
         }
       ); 
     }
@@ -366,4 +375,11 @@ function Recipe(props) {
   );
 }
 
-export default Recipe;
+function mapStateToProps(state) {
+  return { 
+    token: state.token,
+    recipeId: state.recipeid
+  }
+}
+
+export default connect(mapStateToProps, null)(Recipe)
