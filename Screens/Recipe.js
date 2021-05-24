@@ -14,6 +14,11 @@ function Recipe(props) {
   const [stepsExpanded, setStepsExpanded] = useState(false);
   const [picsExpanded, setPicsExpanded] = useState(false);
   const [recipe, setRecipe] = useState({});
+  const [isFav, setIsFav] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+  const [nbPerson, setNbPerson] = useState(4);
+  const [rate, setRate] = useState(0.5)
 
   const idRecipe = '60a7b2d33a185c39987353d2';
 
@@ -27,8 +32,9 @@ function Recipe(props) {
       });  
       const data = await rawData.json();
       console.log('data', data);
-      setRecipe(data.response);
-
+      const recipeFromDB = data.response;
+      setRecipe(recipeFromDB);
+      setNbPerson(recipeFromDB.numOfPersons)
       return data;
     }
     getRecipeData();
@@ -43,6 +49,63 @@ function Recipe(props) {
         </Text>
       </View>
     )
+  }
+
+  const handleFavoriteButton = async () => {
+    if (isFav) { // Si isFav = true à ce moment, cela veut dire que le user le retire de ses favoris
+      await fetch(`http://${env.ip}:3000/recipe/removeFromFavorites`,
+        {
+          method: 'DELETE',
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: `idFromFront=${idRecipe}&userTokenFromFront=${env.token}`
+        }
+      );
+    } else {
+      await fetch(`http://${env.ip}:3000/recipe/addToFavorites`,
+        {
+          method: 'POST',
+          headers: {'Content-Type':'application/x-www-form-urlencoded'},
+          body: `idFromFront=${idRecipe}&userTokenFromFront=${env.token}`
+        }
+      ); 
+    }
+    console.log('click on favorite');
+    setIsFav(!isFav);
+  }
+
+  const handleLikeButton = () => {
+    console.log('click on like');
+    setIsLiked(!isLiked);
+  }
+
+  const handleDislikeButton = () => {
+    console.log('click on dislike');
+    setIsDisliked(!isDisliked);
+  }
+
+  const addPerson = () => {
+    console.log('plick on +');
+
+    let recipeCopy = {...recipe};
+    recipeCopy.ingredients.map((ingredient) => {
+      ingredient.quantity = ingredient.quantity / nbPerson * (nbPerson + 1)
+    })
+    setRecipe(recipeCopy);
+    setNbPerson(nbPerson+1);
+  }
+
+  const removePerson = () => {
+    console.log('plick on -');
+    if (nbPerson <= 1) {
+      setNbPerson(1);
+      return;
+    }
+    let recipeCopy = {...recipe};
+    recipeCopy.ingredients.map((ingredient) => {
+      ingredient.quantity = ingredient.quantity / nbPerson * (nbPerson - 1)
+    })
+    setRecipe(recipeCopy);
+    setNbPerson(nbPerson-1);
   }
 
   return (
@@ -84,14 +147,15 @@ function Recipe(props) {
               {recipe.name} 
             </Text>
             <Icon
-              name="heart-outline"
+              name={isFav ? "heart" : "heart-outline"} 
               type="ionicon"
               color="#FF6F61"
               size={28}
-              style={{
+              iconStyle={{
                 marginRight: 10,
                 marginTop: 4
               }}
+              onPress={() => handleFavoriteButton()}
             />
           </View>
           
@@ -135,7 +199,7 @@ function Recipe(props) {
           >
             <LinearProgress
               variant='determinate'
-              value={0.8}
+              value={rate}
               color='blue'
               trackColor='red'
               style={{
@@ -154,23 +218,27 @@ function Recipe(props) {
                 marginTop: 5
               }}
             >
-              80%
+              {rate*100 + '%'}
             </Text>
             <Icon
-              name="like2"
+              onPress={() => handleLikeButton()}
+              name={isLiked ? "like1" : "like2"}
               type="antdesign"
-              style={{
+              iconStyle={{
                 marginLeft: 10,
                 marginTop: 2
               }}
+
             />
             <Icon
-              name="dislike2"
+              onPress={() => handleDislikeButton()}
+              name={isDisliked ? "dislike1" : "dislike2"}
               type="antdesign"
-              style={{
+              iconStyle={{
                 marginLeft: 10,
                 marginTop: 2
               }}
+
             />
           </View>
         </View>
@@ -194,23 +262,25 @@ function Recipe(props) {
           }}
         >
           <Text style={styles.body}>
-            Nombre de personnes : {recipe.numOfPersons}
+            Nombre de personnes : {nbPerson}
           </Text>
           <Icon
             name="minuscircleo"
             type="antdesign"
-            style={{
+            iconStyle={{
               marginLeft: 10,
               marginTop: 0
             }}
+            onPress={() => removePerson()}
           /> 
           <Icon
             name="pluscircleo"
             type="antdesign"
-            style={{
+            iconStyle={{
               marginLeft: 10,
               marginTop: 0
             }}
+            onPress={() => addPerson()}
           />
         </View>
 
