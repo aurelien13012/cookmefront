@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Header, Button, Text, Input } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+
+import qs from 'qs';
+import env from '../env.json';
+
 
 import styles from '../stylesheets/styles';
 import Confirmation from '../Components/Confirmation';
@@ -11,7 +16,7 @@ function NewRecipe(props) {
   //UseState
   const [recipeName, setRecipeName] = useState('');
   const [newRecipeName, setNewRecipeName] = useState('');
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState(2);
   const [ingredientInput, setIngredientInput] = useState('');
   const [newIngredientsList, setNewIngredientList] = useState([]);
   const [stepInput, setStepInput] = useState('');
@@ -71,6 +76,28 @@ function NewRecipe(props) {
       setNewStepsList(listSteps)
       setStepInput('')
     }
+  }
+
+  const onSubmitRecipe = async () => {
+    console.log('onsubmitrecipe executé')
+    const bodyObj = {
+      recipeFromFront : newRecipeName,
+      steps : newStepsList,
+      numbsFromFront : num,
+      ingredients : newIngredientsList,
+      userTokenFromFront : env.token
+    }
+    const bodyStr = qs.stringify(bodyObj, {arrayFormat:'brackets'}); //array format brackets : change le format du string : steps[0]=a en steps[]=a
+    // https://github.com/ljharb/qs/issues/46#issuecomment-70061976
+    console.log('bodystr', bodyStr);
+
+    const res = await fetch (`http://${env.ip}:3000/addRecipe`, {
+      method:'POST',
+      headers : {'Content-Type': 'application/x-www-form-urlencoded'},
+      body : bodyStr
+    })
+    const data = await res.json();
+    console.log('datarecipe', data);
   }
 
   const isRecipeName = newRecipeName.length > 0;
@@ -241,7 +268,7 @@ function NewRecipe(props) {
       </ScrollView>
 
       <View>
-        <Confirmation />
+        <Confirmation propsSubmitMyRecipe={onSubmitRecipe}/>
       </View>
 
 
@@ -249,4 +276,11 @@ function NewRecipe(props) {
   );
 }
 
-export default NewRecipe;
+function mapStateToProps(state) {
+  return { token: state.token }
+}
+
+export default connect(
+  mapStateToProps, null
+)(NewRecipe)
+
