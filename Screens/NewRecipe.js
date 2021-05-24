@@ -11,7 +11,7 @@ function NewRecipe(props) {
   //UseState
   const [recipeName, setRecipeName] = useState('');
   const [newRecipeName, setNewRecipeName] = useState('');
-  const [num, setNum] = useState('0');
+  const [num, setNum] = useState(0);
   const [ingredientInput, setIngredientInput] = useState('');
   const [newIngredientsList, setNewIngredientList] = useState([]);
   const [stepInput, setStepInput] = useState('');
@@ -29,7 +29,7 @@ function NewRecipe(props) {
 
   const onDecreaseNumb = () => {
     if (num === 0) {
-      setNum('0')
+      setNum(0)
     } else {
       setNum(num - 1)
     }

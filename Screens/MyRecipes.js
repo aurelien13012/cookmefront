@@ -20,15 +20,6 @@ function MyRecipes(props) {
       const body = await dataRecipes.json()
       console.log('body', body)
       setMyRecipesList(body);
-
-      // const bodyId = body.map((recipe, i) => {
-      //   console.log('recipebody', recipe)
-      //   return (
-      //     recipe._id
-      //   )
-      // })
-      // console.log(bodyId)
-      // props.saveRecipeId(bodyId)
     }
     findMyRecipes()
   }, [])
