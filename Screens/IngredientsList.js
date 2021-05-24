@@ -42,12 +42,12 @@ export default function IngredientsList(props) {
       const myFridge = await getMyFridge();
 
       // Update la propriété "selected" si l'utilisateur à l'ingrédient dans son fridge
-      myFridge.map((ingredient) => {
-        const ingredientsName =  formatedData[ingredient.category].map((ingredient) => {
+      myFridge.map((fridgeIngredient) => {
+        const ingredientsNames = formatedData[fridgeIngredient.category].map((ingredient) => {
           return ingredient.name
         })
-        const index = ingredientsName.indexOf(ingredient.name);
-        formatedData[ingredient.category][index].selected = true;
+        const index = ingredientsNames.indexOf(fridgeIngredient.name);
+        formatedData[fridgeIngredient.category][index].selected = true;
       })
 
       // Update la variable d'état
@@ -67,9 +67,12 @@ export default function IngredientsList(props) {
     // On crée un objet de base
     let formatedData = {};
     // pour chaque category trouvée, on crée un tableau
+
     data.map((ingredient, index) => {
       formatedData[ingredient.category] = [];
     });
+
+    // console.log('formated data en cours', formatedData);
 
     // On remplit le tableau de chaque catégorie avec un objet {name, selected} pour chaque ingrédient correspondant
     data.map((ingredient, index) => {
@@ -78,6 +81,10 @@ export default function IngredientsList(props) {
         selected: false
       });
     });
+
+    // console.log('IngredientsFromDB', data);
+    // console.log('données formatées', formatedData);
+
     return formatedData;
   }
 

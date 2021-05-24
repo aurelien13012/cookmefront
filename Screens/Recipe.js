@@ -15,7 +15,7 @@ function Recipe(props) {
   const [picsExpanded, setPicsExpanded] = useState(false);
   const [recipe, setRecipe] = useState({});
 
-  const idRecipe = '60a794f5b672a34d448d7452';
+  const idRecipe = '60a7b2d33a185c39987353d2';
 
   useEffect(() => {
     const getRecipeData = async () => {
