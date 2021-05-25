@@ -25,8 +25,8 @@ function Recipe(props) {
   ///// VARIABLES REDUX
   const idRecipe = '60a7b2d33a185c39987353d2';
   // const idRecipe = props.idRecipe;
-  const token = env.token;
-  // const token = props.token;
+  // const token = env.token;
+  const token = props.token;
 
   useEffect(() => {
     const getRecipeData = async () => {
