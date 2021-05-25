@@ -41,7 +41,7 @@ function RecipesList(props) {
       {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${env.token}`
+        body: `userTokenFromFront=${props.token}`
       });
       console.log("afterFetch");
       const data = await rawData.json();
@@ -63,13 +63,14 @@ function RecipesList(props) {
       return 
     }
     console.log("useEffectUpDate fetch")
+    
     const getSuggestedRecipe = async () => {
       console.log("fetch");
       const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
       {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${env.token}`
+        body: `userTokenFromFront=${props.token}`
       });
       console.log("afterFetch");
       const data = await rawData.json();

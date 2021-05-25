@@ -88,7 +88,7 @@ function NewRecipe(props) {
     });
     data.append('recipeFromFront', newRecipeName)
     data.append('numbsFromFront', num)
-    data.append('userTokenFromFront', env.token)
+    data.append('userTokenFromFront', props.token)
     data.append('steps', JSON.stringify(newStepsList))
     data.append('ingredients', JSON.stringify(newIngredientsList))
 
