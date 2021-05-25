@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { View, Text, ScrollView, Image } from "react-native";
-import { Button, SearchBar, Card, Header } from "react-native-elements";
-import { List } from "react-native-paper";
+import { View, Text, ScrollView, Image,TouchableOpacity } from "react-native";
+import { SearchBar, Card, Header } from "react-native-elements";
+import { useIsFocused} from "@react-navigation/native";
+import { connect } from 'react-redux';
 
 import styles from "../stylesheets/styles";
 import env from "../env.json";
@@ -10,8 +11,6 @@ import env from "../env.json";
 function RecipesList(props) {
   const [searchRecipesList, setSearchRecipesList] = useState("");
 
-  const [ingredientsList, setIngredientsList] = useState([]);
-  const [ingredientsExpanded, setIngredientsExpanded] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
 
   const [suggestedList, setSuggestedList] = useState([]);
@@ -21,6 +20,7 @@ function RecipesList(props) {
     setSearchRecipesList(search);
   };
 
+  const isFocused = useIsFocused()
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
@@ -37,33 +37,49 @@ function RecipesList(props) {
 
     const getSuggestedRecipe = async () => {
       console.log("fetch");
-      const data = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`);
+      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `userTokenFromFront=${env.token}`
+      });
       console.log("afterFetch");
-      console.log("data", data);
-      const body = await data.json();
-      console.log("body", body);
-      setSuggestedList(body);
+      const data = await rawData.json();
+      // console.log("data", data);
+      setSuggestedList(data);
     };
 
-    // Update la variable d'état
-    setIngredientsList(ingredientsListData);
+    console.log("result", suggestedList);
 
     // Appel de la fonction
     getAllRecipes();
     getSuggestedRecipe();
   }, []);
 
+  useEffect(()=>{
+    console.log("useEffectUpDate");
+    if (!isFocused){
+      console.log("useEffectUpDateStop");
+      return 
+    }
+    console.log("useEffectUpDate fetch")
+    const getSuggestedRecipe = async () => {
+      console.log("fetch");
+      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `userTokenFromFront=${env.token}`
+      });
+      console.log("afterFetch");
+      const data = await rawData.json();
+      // console.log("data2", data);
+      setSuggestedList(data || {});
+    };
+    getSuggestedRecipe();
+  },[isFocused]) 
+
   //// DONNEES EN DUR
-  const ingredientsListData = [
-    {
-      name: "Courgette",
-      selected: false,
-    },
-    {
-      name: "Poulet",
-      selected: false,
-    },
-  ];
 
   // const recipesListData = [
   //   {
@@ -75,22 +91,6 @@ function RecipesList(props) {
   //     imgRecipe: require("../assets/pates-bolognaise.jpg"),
   //   },
   // ];
-
-  ////// FUNCTION UTILITAIRES
-  const handleButtonIngredients = (array, index) => {
-    const ingredientsListCopy = [...ingredientsList];
-    // Toggle le boolééen "selected"
-    ingredientsListCopy[index].selected = !ingredientsListCopy[index].selected;
-    setIngredientsList(ingredientsListCopy);
-    console.log(
-      "click on " +
-        ingredientsListCopy[index].name +
-        "; selected: " +
-        ingredientsListCopy[index].selected
-    );
-  };
-
-  // console.log("recipesList", recipesList);
 
   return (
     <View style={{ flex: 1 }}>
@@ -119,59 +119,35 @@ function RecipesList(props) {
         <Card>
           <Card.Title>Recette suggérée :</Card.Title>
           <Card.Divider />
-          {/* {suggestedList.map((item, index) => ( */}
-            {/* <View key={index} style={styles.cardLigne}> */}
-              <Text style={styles.cardName}>{suggestedList.name}</Text>
+              <Text style={styles.cardText}>{suggestedList.name}</Text>
               <Card.Image
                 style={styles.cardImage}
                 source={require("../assets/pates-au-pesto.jpg")}
-                onPress={() => props.navigation.navigate("Recipe")}
+                onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(suggestedList._id)}}
               ></Card.Image>
-            {/* </View> */}
-          {/* ))} */}
         </Card>
-
-        <List.Accordion
-          title="Avez vous ?"
-          expanded={ingredientsExpanded}
-          onPress={() => {
-            setIngredientsExpanded(!ingredientsExpanded);
-          }}
-          style={styles.accordionContainer}
-          titleStyle={styles.accordionTitle}
-        >
-          <View style={styles.accordionItemsContainer}>
-            {ingredientsList.map((item, index) => (
-              <Button
-                title={item.name}
-                buttonStyle={
-                  item.selected
-                    ? styles.accordionItemSelected
-                    : styles.accordionItem
-                }
-                onPress={() => handleButtonIngredients(ingredientsList, index)}
-                titleStyle={
-                  item.selected
-                    ? styles.accordionItemTitleSelected
-                    : styles.accordionItemTitle
-                }
-              />
-            ))}
-          </View>
-        </List.Accordion>
 
         <Card style={styles.cardContainer}>
           <Card.Title>Toutes les recettes :</Card.Title>
           <Card.Divider />
           {recipesList.map((item, index) => (
-            <View key={index} style={styles.cardLigne}>
-              <Text style={styles.cardName}>{item.name}</Text>
+            <TouchableOpacity
+              key={index} 
+              style={styles.cardLigne} 
+              onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(item._id)}}
+            >
+              <Text 
+                style={styles.cardName}
+              >               
+                {item.name}
+              </Text>
               <Image
                 style={styles.image}
                 resizeMode="cover"
                 source={require("../assets/pates-au-beurre.jpg")}
-              />
-            </View>
+                />
+            </TouchableOpacity>
+            
           ))}
         </Card>
       </ScrollView>
@@ -179,4 +155,18 @@ function RecipesList(props) {
   );
 }
 
-export default RecipesList;
+function mapStateToProps(state) {
+  return { token: state.token }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    recipeId: function (recipeId) {
+      dispatch({ type: 'saveRecipeId', recipeId })
+    }
+  }
+}
+
+export default connect(
+  mapStateToProps, mapDispatchToProps
+)(RecipesList);

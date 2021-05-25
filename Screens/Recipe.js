@@ -22,8 +22,8 @@ function Recipe(props) {
   const [rate, setRate] = useState(0.5)
 
   ///// VARIABLES REDUX
-  const idRecipe = '60a7b2d33a185c39987353d2';
-  // const idRecipe = props.idRecipe;
+  //const idRecipe = '60a7b2d33a185c39987353d2';
+  const idRecipe = props.recipeId;
   // const token = env.token;
   const token = props.token;
 
