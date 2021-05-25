@@ -152,6 +152,7 @@ function Recipe(props) {
           alignItems: 'center'
         }}
         onPress={() => handleModifyRecipe()}
+        key={0}
       />,
       <Icon
         name="trash" 
@@ -174,6 +175,7 @@ function Recipe(props) {
           alignItems: 'center'
         }}
         onPress={() => handleDeleteRecipe()}
+        key={1}
       />
     ];   
   }
@@ -192,56 +194,8 @@ function Recipe(props) {
         style={styles.recipePic}
       />
 
-
       {iconsForOwner}
-      {/* <Icon
-        name="pencil" 
-        type="font-awesome"
-        color="#FF6F61"
-        size={28}
-        containerStyle={{
-          backgroundColor: 'white',
-          // padding: 7,
-          width: 44,
-          height: 44,
-          borderRadius: 22,
-          borderStyle: 'solid',
-          borderColor: '#FF6F61',
-          borderWidth: 2,
-          position: 'absolute',
-          top: 50,
-          left: 280,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-        onPress={() => {}}
-      />
-      <Icon
-        name="trash" 
-        type="font-awesome"
-        color="#FF6F61"
-        size={28}
-        containerStyle={{
-          backgroundColor: 'white',
-          // padding: 7,
-          width: 44,
-          height: 44,
-          borderRadius: 22,
-          borderStyle: 'solid',
-          borderColor: '#FF6F61',
-          borderWidth: 2,
-          position: 'absolute',
-          top: 50,
-          left: 330,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-        onPress={() => {}}
-      /> */}
-      
-
+     
       {/* Centrage boite d'information */}
       <View
         style={{
@@ -418,6 +372,7 @@ function Recipe(props) {
               <List.Item
                 title={`${ingredient.ingredientsIds.name} (${ingredient.quantity} ${ingredient.unit})`}
                 titleStyle={styles.body}
+                key={index}
               />
             )
           })}
@@ -436,6 +391,7 @@ function Recipe(props) {
               <List.Item
                 title={`${index+1}. ${step}`}
                 titleStyle={styles.body}
+                key={index}
               />
             )
           })}
@@ -461,18 +417,22 @@ function Recipe(props) {
             <Image 
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={0}
             />
             <Image 
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={1}
             />
             <Image  
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={2}
             />
             <Image 
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={3}
             />
  
           </View>

@@ -55,6 +55,7 @@ function MyRecipes(props) {
             titleStyle={styles.itemMyRecipesTitle}
             buttonStyle={styles.itemMyRecipes}
             onPress={() => {props.navigation.navigate('Recipe'); props.recipeId(item._id)}}
+            key={i}
           />
         )
         )

@@ -168,6 +168,7 @@ function IngredientsList(props) {
             onPress={() => toggleCategoryExpanded(index)}
             style={styles.accordionContainer}
             titleStyle={styles.accordionTitle}
+            key={index}
           >
             <View
               style={styles.accordionItemsContainer}
@@ -178,6 +179,7 @@ function IngredientsList(props) {
                   buttonStyle={ingredient.selected ? styles.accordionItemSelected : styles.accordionItem}
                   onPress={() => toggleIngredientSelected(category.name, index)}
                   titleStyle={ingredient.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
+                  key={index}
                 />
               ))}
             </View>

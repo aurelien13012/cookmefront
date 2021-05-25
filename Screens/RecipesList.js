@@ -155,6 +155,7 @@ function RecipesList(props) {
                     ? styles.accordionItemTitleSelected
                     : styles.accordionItemTitle
                 }
+                key={index}
               />
             ))}
           </View>
