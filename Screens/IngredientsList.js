@@ -14,8 +14,8 @@ function IngredientsList(props) {
   const [categories, setCategories] = useState([]);
 
   /////// VARIABLES REDUX
-  // const token = env.token;
-  const token = props.token;
+  const token = env.token;
+  // const token = props.token;
 
   //////// USE EFFECTS
   // Charger les données
