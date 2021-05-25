@@ -7,35 +7,39 @@ import {
   Button,
   Text,
 } from "react-native-elements";
+import { connect } from 'react-redux';
 
 import styles from "../stylesheets/styles";
+import env from '../env.json';
 
 function Favorites(props) {
   //UseStates
   const [searchValue, setSearchValue] = useState("");
   const [favoritesRecipesList, setFavoritesRecipesList] = useState([]);
 
-  //Données en dur
-  const favoritesRecipesData = [
-    {
-      name: "Tournedos",
-    },
-    {
-      name: "Salade Niçoise",
-    },
-    {
-      name: "Pot au feu",
-    },
-    {
-      name: "Salade Césare",
-    },
-  ];
+
+  ///: VARIABLES REDUX
+  const token = props.token;
+  
 
   //UseEffect
   useEffect(() => {
-    setFavoritesRecipesList(favoritesRecipesData);
-    console.log("myrecipelist", favoritesRecipesList.length);
-    console.log("recipelist", favoritesRecipesList);
+    const getFavoritesRecipes = async () => {
+      const rawData = await fetch(`http://${env.ip}:3000/recipesList/myFavorites`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `userTokenFromFront=${token}`
+      });
+      const data = await rawData.json();
+      setFavoritesRecipesList(data);
+      console.log("recipelist", data);
+    }
+
+    getFavoritesRecipes();
+    // setFavoritesRecipesList(favoritesRecipesData);
+    // console.log("myrecipelist", favoritesRecipesList.length);
+    // console.log("recipelist", favoritesRecipesList);
   }, []);
 
   // fonction de la barre de recherche
@@ -48,7 +52,7 @@ function Favorites(props) {
       return (
         <View>
           <Text style={styles.noRecipes}>
-            Vous n'avez pas encore de recettes. Proposez vite une recette !{" "}
+            Vous n'avez pas encore de recettes favorites.
           </Text>
         </View>
       );
@@ -58,7 +62,7 @@ function Favorites(props) {
           title={item.name}
           titleStyle={styles.itemMyRecipesTitle}
           buttonStyle={styles.itemMyRecipes}
-          onPress={() => props.navigation.navigate("Recipe")}
+          onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(item._id)}}
           key={i}
         />
       ));
@@ -93,4 +97,16 @@ function Favorites(props) {
   );
 }
 
-export default Favorites;
+function mapStateToProps(state) {
+  return { token: state.token }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    recipeId: function (recipeId) {
+      dispatch({ type: 'saveRecipeId', recipeId })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
