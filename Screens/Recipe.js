@@ -19,7 +19,8 @@ function Recipe(props) {
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
   const [nbPerson, setNbPerson] = useState(4);
-  const [rate, setRate] = useState(0.5)
+  const [rate, setRate] = useState(0.5);
+  const [isMyRecipe, setIsMyRecipe] = useState(false);
 
   ///// VARIABLES REDUX
   //const idRecipe = '60a7b2d33a185c39987353d2';
@@ -42,8 +43,10 @@ function Recipe(props) {
       console.log('user', userFromDB);
       setRecipe(recipeFromDB);
       setNbPerson(recipeFromDB.numOfPersons);
-      const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id)
+      const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
       setIsFav(isFavFromDB);
+      const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
+      setIsMyRecipe(isMyRecipeFromDB);
       return data;
     }
     getRecipeData();
@@ -93,7 +96,7 @@ function Recipe(props) {
   }
 
   const addPerson = () => {
-    console.log('plick on +');
+    console.log('click on +');
 
     let recipeCopy = {...recipe};
     recipeCopy.ingredients.map((ingredient) => {
@@ -104,7 +107,7 @@ function Recipe(props) {
   }
 
   const removePerson = () => {
-    console.log('plick on -');
+    console.log('click on -');
     if (nbPerson <= 1) {
       setNbPerson(1);
       return;
@@ -117,19 +120,88 @@ function Recipe(props) {
     setNbPerson(nbPerson-1);
   }
 
+  const handleModifyRecipe = () => {
+    console.log('click on modify');
+  }
+
+  const handleDeleteRecipe = async (id) => {
+    console.log('click on delete');
+    await fetch (`http://${env.ip}:3000/deleteMyRecipe/${id}`,
+      {
+        method: 'DELETE'
+      }
+    );
+    props.navigation.navigate('BottomNavigator', {screen : 'My Recipes'})
+  }
+
+  let iconsForOwner = [];
+  if (isMyRecipe) {
+    iconsForOwner = [
+      <Icon
+        name="pencil" 
+        type="font-awesome"
+        color="#FF6F61"
+        size={28}
+        containerStyle={{
+          backgroundColor: 'white',
+          width: 44,
+          height: 44,
+          borderRadius: 22,
+          borderStyle: 'solid',
+          borderColor: '#FF6F61',
+          borderWidth: 2,
+          position: 'absolute',
+          top: 50,
+          left: 280,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        onPress={() => handleModifyRecipe()}
+        key={0}
+      />,
+      <Icon
+        name="trash" 
+        type="font-awesome"
+        color="#FF6F61"
+        size={28}
+        containerStyle={{
+          backgroundColor: 'white',
+          width: 44,
+          height: 44,
+          borderRadius: 22,
+          borderStyle: 'solid',
+          borderColor: '#FF6F61',
+          borderWidth: 2,
+          position: 'absolute',
+          top: 50,
+          left: 330,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+        onPress={() => handleDeleteRecipe(recipe._id)}
+        key={1}
+      />
+    ];   
+  }
+
   return (
  
     <ScrollView    
-      style={{backgroundColor: 'white', height: '100%'}}
+      style={{backgroundColor: 'white', height: '100%', flex: 1}}
     > 
     {/* Conteneur principal    */}
 
       {/* Image de fond */}
+
       <Image
         source={require('../assets/pate_pesto.jpg')}
         style={styles.recipePic}
       />
 
+      {iconsForOwner}
+     
       {/* Centrage boite d'information */}
       <View
         style={{
@@ -160,7 +232,7 @@ function Recipe(props) {
               type="ionicon"
               color="#FF6F61"
               size={28}
-              iconStyle={{
+              containerStyle={{
                 marginRight: 10,
                 marginTop: 4
               }}
@@ -233,7 +305,7 @@ function Recipe(props) {
               onPress={() => handleLikeButton()}
               name={isLiked ? "like1" : "like2"}
               type="antdesign"
-              iconStyle={{
+              containerStyle={{
                 marginLeft: 10,
                 marginTop: 2
               }}
@@ -243,7 +315,7 @@ function Recipe(props) {
               onPress={() => handleDislikeButton()}
               name={isDisliked ? "dislike1" : "dislike2"}
               type="antdesign"
-              iconStyle={{
+              containerStyle={{
                 marginLeft: 10,
                 marginTop: 2
               }}
@@ -276,7 +348,7 @@ function Recipe(props) {
           <Icon
             name="minuscircleo"
             type="antdesign"
-            iconStyle={{
+            containerStyle={{
               marginLeft: 10,
               marginTop: 0
             }}
@@ -285,7 +357,7 @@ function Recipe(props) {
           <Icon
             name="pluscircleo"
             type="antdesign"
-            iconStyle={{
+            containerStyle={{
               marginLeft: 10,
               marginTop: 0
             }}
@@ -306,6 +378,7 @@ function Recipe(props) {
               <List.Item
                 title={`${ingredient.ingredientsIds.name} (${ingredient.quantity} ${ingredient.unit})`}
                 titleStyle={styles.body}
+                key={index}
               />
             )
           })}
@@ -324,6 +397,7 @@ function Recipe(props) {
               <List.Item
                 title={`${index+1}. ${step}`}
                 titleStyle={styles.body}
+                key={index}
               />
             )
           })}
@@ -349,18 +423,22 @@ function Recipe(props) {
             <Image 
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={0}
             />
             <Image 
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={1}
             />
             <Image  
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={2}
             />
             <Image 
               source={require('../assets/pate_pesto.jpg')}
               style={styles.recipeMiniPic}
+              key={3}
             />
  
           </View>

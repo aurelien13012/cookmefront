@@ -20,15 +20,6 @@ function MyRecipes(props) {
       const body = await dataRecipes.json()
       console.log('body', body)
       setMyRecipesList(body);
-
-      // const bodyId = body.map((recipe, i) => {
-      //   console.log('recipebody', recipe)
-      //   return (
-      //     recipe._id
-      //   )
-      // })
-      // console.log(bodyId)
-      // props.saveRecipeId(bodyId)
     }
     findMyRecipes()
   }, [])
@@ -55,6 +46,7 @@ function MyRecipes(props) {
             titleStyle={styles.itemMyRecipesTitle}
             buttonStyle={styles.itemMyRecipes}
             onPress={() => {props.navigation.navigate('Recipe'); props.recipeId(item._id)}}
+            key={i}
           />
         )
         )
@@ -102,7 +94,7 @@ function mapStateToProps(state) {
   return { token: state.token }
 }
 
-function mapDispactchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     recipeId: function (recipeId) {
       dispatch({ type: 'saveRecipeId', recipeId })
@@ -111,5 +103,5 @@ function mapDispactchToProps(dispatch) {
 }
 
 export default connect(
-  mapStateToProps, mapDispactchToProps
+  mapStateToProps, mapDispatchToProps
 )(MyRecipes);
