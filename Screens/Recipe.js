@@ -23,7 +23,7 @@ function Recipe(props) {
   const [isMyRecipe, setIsMyRecipe] = useState(false);
 
   ///// VARIABLES REDUX
-  const idRecipe = '60a7b2d33a185c39987353d2';
+  const idRecipe = '60abd25a621b2e47040b0ed4';
   // const idRecipe = props.idRecipe;
   const token = env.token;
   // const token = props.token;
@@ -124,8 +124,14 @@ function Recipe(props) {
     console.log('click on modify');
   }
 
-  const handleDeleteRecipe = () => {
+  const handleDeleteRecipe = async (id) => {
     console.log('click on delete');
+    await fetch (`http://${env.ip}:3000/deleteMyRecipe/${id}`,
+      {
+        method: 'DELETE'
+      }
+    );
+    
   }
 
   let iconsForOwner = [];
@@ -174,7 +180,7 @@ function Recipe(props) {
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        onPress={() => handleDeleteRecipe()}
+        onPress={() => handleDeleteRecipe(recipe._id)}
         key={1}
       />
     ];   
