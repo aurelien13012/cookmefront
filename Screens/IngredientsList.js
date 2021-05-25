@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Header, Button } from 'react-native-elements';
 import { List } from 'react-native-paper';
+import { connect } from 'react-redux';
 
 import styles from '../stylesheets/styles'
 import env from '../env.json';
 
-export default function IngredientsList(props) {
+function IngredientsList(props) {
 
   //////// VARIABLES D'ETAT
   const [ingredientsList, setIngredientsList] = useState({});
   const [categories, setCategories] = useState([]);
+
+  /////// VARIABLES REDUX
+  const token = env.token;
+  // const token = props.token;
 
   //////// USE EFFECTS
   // Charger les données
@@ -30,7 +35,7 @@ export default function IngredientsList(props) {
       {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${env.token}`
+        body: `userTokenFromFront=${token}`
       }); 
       const data = await rawData.json();
       return data;
@@ -42,12 +47,12 @@ export default function IngredientsList(props) {
       const myFridge = await getMyFridge();
 
       // Update la propriété "selected" si l'utilisateur à l'ingrédient dans son fridge
-      myFridge.map((ingredient) => {
-        const ingredientsName =  formatedData[ingredient.category].map((ingredient) => {
+      myFridge.map((fridgeIngredient) => {
+        const ingredientsNames = formatedData[fridgeIngredient.category].map((ingredient) => {
           return ingredient.name
         })
-        const index = ingredientsName.indexOf(ingredient.name);
-        formatedData[ingredient.category][index].selected = true;
+        const index = ingredientsNames.indexOf(fridgeIngredient.name);
+        formatedData[fridgeIngredient.category][index].selected = true;
       })
 
       // Update la variable d'état
@@ -67,9 +72,12 @@ export default function IngredientsList(props) {
     // On crée un objet de base
     let formatedData = {};
     // pour chaque category trouvée, on crée un tableau
+
     data.map((ingredient, index) => {
       formatedData[ingredient.category] = [];
     });
+
+    // console.log('formated data en cours', formatedData);
 
     // On remplit le tableau de chaque catégorie avec un objet {name, selected} pour chaque ingrédient correspondant
     data.map((ingredient, index) => {
@@ -78,6 +86,10 @@ export default function IngredientsList(props) {
         selected: false
       });
     });
+
+    // console.log('IngredientsFromDB', data);
+    // console.log('données formatées', formatedData);
+
     return formatedData;
   }
 
@@ -120,7 +132,7 @@ export default function IngredientsList(props) {
     {
       method: 'PUT',
       headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: `nameFromFront=${name}&userTokenFromFront=${env.token}`
+      body: `nameFromFront=${name}&userTokenFromFront=${token}`
     });  
   }
 
@@ -130,51 +142,62 @@ export default function IngredientsList(props) {
     {
       method: 'DELETE',
       headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: `nameFromFront=${name}&userTokenFromFront=${env.token}`
+      body: `nameFromFront=${name}&userTokenFromFront=${token}`
     });  
   }
 
   //// RENDER
   return (
-    <ScrollView style={styles.containerIngredients}>
-      <Header
-        centerComponent={{
-          text: 'Mes ingrédients',
-          style: styles.headerTitle
-        }}
-        containerStyle={styles.headerContainer}
-      />
+    <View
+      style={styles.container}
+    >
+      <ScrollView >
+        <Header
+          centerComponent={{
+            text: 'Mes ingrédients',
+            style: styles.headerTitle
+          }}
+          containerStyle={styles.headerContainer}
+        />
 
-    {categories.map((category, index) => {
-      return(
-        <List.Accordion
-          title={category.name}
-          expanded={category.expanded}
-          onPress={() => toggleCategoryExpanded(index)}
-          style={styles.accordionContainer}
-          titleStyle={styles.accordionTitle}
-        >
-          <View
-            style={styles.accordionItemsContainer}
+      {categories.map((category, index) => {
+        return(
+          <List.Accordion
+            title={category.name}
+            expanded={category.expanded}
+            onPress={() => toggleCategoryExpanded(index)}
+            style={styles.accordionContainer}
+            titleStyle={styles.accordionTitle}
+            key={index}
           >
-            {ingredientsList[category.name].map((ingredient, index) => (
-              <Button
-                title={ingredient.name}
-                buttonStyle={ingredient.selected ? styles.accordionItemSelected : styles.accordionItem}
-                onPress={() => toggleIngredientSelected(category.name, index)}
-                titleStyle={ingredient.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
-              />
-            ))}
-          </View>
-        </List.Accordion>
-      )
-    })}
+            <View
+              style={styles.accordionItemsContainer}
+            >
+              {ingredientsList[category.name].map((ingredient, index) => (
+                <Button
+                  title={ingredient.name}
+                  buttonStyle={ingredient.selected ? styles.accordionItemSelected : styles.accordionItem}
+                  onPress={() => toggleIngredientSelected(category.name, index)}
+                  titleStyle={ingredient.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
+                  key={index}
+                />
+              ))}
+            </View>
+          </List.Accordion>
+        )
+      })}
+      </ScrollView>
 
       <Button title = 'Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
-        onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Recipes'})}
+          onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Recipes'})}
       />
-    </ScrollView>
+    </View>
   );
 }
 
+function mapStateToProps(state) {
+  return { token: state.token }
+}
 
+
+export default connect(mapStateToProps, null)(IngredientsList)

@@ -59,6 +59,7 @@ function Favorites(props) {
           titleStyle={styles.itemMyRecipesTitle}
           buttonStyle={styles.itemMyRecipes}
           onPress={() => props.navigation.navigate("Recipe")}
+          key={i}
         />
       ));
     }

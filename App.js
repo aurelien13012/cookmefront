@@ -49,7 +49,7 @@ const NavRecipe = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Recipes' component={RecipesList} />
       <Stack.Screen name='Recipe' component={Recipe} />
-      {/* <Stack.Screen name='Login' component={Login} /> */}
+      <Stack.Screen name='Login' component={Login} />
     </Stack.Navigator>
   )
 }
@@ -57,7 +57,7 @@ const NavRecipe = () => {
 const NavMyRecipe = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen name='Login' component={Login} /> */}
+      {/* <Stack.Screen name='Login' component={Login} />  */}
       <Stack.Screen name='My Recipes' component={MyRecipes} />
       <Stack.Screen name='Recipe' component={Recipe} />
       <Stack.Screen name='New Recipe' component={NewRecipe} />

@@ -5,13 +5,16 @@ import { Button, SearchBar, Card, Header } from "react-native-elements";
 import { List } from "react-native-paper";
 
 import styles from "../stylesheets/styles";
-import env from '../env.json';
+import env from "../env.json";
 
 function RecipesList(props) {
   const [searchRecipesList, setSearchRecipesList] = useState("");
+
   const [ingredientsList, setIngredientsList] = useState([]);
   const [ingredientsExpanded, setIngredientsExpanded] = useState(false);
   const [recipesList, setRecipesList] = useState([]);
+
+  const [suggestedList, setSuggestedList] = useState([]);
 
   // fonction de la barre de recherche
   const updateSearch = (search) => {
@@ -23,22 +26,32 @@ function RecipesList(props) {
   useEffect(() => {
     // Charge tous les recettes de la bdd
     const getAllRecipes = async () => {
-    //onsole.log('fetch')
-    const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipesList`);  
-    // console.log('afterFetch')
-    // console.log('rawData', rawData)
-    const data = await rawData.json();
-    //console.log('data', data)
-    setRecipesList(data);
-    }
+      //console.log('fetch')
+      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipesList`);
+      // console.log('afterFetch')
+      // console.log('rawData', rawData)
+      const data = await rawData.json();
+      //console.log('data', data)
+      setRecipesList(data);
+    };
 
-    // Update la variable d'état  
+    const getSuggestedRecipe = async () => {
+      console.log("fetch");
+      const data = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`);
+      console.log("afterFetch");
+      console.log("data", data);
+      const body = await data.json();
+      console.log("body", body);
+      setSuggestedList(body);
+    };
+
+    // Update la variable d'état
     setIngredientsList(ingredientsListData);
-    
 
     // Appel de la fonction
     getAllRecipes();
-  },[]);
+    getSuggestedRecipe();
+  }, []);
 
   //// DONNEES EN DUR
   const ingredientsListData = [
@@ -77,10 +90,10 @@ function RecipesList(props) {
     );
   };
 
-  console.log("recipesList", recipesList);
+  // console.log("recipesList", recipesList);
 
   return (
-    <View style = {{flex : 1}}>
+    <View style={{ flex: 1 }}>
       {/* en-tête de page donnant le nom de la page */}
       <Header
         centerComponent={{
@@ -105,12 +118,17 @@ function RecipesList(props) {
       <ScrollView>
         <Card>
           <Card.Title>Recette suggérée :</Card.Title>
-          <Text style={styles.cardText}>Pates au pesto</Text>
-          <Card.Image
-            style={styles.cardImage}
-            source={require("../assets/pates-au-pesto.jpg")}
-            onPress={() => props.navigation.navigate("Recipe")}
-          ></Card.Image>
+          <Card.Divider />
+          {/* {suggestedList.map((item, index) => ( */}
+            {/* <View key={index} style={styles.cardLigne}> */}
+              <Text style={styles.cardName}>{suggestedList.name}</Text>
+              <Card.Image
+                style={styles.cardImage}
+                source={require("../assets/pates-au-pesto.jpg")}
+                onPress={() => props.navigation.navigate("Recipe")}
+              ></Card.Image>
+            {/* </View> */}
+          {/* ))} */}
         </Card>
 
         <List.Accordion
@@ -137,6 +155,7 @@ function RecipesList(props) {
                     ? styles.accordionItemTitleSelected
                     : styles.accordionItemTitle
                 }
+                key={index}
               />
             ))}
           </View>
@@ -156,7 +175,6 @@ function RecipesList(props) {
             </View>
           ))}
         </Card>
-
       </ScrollView>
     </View>
   );
