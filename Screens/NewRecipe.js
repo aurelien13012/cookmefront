@@ -1,16 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
-import { Header, Button, Text, Input } from 'react-native-elements';
+import { Header, Button, Text, Input, Card } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
-import qs from 'qs';
 import env from '../env.json';
 
 import styles from '../stylesheets/styles';
 import Confirmation from '../Components/Confirmation';
 import PictureScreen from '../Components/PictureScreen';
+import picture from '../Reducers/picture';
 
 function NewRecipe(props) {
 
@@ -22,6 +22,7 @@ function NewRecipe(props) {
   const [newIngredientsList, setNewIngredientList] = useState([]);
   const [stepInput, setStepInput] = useState('');
   const [newStepsList, setNewStepsList] = useState([]);
+  const [isPicture, setIsPicture] = useState(false);
 
   const onSubmitRecipeName = (name) => {
     console.log('click détecté name', name)
@@ -78,11 +79,10 @@ function NewRecipe(props) {
   }
 
   const onSubmitRecipe = async () => {
-    console.log('onsubmitrecipe executé')
-    console.log('recipeName', newRecipeName)
+    
     let data = new FormData();
     data.append('food', {
-      uri : props.picture.uri,
+      uri: props.picture.uri,
       type: 'image/jpeg',
       name: 'avatar.jpg',
     });
@@ -92,32 +92,26 @@ function NewRecipe(props) {
     data.append('steps', JSON.stringify(newStepsList))
     data.append('ingredients', JSON.stringify(newIngredientsList))
 
-    const bodyObj = {
-      recipeFromFront: newRecipeName,
-      steps: newStepsList,
-      numbsFromFront: num,
-      ingredients: newIngredientsList,
-      userTokenFromFront: env.token,
-    }
-    const bodyStr = qs.stringify(bodyObj, { arrayFormat: 'brackets' }); //array format brackets : change le format du string : steps[0]=a en steps[]=a
-    // https://github.com/ljharb/qs/issues/46#issuecomment-70061976
-    console.log('bodystr', bodyStr);
-
     const res = await fetch(`http://${env.ip}:3000/addRecipe`, {
       method: 'POST',
-      // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      // body: `${bodyStr}&pictureFromFront=${data}`
       body: data
 
     })
     const dataResult = await res.json();
-    console.log('datarecipe', dataResult);
   }
 
+  let pictureDisplay;
+  if (isPicture) {
+    pictureDisplay =
+      <Card>
+        <Card.Image
+          style={{ width: '100%', height: 200, marginBottom: 10 }}
+          source={{ uri: props.picture.uri }}
+        />
+      </Card>
+  }
   const isRecipeName = newRecipeName.length > 0;
 
-  // console.log('listingredient', newIngredientsList)
-  
   return (
     <View style={{ flex: 1 }}>
       {/* en-tête de page donnant le nom de la page */}
@@ -276,8 +270,14 @@ function NewRecipe(props) {
             title='+' //bouton pour le click pour ajouter une photo
             titleStyle={styles.addNewRecipeTitle}
             buttonStyle={styles.addNew}
-            onPress={() => props.navigation.navigate('Picture')}
+            onPress={() => { props.navigation.navigate('Picture'); setIsPicture(true) }}
           />
+
+        </View>
+
+        <View style={styles.NewResultContainer}>
+
+          {pictureDisplay}
 
         </View>
 
@@ -293,7 +293,7 @@ function NewRecipe(props) {
 }
 
 function mapStateToProps(state) {
-  return { token: state.token, picture : state.picture}
+  return { token: state.token, picture: state.picture }
 }
 
 export default connect(
