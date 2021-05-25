@@ -94,7 +94,7 @@ function mapStateToProps(state) {
   return { token: state.token }
 }
 
-function mapDispactchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     recipeId: function (recipeId) {
       dispatch({ type: 'saveRecipeId', recipeId })
@@ -103,5 +103,5 @@ function mapDispactchToProps(dispatch) {
 }
 
 export default connect(
-  mapStateToProps, mapDispactchToProps
+  mapStateToProps, mapDispatchToProps
 )(MyRecipes);
