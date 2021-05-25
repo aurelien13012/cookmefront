@@ -23,7 +23,7 @@ function Recipe(props) {
   const [isMyRecipe, setIsMyRecipe] = useState(false);
 
   ///// VARIABLES REDUX
-  const idRecipe = '60abd25a621b2e47040b0ed4';
+  const idRecipe = '60a7b2d33a185c39987353d2';
   // const idRecipe = props.idRecipe;
   const token = env.token;
   // const token = props.token;
@@ -131,7 +131,7 @@ function Recipe(props) {
         method: 'DELETE'
       }
     );
-    
+    props.navigation.navigate('BottomNavigator', {screen : 'My Recipes'})
   }
 
   let iconsForOwner = [];
