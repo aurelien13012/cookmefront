@@ -27,6 +27,7 @@ import {Provider} from 'react-redux';
 import {createStore, combineReducers} from 'redux';
 import token from './Reducers/token';
 import recipeid from './Reducers/recipeid';
+import picture from './Reducers/picture';
 
 import Account from './Screens/Account';
 import Favorites from './Screens/Favorites';
@@ -36,11 +37,12 @@ import MyRecipes from './Screens/MyRecipes';
 import NewRecipe from './Screens/NewRecipe';
 import Recipe from './Screens/Recipe';
 import RecipesList from './Screens/RecipesList';
+import Picture from './Components/PictureScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const store = createStore(combineReducers({token, recipeid}))
+const store = createStore(combineReducers({token, recipeid, picture}))
 
 const NavRecipe = () => {
   return (
@@ -59,6 +61,7 @@ const NavMyRecipe = () => {
       <Stack.Screen name='My Recipes' component={MyRecipes} />
       <Stack.Screen name='Recipe' component={Recipe} />
       <Stack.Screen name='New Recipe' component={NewRecipe} />
+      <Stack.Screen name = 'Picture' component = {Picture} />
     </Stack.Navigator>
   )
 }
@@ -146,7 +149,3 @@ function App() {
 
 export default App;
 
-// options = {{
-//   headerTitleStyle : {
-//     fontFamily : 'SourceSansPro_300Light_Italic',
-//     }}}

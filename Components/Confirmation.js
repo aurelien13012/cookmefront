@@ -12,9 +12,17 @@ function Confirmation(props) {
     setVisible(!visible);
   };
 
+  //() => {}
+
+  const handleClick = () => {
+    console.log('click soumettre recette okay');
+    props.propsSubmitMyRecipe();
+  }
+
   return (
     <View>   
-      <Button title="Open Overlay" onPress={toggleOverlay} />
+
+      <Button title="Je valide ma recette" onPress={() => {toggleOverlay(); handleClick()}}/>
 
       <Overlay 
         isVisible={visible} 

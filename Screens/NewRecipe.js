@@ -1,24 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView } from 'react-native';
-import { Header, Button, Text, Input } from 'react-native-elements';
+import React, { useState, useRef } from 'react';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { Header, Button, Text, Input, Card } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+
+import env from '../env.json';
 
 import styles from '../stylesheets/styles';
 import Confirmation from '../Components/Confirmation';
+import PictureScreen from '../Components/PictureScreen';
+import picture from '../Reducers/picture';
 
 function NewRecipe(props) {
 
   //UseState
   const [recipeName, setRecipeName] = useState('');
   const [newRecipeName, setNewRecipeName] = useState('');
-  const [num, setNum] = useState('0');
+  const [num, setNum] = useState(0);
   const [ingredientInput, setIngredientInput] = useState('');
   const [newIngredientsList, setNewIngredientList] = useState([]);
   const [stepInput, setStepInput] = useState('');
   const [newStepsList, setNewStepsList] = useState([]);
+  const [isPicture, setIsPicture] = useState(false);
 
   const onSubmitRecipeName = (name) => {
-    console.log('click détecté', name)
+    console.log('click détecté name', name)
     setNewRecipeName(name.toUpperCase())
     setRecipeName('')
   }
@@ -29,7 +36,7 @@ function NewRecipe(props) {
 
   const onDecreaseNumb = () => {
     if (num === 0) {
-      setNum('0')
+      setNum(0)
     } else {
       setNum(num - 1)
     }
@@ -46,18 +53,16 @@ function NewRecipe(props) {
   }
 
   const onChangeQuantity = (quantity, i) => {
-    // listIngredient.push({ quantity: quantity })
     console.log('quantity', quantity)
-    console.log('i',i)
+    console.log('i', i)
     const newIngredientsListCopy = [...newIngredientsList]
     newIngredientsListCopy[i].quantity = quantity
     setNewIngredientList(newIngredientsListCopy)
   }
 
   const onChangeUnit = (unit, i) => {
-    // listIngredient.push({ quantity: quantity })
     console.log('quantity', unit)
-    console.log('i',i)
+    console.log('i', i)
     const newIngredientsListCopy = [...newIngredientsList]
     newIngredientsListCopy[i].unit = unit
     setNewIngredientList(newIngredientsListCopy)
@@ -73,9 +78,40 @@ function NewRecipe(props) {
     }
   }
 
+  const onSubmitRecipe = async () => {
+    
+    let data = new FormData();
+    data.append('food', {
+      uri: props.picture.uri,
+      type: 'image/jpeg',
+      name: 'avatar.jpg',
+    });
+    data.append('recipeFromFront', newRecipeName)
+    data.append('numbsFromFront', num)
+    data.append('userTokenFromFront', env.token)
+    data.append('steps', JSON.stringify(newStepsList))
+    data.append('ingredients', JSON.stringify(newIngredientsList))
+
+    const res = await fetch(`http://${env.ip}:3000/addRecipe`, {
+      method: 'POST',
+      body: data
+
+    })
+    const dataResult = await res.json();
+  }
+
+  let pictureDisplay;
+  if (isPicture) {
+    pictureDisplay =
+      <Card>
+        <Card.Image
+          style={{ width: '100%', height: 200, marginBottom: 10 }}
+          source={{ uri: props.picture.uri }}
+        />
+      </Card>
+  }
   const isRecipeName = newRecipeName.length > 0;
 
-  console.log('listingredient', newIngredientsList)
   return (
     <View style={{ flex: 1 }}>
       {/* en-tête de page donnant le nom de la page */}
@@ -228,20 +264,27 @@ function NewRecipe(props) {
             containerStyle={{ marginLeft: 35, width: '70%' }}
             inputStyle={{ marginLeft: 10 }}
             placeholder='Ajouter une photo'
-            onChangeText={(val) => setRecipeName(val)}
           />
 
           <Button
-            title='+' //bouton pour le click pour ajouter une étapes
+            title='+' //bouton pour le click pour ajouter une photo
             titleStyle={styles.addNewRecipeTitle}
             buttonStyle={styles.addNew}
+            onPress={() => { props.navigation.navigate('Picture'); setIsPicture(true) }}
           />
+
+        </View>
+
+        <View style={styles.NewResultContainer}>
+
+          {pictureDisplay}
+
         </View>
 
       </ScrollView>
 
       <View>
-        <Confirmation />
+        <Confirmation propsSubmitMyRecipe={onSubmitRecipe} />
       </View>
 
 
@@ -249,4 +292,11 @@ function NewRecipe(props) {
   );
 }
 
-export default NewRecipe;
+function mapStateToProps(state) {
+  return { token: state.token, picture: state.picture }
+}
+
+export default connect(
+  mapStateToProps, null
+)(NewRecipe)
+
