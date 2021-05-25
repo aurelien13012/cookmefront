@@ -124,8 +124,14 @@ function Recipe(props) {
     console.log('click on modify');
   }
 
-  const handleDeleteRecipe = () => {
+  const handleDeleteRecipe = async (id) => {
     console.log('click on delete');
+    await fetch (`http://${env.ip}:3000/deleteMyRecipe/${id}`,
+      {
+        method: 'DELETE'
+      }
+    );
+    props.navigation.navigate('BottomNavigator', {screen : 'My Recipes'})
   }
 
   let iconsForOwner = [];
@@ -174,7 +180,7 @@ function Recipe(props) {
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        onPress={() => handleDeleteRecipe()}
+        onPress={() => handleDeleteRecipe(recipe._id)}
         key={1}
       />
     ];   
