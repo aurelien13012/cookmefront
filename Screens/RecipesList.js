@@ -41,7 +41,7 @@ function RecipesList(props) {
       {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${env.token}`
+        body: `userTokenFromFront=${props.token}`
       });
       console.log("afterFetch");
       const data = await rawData.json();
@@ -69,7 +69,7 @@ function RecipesList(props) {
       {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${env.token}`
+        body: `userTokenFromFront=${props.token}`
       });
       console.log("afterFetch");
       const data = await rawData.json();

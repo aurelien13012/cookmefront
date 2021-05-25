@@ -16,7 +16,7 @@ function MyRecipes(props) {
   useEffect(() => {
     console.log('in use effect')
     const findMyRecipes = async () => {
-      const dataRecipes = await fetch(`http://${env.ip}:3000/myRecipes?tokenFromFront=${env.token}`)
+      const dataRecipes = await fetch(`http://${env.ip}:3000/myRecipes?tokenFromFront=${props.token}`)
       const body = await dataRecipes.json()
       console.log('body', body)
       setMyRecipesList(body);
