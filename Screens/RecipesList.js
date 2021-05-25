@@ -63,6 +63,7 @@ function RecipesList(props) {
       return 
     }
     console.log("useEffectUpDate fetch")
+    
     const getSuggestedRecipe = async () => {
       console.log("fetch");
       const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
