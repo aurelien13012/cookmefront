@@ -65,30 +65,30 @@ function Recipe(props) {
     getRecipeData();
   }, [])
 
-  useEffect(() => {
-    console.log('recipe useeffect update')
-    const getRecipeData = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
-      });  
-      const data = await rawData.json();
-      const recipeFromDB = data.recipe;
-      const userFromDB = data.user;
-      // console.log('recipe', recipeFromDB);
-      // console.log('user', userFromDB);
-      setRecipe(recipeFromDB);
-      setNbPerson(recipeFromDB.numOfPersons);
-      const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
-      setIsFav(isFavFromDB);
-      const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
-      setIsMyRecipe(isMyRecipeFromDB);
-      return data;
-    }
-    getRecipeData();
-  }, [isFocused])
+  // useEffect(() => {
+  //   console.log('recipe useeffect update')
+  //   const getRecipeData = async () => {
+  //     const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
+  //     {
+  //       method: 'POST',
+  //       headers: {'Content-Type':'application/x-www-form-urlencoded'},
+  //       body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
+  //     });  
+  //     const data = await rawData.json();
+  //     const recipeFromDB = data.recipe;
+  //     const userFromDB = data.user;
+  //     // console.log('recipe', recipeFromDB);
+  //     // console.log('user', userFromDB);
+  //     setRecipe(recipeFromDB);
+  //     setNbPerson(recipeFromDB.numOfPersons);
+  //     const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
+  //     setIsFav(isFavFromDB);
+  //     const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
+  //     setIsMyRecipe(isMyRecipeFromDB);
+  //     return data;
+  //   }
+  //   getRecipeData();
+  // }, [isFocused])
 
   if (Object.keys(recipe).length === 0) {
     console.log('in safe path');
@@ -209,7 +209,13 @@ function Recipe(props) {
         method: 'DELETE'
       }
     );
-    props.navigation.navigate('BottomNavigator', {screen : 'My Recipes'})
+    console.log('after fetch');
+    props.navigation.navigate('BottomNavigator', {
+      screen: 'My Recipes',
+      params: {
+        screen: 'My Recipes'
+      }});
+    console.log('after navigate');
   }
 
   let iconsForOwner = [];
