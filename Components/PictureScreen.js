@@ -3,9 +3,11 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useIsFocused } from '@react-navigation/native';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@expo/vector-icons'; 
 import { Button, Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 
+import styles from '../stylesheets/styles'
 import env from '../env.json';
 
 function PictureScreen(props) {
@@ -69,21 +71,23 @@ function PictureScreen(props) {
 
       <Button
         onPress={async () => {
-          // setVisible(true);
           if (camera) {
             let photo = await camera.takePictureAsync({ quality: 0.3, base64: true });
             props.onSnap({
               base64: photo.base64,
               uri: photo.uri
             })
-            // console.log('photo', photo)
-            // console.log('data', data)
-            // setVisible(false);
             props.navigation.navigate('New Recipe')
           }
         }}
-        title="Mettre un bouton rond"
-        buttonStyle={{ backgroundColor: "#009788" }}
+        icon={
+          <FontAwesome
+            name="camera"
+            size={24}
+            color="#FF6F61"
+          />
+        }
+        buttonStyle={styles.itemMyRecipes}
         type="solid"
       />
     </View>

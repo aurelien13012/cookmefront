@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import { Button, Overlay, Image } from 'react-native-elements';
+
+import { connect } from 'react-redux';
 
 import styles from '../stylesheets/styles'
 
@@ -9,12 +11,10 @@ function Confirmation(props) {
   console.log("props.navigation", props.navigation);
 
   const [visible, setVisible] = useState(false);
-  
+
   const toggleOverlay = () => {
     setVisible(!visible);
   };
-
-  //() => {}
 
   const handleClick = () => {
     console.log('click soumettre recette okay');
@@ -22,18 +22,21 @@ function Confirmation(props) {
   }
 
   return (
-    <View>   
+    <View>
 
-      <Button title="Je valide ma recette" onPress={() => {toggleOverlay(); handleClick()}}/>
+      <Button
+        titleStyle={styles.itemMyRecipesTitle}
+        buttonStyle={styles.itemMyRecipes}
+        title="Je valide ma recette" onPress={() => { toggleOverlay(); handleClick() }} />
 
-      <Overlay 
-        isVisible={visible} 
+      <Overlay
+        isVisible={visible}
         onBackdropPress={toggleOverlay}
         overlayStyle={{
           width: 300,
           height: 450,
           display: 'flex',
-          alignItems: 'center'  
+          alignItems: 'center'
         }}
       >
         <Image
@@ -65,15 +68,25 @@ function Confirmation(props) {
         >
           Votre recette est en ligne
         </Text>
-        <Button 
+        <Button
           title="Voir ma recette"
           buttonStyle={styles.buttonRegular}
           titleStyle={styles.buttonRegularTitle}
-          onPress={() => {props.navigation.navigate('Recipe'); toggleOverlay()}}
+          onPress={() => {props.navigation.navigate('Recipe'); props.recipeId; props.token}}
+
         />
       </Overlay>
     </View>
   );
 }
 
-export default Confirmation;
+function mapStateToProps(state) {
+  return { 
+    token: state.token,
+    recipeId: state.recipeid
+  }
+}
+
+export default connect(
+  mapStateToProps, null
+  )(Confirmation);
