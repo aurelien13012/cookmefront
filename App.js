@@ -120,8 +120,8 @@ const BottomNavigator = () => {
       <Tab.Screen name='Fridge' component={IngredientsList} />
       <Tab.Screen name='Recipes' component={NavRecipe} />
       <Tab.Screen name='Favorites' component={Favorites} />
-      <Tab.Screen name='My Recipes' component={NavMyRecipe} options={{unmountOnBlur: true}} />
-      <Tab.Screen name='My Account' component={Account} />
+      <Tab.Screen name='My Recipes' component={NavMyRecipe}  />
+      <Tab.Screen name='My Account' component={NavAccount} />
     </Tab.Navigator>
   )
 }

@@ -24,6 +24,10 @@ function NewRecipe(props) {
   const [newStepsList, setNewStepsList] = useState([]);
   const [isPicture, setIsPicture] = useState(false);
 
+  useEffect (() =>{
+    props.picture.uri = ""
+  },[])
+
 
   //Fonction pour soumettre le nom de la recette
   const onSubmitRecipeName = (name) => {
@@ -219,8 +223,8 @@ function NewRecipe(props) {
 
           {newIngredientsList.map((ingredient, i) => {
             return (
-              <View style={styles.NewRecipeContainer}>
-                <Text style={styles.noRecipes} key={i}>{i + 1}.{ingredient.name}</Text>
+              <View style={styles.NewRecipeContainer} key={i}>
+                <Text style={styles.noRecipes} >{i + 1}.{ingredient.name}</Text>
 
                 <Input
                   placeholder='Qty'
