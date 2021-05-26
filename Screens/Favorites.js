@@ -8,6 +8,7 @@ import {
   Text,
 } from "react-native-elements";
 import { connect } from 'react-redux';
+import { useIsFocused } from "@react-navigation/native";
 
 import styles from "../stylesheets/styles";
 import env from '../env.json';
@@ -20,34 +21,39 @@ function Favorites(props) {
 
   ///: VARIABLES REDUX
   const token = props.token;
+
+  // Is focused
+  const isFocused = useIsFocused();
+
   
 
   //UseEffect
   useEffect(() => {
-    const getFavoritesRecipes = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/recipesList/myFavorites`,
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${token}`
-      });
-      const data = await rawData.json();
-      setFavoritesRecipesList(data);
-      console.log("recipelist", data);
-    }
-
     getFavoritesRecipes();
-    // setFavoritesRecipesList(favoritesRecipesData);
-    // console.log("myrecipelist", favoritesRecipesList.length);
-    // console.log("recipelist", favoritesRecipesList);
   }, []);
+
+  useEffect(() => {
+    getFavoritesRecipes();
+  }, [isFocused])
+
+  const getFavoritesRecipes = async () => {
+    const rawData = await fetch(`http://${env.ip}:3000/recipesList/myFavorites`,
+    {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: `userTokenFromFront=${token}`
+    });
+    const data = await rawData.json();
+    setFavoritesRecipesList(data);
+    console.log("recipelist", data);
+  }
 
   // fonction de la barre de recherche
   const updateSearch = (search) => {
     setSearchValue(search);
   };
 
-  const getFavoritesRecipes = () => {
+  const displayFavoritesRecipes = () => {
     if (favoritesRecipesList.length === 0) {
       return (
         <View>
@@ -92,7 +98,7 @@ function Favorites(props) {
         value={searchValue}
       />
 
-      {getFavoritesRecipes()}
+      {displayFavoritesRecipes()}
     </View>
   );
 }

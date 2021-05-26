@@ -47,6 +47,15 @@ function Recipe(props) {
       setIsFav(isFavFromDB);
       const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
       setIsMyRecipe(isMyRecipeFromDB);
+      setRate(0.5);
+      if (recipeFromDB.nbVote > 0) {
+        let newRate = recipeFromDB.nbLike / recipeFromDB.nbVote
+        setRate(newRate)
+      }
+      const isLikedFromDB = userFromDB.likedIds.find(id => id === recipeFromDB._id);
+      const isDislikedFromDB = userFromDB.dislikedIds.find(id => id === recipeFromDB._id);
+      setIsLiked(isLikedFromDB);
+      setIsDisliked(isDislikedFromDB);
       return data;
     }
     getRecipeData();
@@ -55,7 +64,7 @@ function Recipe(props) {
   if (Object.keys(recipe).length === 0) {
     console.log('in safe path');
     return (
-      <View>
+      <View style={{flex:1, justifyContent:'center', alignItems: 'center'}}>
         <Text>
           Chargement...
         </Text>
@@ -85,14 +94,54 @@ function Recipe(props) {
     setIsFav(!isFav);
   }
 
+  const updateVoteInDB = async (type) => {
+    const rawData = await fetch(`http://${env.ip}:3000/recipe/updateVote`,
+      {
+        method: 'PUT',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `idFromFront=${idRecipe}&userTokenFromFront=${token}&typeFromFront=${type}`
+      }
+    );
+    const data = await rawData.json();
+    // console.log('data', data);
+    setRecipe(data);
+    if (data.nbVote === 0) {
+      setRate(0.5);
+    } else {
+      setRate(data.nbLike / data.nbVote);
+    }
+ 
+    // return data
+  }
+
   const handleLikeButton = () => {
+    if (isLiked) {
+      console.log('remove like');
+      updateVoteInDB('removeLike');
+      setIsLiked(!isLiked);
+      return;
+    }
     console.log('click on like');
+    updateVoteInDB('like');
     setIsLiked(!isLiked);
+    if (isDisliked) {
+      setIsDisliked(false)
+    }
   }
 
   const handleDislikeButton = () => {
+    if (isDisliked) {
+      console.log('already disliked');
+      updateVoteInDB('removeDislike');
+      setIsDisliked(!isDisliked);
+      return;
+    }
     console.log('click on dislike');
+    updateVoteInDB('dislike');
     setIsDisliked(!isDisliked);
+    if (isLiked) {
+      setIsLiked(false);
+    }
   }
 
   const addPerson = () => {
@@ -196,7 +245,7 @@ function Recipe(props) {
       {/* Image de fond */}
 
       <Image
-        source={require('../assets/pate_pesto.jpg')}
+        source={{uri: recipe.pictures}}
         style={styles.recipePic}
       />
 
@@ -241,7 +290,7 @@ function Recipe(props) {
           </View>
           
           {/* 2eme ligne */}
-          <View
+          {/* <View
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -267,7 +316,7 @@ function Recipe(props) {
             >
               15 minutes
             </Text>
-          </View>
+          </View> */}
           
           {/* 3eme ligne */}
           <View
@@ -299,7 +348,7 @@ function Recipe(props) {
                 marginTop: 5
               }}
             >
-              {rate*100 + '%'}
+              {Math.round(rate*100) + '%'}
             </Text>
             <Icon
               onPress={() => handleLikeButton()}
@@ -404,7 +453,7 @@ function Recipe(props) {
         </List.Accordion>  
 
         {/* Liste des photos */}
-        <List.Accordion
+        {/* <List.Accordion
           title="Images"
           expanded={picsExpanded}
           onPress={() => {setPicsExpanded(!picsExpanded)}}
@@ -443,7 +492,7 @@ function Recipe(props) {
  
           </View>
 
-        </List.Accordion>  
+        </List.Accordion>   */}
 
       </View>
     

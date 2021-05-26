@@ -87,10 +87,10 @@ function NewRecipe(props) {
       name: 'avatar.jpg',
     });
     data.append('recipeFromFront', newRecipeName)
-    data.append('numbsFromFront', num)
+    data.append('numbFromFront', num)
     data.append('userTokenFromFront', props.token)
     data.append('steps', JSON.stringify(newStepsList))
-    data.append('ingredients', JSON.stringify(newIngredientsList))
+    data.append('ingredients', JSON.stringify(newIngredientsList));
 
     const res = await fetch(`http://${env.ip}:3000/addRecipe`, {
       method: 'POST',
