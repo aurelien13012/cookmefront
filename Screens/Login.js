@@ -29,10 +29,18 @@ function Login(props) {
 
   //affiche lorsqu'il n'apparait pas ou le contraire
   const toggleOverlaySignIn = () => {
+    setSignInEmail('');
+    setSignInPassword('');
+    setErrorsSignin([]);
     setVisibleSignIn(!visibleSignIn);
   };
 
   const toggleOverlaySignUp = () => {
+    setSignUpEmail('');
+    setSignUpFirstName('');
+    setSignUpSurName('');
+    setSignUpPassword('');
+    setErrorsSignup([])
     setVisibleSignUp(!visibleSignUp);
   };
 
@@ -68,6 +76,7 @@ function Login(props) {
         setErrorsSignup(body.error)
       }
     }
+
   }
 
   //// bouton valider lit les données pour signin gère aussi l'overlay et les message d'erreurs
@@ -91,14 +100,15 @@ function Login(props) {
     }  else {
       setErrorsSignin(body.error)
     }
+
   }
 
   var tabErrorsSignin = listErrorsSignin.map((error,i) => {
-    return(<Text>{error}</Text>)
+    return(<Text key={i}>{error}</Text>)
   })
 
   var tabErrorsSignup = listErrorsSignup.map((error,i) => {
-    return(<Text>{error}</Text>)
+    return(<Text key= {i}>{error}</Text>)
   })
 
   return (
