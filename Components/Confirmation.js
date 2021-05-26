@@ -16,9 +16,10 @@ function Confirmation(props) {
     setVisible(!visible);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     console.log('click soumettre recette okay');
-    props.propsSubmitMyRecipe();
+    await props.propsSubmitMyRecipe();
+    toggleOverlay();
   }
 
   return (
@@ -27,7 +28,7 @@ function Confirmation(props) {
       <Button
         titleStyle={styles.itemMyRecipesTitle}
         buttonStyle={styles.itemMyRecipes}
-        title="Je valide ma recette" onPress={() => { toggleOverlay(); handleClick() }} />
+        title="Je valide ma recette" onPress={() => { handleClick() }} />
 
       <Overlay
         isVisible={visible}
@@ -72,7 +73,12 @@ function Confirmation(props) {
           title="Voir ma recette"
           buttonStyle={styles.buttonRegular}
           titleStyle={styles.buttonRegularTitle}
-          onPress={() => {props.navigation.navigate('Recipe'); props.recipeId; props.token}}
+          onPress={() => {
+            props.navigation.navigate('Recipe'); 
+            // props.recipeId; 
+            // props.token;
+            toggleOverlay();
+          }}
 
         />
       </Overlay>

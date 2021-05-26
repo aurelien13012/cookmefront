@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 
 import styles from '../stylesheets/styles';
 
-
-
 function Account(props) {
 
   const [infoUser, setInfoUser] = useState([]);
