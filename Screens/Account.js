@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 
 import styles from '../stylesheets/styles';
 
-const [infoUser, setInfoUser] = useState([]);
+
 
 function Account(props) {
+
+  const [infoUser, setInfoUser] = useState([]);
 
   useEffect(() => {
     const infoUser = async () => {
