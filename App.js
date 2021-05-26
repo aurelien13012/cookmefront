@@ -68,14 +68,14 @@ const NavMyRecipe = () => {
   )
 }
 
-const NavAccount = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Account' component={Account} />
-      <Stack.Screen name = 'Login' component = {Login} />
-    </Stack.Navigator>
-  )
-}
+// const NavAccount = () => {
+//   return (
+//     <Stack.Navigator screenOptions={{ headerShown: false }}>
+//       <Stack.Screen name='Account' component={Account} />
+//       <Stack.Screen name = 'Login' component = {Login} />
+//     </Stack.Navigator>
+//   )
+// }
 
 const BottomNavigator = () => {
   return (
@@ -121,7 +121,7 @@ const BottomNavigator = () => {
       <Tab.Screen name='Recipes' component={NavRecipe} />
       <Tab.Screen name='Favorites' component={Favorites} />
       <Tab.Screen name='My Recipes' component={NavMyRecipe}  />
-      <Tab.Screen name='My Account' component={NavAccount} />
+      <Tab.Screen name='My Account' component={Account} />
     </Tab.Navigator>
   )
 }

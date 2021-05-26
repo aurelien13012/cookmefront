@@ -2,22 +2,32 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { Button, Header, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from '../stylesheets/styles';
+import env from "../env.json";
 
 function Account(props) {
 
   const [infoUser, setInfoUser] = useState([]);
 
   useEffect(() => {
-    const infoUser = async () => {
+    const getUser = async () => {
       //console.log('fetch')
-      const rawData = await fetch(`http://${env.ip}:3000/account/infoUser`);
+      const rawData = await fetch(`http://${env.ip}:3000/account/infoUser`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `userTokenFromFront=${props.token}`
+      });
       const data = await rawData.json();
+      //console.log("data", data);
       setInfoUser(data);
     }
-    infoUser();
+    getUser();
   }, [])
+
+  console.log("infouser",infoUser);
 
   return (
 
@@ -32,7 +42,29 @@ function Account(props) {
         centerContainerStyle={{ flex: 0 }}
       />
       <Text style = {styles.itemMyRecipesTitle, styles.itemMyRecipes}>Mes informations personnelles</Text>
-      <Text>{infoUser.name}</Text>
+      <Text>
+        <Icon
+          name='user'
+          size={24}
+          color='#FF6F61'
+        />
+        {infoUser.firstName}
+      </Text>
+      <Text>
+        <Icon
+          name='user'
+          size={24}
+          color='#FF6F61'
+        />
+        {infoUser.surname}</Text>
+      <Text>
+        <Icon
+          name='envelope'
+          size={24}
+          color='#FF6F61'
+        />
+        {infoUser.email}</Text>
+
       <Button title='Déconnexion'
         onPress={() => props.navigation.navigate('Login')}
       />
