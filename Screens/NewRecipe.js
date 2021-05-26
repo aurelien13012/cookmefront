@@ -284,7 +284,7 @@ function NewRecipe(props) {
       </ScrollView>
 
       <View>
-        <Confirmation propsSubmitMyRecipe={onSubmitRecipe} />
+        <Confirmation propsSubmitMyRecipe={onSubmitRecipe} navigation={props.navigation} />
       </View>
 
 

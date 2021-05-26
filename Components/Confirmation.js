@@ -5,6 +5,8 @@ import { Button, Overlay, Image } from 'react-native-elements';
 import styles from '../stylesheets/styles'
 
 function Confirmation(props) {
+  console.log("props", props);
+  console.log("props.navigation", props.navigation);
 
   const [visible, setVisible] = useState(false);
   
@@ -67,6 +69,7 @@ function Confirmation(props) {
           title="Voir ma recette"
           buttonStyle={styles.buttonRegular}
           titleStyle={styles.buttonRegularTitle}
+          onPress={() => {props.navigation.navigate('Recipe'); toggleOverlay()}}
         />
       </Overlay>
     </View>

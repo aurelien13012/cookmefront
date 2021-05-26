@@ -57,13 +57,13 @@ function RecipesList(props) {
   }, []);
 
   useEffect(()=>{
-    console.log("useEffectUpDate");
-    if (!isFocused){
-      console.log("useEffectUpDateStop");
-      return 
+  
+    const getAllRecipes = async () => {
+      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipesList`);
+      const data = await rawData.json();
+      setRecipesList(data);
     }
-    console.log("useEffectUpDate fetch")
-    
+
     const getSuggestedRecipe = async () => {
       console.log("fetch");
       const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
@@ -74,11 +74,42 @@ function RecipesList(props) {
       });
       console.log("afterFetch");
       const data = await rawData.json();
-      // console.log("data2", data);
-      setSuggestedList(data || {});
+      console.log("data2", data);
+      setSuggestedList(data.suggestedRecipe);
     };
+
+    getAllRecipes();
     getSuggestedRecipe();
-  },[isFocused]) 
+  },[isFocused])
+
+  const displaySuggestedRecipe = () => {
+    if (suggestedList === null){
+      return (
+        <Card>
+          <Card.Title>Recette suggérée :</Card.Title>
+              <Text style={styles.cardText}>Aucune recette ne correspond!</Text>
+              <Text style={styles.cardText}>Ajouter des ingredients</Text>
+              <Card.Image
+                style={styles.cardImage}
+                source={require("../assets/frigo.jpg")}
+                onPress={() => {props.navigation.navigate("Fridge")}}
+              ></Card.Image>
+        </Card>
+      )
+    }
+    return (
+      <Card>
+          <Card.Title>Recette suggérée :</Card.Title>
+          <Card.Divider />
+              <Text style={styles.cardText}>{suggestedList.name}</Text>
+              <Card.Image
+                style={styles.cardImage}
+                source={{uri : suggestedList.pictures}}
+                onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(suggestedList._id)}}
+              ></Card.Image>
+        </Card>
+    )
+  }
 
   //// DONNEES EN DUR
 
@@ -117,16 +148,17 @@ function RecipesList(props) {
       />
 
       <ScrollView>
-        <Card>
+        {/* <Card>
           <Card.Title>Recette suggérée :</Card.Title>
           <Card.Divider />
-              <Text style={styles.cardText}>{suggestedList.name}</Text>
+              <Text style={styles.cardText}>{}</Text>
               <Card.Image
                 style={styles.cardImage}
-                source={require("../assets/pates-au-pesto.jpg")}
+                source={{uri : suggestedList.pictures}}
                 onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(suggestedList._id)}}
               ></Card.Image>
-        </Card>
+        </Card> */}
+        {displaySuggestedRecipe()}
 
         <Card style={styles.cardContainer}>
           <Card.Title>Toutes les recettes :</Card.Title>
@@ -145,7 +177,7 @@ function RecipesList(props) {
               <Image
                 style={styles.image}
                 resizeMode="cover"
-                source={require("../assets/pates-au-beurre.jpg")}
+                source={{ uri: item.pictures }}
                 />
             </TouchableOpacity>
             

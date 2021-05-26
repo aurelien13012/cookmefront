@@ -38,6 +38,7 @@ import NewRecipe from './Screens/NewRecipe';
 import Recipe from './Screens/Recipe';
 import RecipesList from './Screens/RecipesList';
 import Picture from './Components/PictureScreen';
+import Confirmation from './Components/Confirmation';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -62,6 +63,16 @@ const NavMyRecipe = () => {
       <Stack.Screen name='Recipe' component={Recipe} />
       <Stack.Screen name='New Recipe' component={NewRecipe} />
       <Stack.Screen name = 'Picture' component = {Picture} />
+      {/* <Stack.Screen name = 'Confirmation' component = {Confirmation} /> */}
+    </Stack.Navigator>
+  )
+}
+
+const NavAccount = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Account' component={Account} />
+      <Stack.Screen name = 'Login' component = {Login} />
     </Stack.Navigator>
   )
 }
@@ -110,7 +121,7 @@ const BottomNavigator = () => {
       <Tab.Screen name='Recipes' component={NavRecipe} />
       <Tab.Screen name='Favorites' component={Favorites} />
       <Tab.Screen name='My Recipes' component={NavMyRecipe} />
-      <Tab.Screen name='My Account' component={Account} />
+      <Tab.Screen name='My Account' component={NavAccount} />
     </Tab.Navigator>
   )
 }

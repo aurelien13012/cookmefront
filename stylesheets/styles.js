@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonSignIn: {
-    borderRadius: 25,
+    borderRadius: 30,
     height: 60,
     alignItems: "center",
     justifyContent: "center",
