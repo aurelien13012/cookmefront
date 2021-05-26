@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { Header, SearchBar, ListItem, Button, Text } from 'react-native-elements';
+import { useIsFocused} from "@react-navigation/native";
 import { connect } from 'react-redux';
 import env from '../env.json';
 
@@ -11,6 +12,8 @@ function MyRecipes(props) {
   //UseStates
   const [searchMyRecipesList, setSearchMyRecipesList] = useState('');
   const [myRecipesList, setMyRecipesList] = useState([]);
+
+  const isFocused = useIsFocused()
 
   //UseEffect
   useEffect(() => {
@@ -23,6 +26,17 @@ function MyRecipes(props) {
     }
     findMyRecipes()
   }, [])
+
+  useEffect(() => {
+    console.log('in use effect')
+    const findMyRecipes = async () => {
+      const dataRecipes = await fetch(`http://${env.ip}:3000/myRecipes?tokenFromFront=${props.token}`)
+      const body = await dataRecipes.json()
+      console.log('body', body)
+      setMyRecipesList(body);
+    }
+    findMyRecipes()
+  }, [isFocused])
 
 
   // fonction de la barre de recherche

@@ -98,7 +98,7 @@ function NewRecipe(props) {
     if(props.picture.uri !== "") {
       pictureUri = props.picture.uri
     }
-    
+
     let data = new FormData();
     data.append('food', {
       uri: pictureUri,
@@ -106,7 +106,7 @@ function NewRecipe(props) {
       name: 'avatar.jpg',
     });
     data.append('recipeFromFront', newRecipeName)
-    data.append('numbsFromFront', num)
+    data.append('numbFromFront', num)
     data.append('userTokenFromFront', props.token)
     data.append('steps', JSON.stringify(newStepsList))
     data.append('ingredients', JSON.stringify(newIngredientsList))
