@@ -21,7 +21,7 @@ function MyRecipes(props) {
     const findMyRecipes = async () => {
       const dataRecipes = await fetch(`http://${env.ip}:3000/myRecipes?tokenFromFront=${props.token}`)
       const body = await dataRecipes.json()
-      console.log('body', body)
+      // console.log('body', body)
       setMyRecipesList(body);
     }
     findMyRecipes()
@@ -32,7 +32,7 @@ function MyRecipes(props) {
     const findMyRecipes = async () => {
       const dataRecipes = await fetch(`http://${env.ip}:3000/myRecipes?tokenFromFront=${props.token}`)
       const body = await dataRecipes.json()
-      console.log('body', body)
+      // console.log('body', body)
       setMyRecipesList(body);
     }
     findMyRecipes()

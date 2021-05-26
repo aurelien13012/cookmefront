@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import { Button, Overlay, Image } from 'react-native-elements';
 
+import { connect } from 'react-redux';
+
 import styles from '../stylesheets/styles'
 
 function Confirmation(props) {
@@ -11,8 +13,6 @@ function Confirmation(props) {
   const toggleOverlay = () => {
     setVisible(!visible);
   };
-
-  //() => {}
 
   const handleClick = () => {
     console.log('click soumettre recette okay');
@@ -70,10 +70,21 @@ function Confirmation(props) {
           title="Voir ma recette"
           buttonStyle={styles.buttonRegular}
           titleStyle={styles.buttonRegularTitle}
+          onPress={() => {props.navigation.navigate('Recipe'); props.recipeId; props.token}}
+
         />
       </Overlay>
     </View>
   );
 }
 
-export default Confirmation;
+function mapStateToProps(state) {
+  return { 
+    token: state.token,
+    recipeId: state.recipeid
+  }
+}
+
+export default connect(
+  mapStateToProps, null
+  )(Confirmation);

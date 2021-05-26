@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, Button, ScrollView } from 'react-native';
 import { Image, Icon, LinearProgress } from 'react-native-elements';
+import { useIsFocused} from "@react-navigation/native";
 import { List } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -22,6 +23,8 @@ function Recipe(props) {
   const [rate, setRate] = useState(0.5);
   const [isMyRecipe, setIsMyRecipe] = useState(false);
 
+  const isFocused = useIsFocused();
+  console.log('recipeisFocused', isFocused)
   ///// VARIABLES REDUX
   //const idRecipe = '60a7b2d33a185c39987353d2';
   const idRecipe = props.recipeId;
@@ -29,6 +32,7 @@ function Recipe(props) {
   const token = props.token;
 
   useEffect(() => {
+    console.log('recipeuseeffectinit')
     const getRecipeData = async () => {
       const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
       {
@@ -39,8 +43,8 @@ function Recipe(props) {
       const data = await rawData.json();
       const recipeFromDB = data.recipe;
       const userFromDB = data.user;
-      console.log('recipe', recipeFromDB);
-      console.log('user', userFromDB);
+      // console.log('recipe', recipeFromDB);
+      // console.log('user', userFromDB);
       setRecipe(recipeFromDB);
       setNbPerson(recipeFromDB.numOfPersons);
       const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
@@ -51,6 +55,31 @@ function Recipe(props) {
     }
     getRecipeData();
   }, [])
+
+  useEffect(() => {
+    console.log('recipe useeffect update')
+    const getRecipeData = async () => {
+      const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
+      });  
+      const data = await rawData.json();
+      const recipeFromDB = data.recipe;
+      const userFromDB = data.user;
+      // console.log('recipe', recipeFromDB);
+      // console.log('user', userFromDB);
+      setRecipe(recipeFromDB);
+      setNbPerson(recipeFromDB.numOfPersons);
+      const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
+      setIsFav(isFavFromDB);
+      const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
+      setIsMyRecipe(isMyRecipeFromDB);
+      return data;
+    }
+    getRecipeData();
+  }, [isFocused])
 
   if (Object.keys(recipe).length === 0) {
     console.log('in safe path');

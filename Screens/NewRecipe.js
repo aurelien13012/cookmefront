@@ -25,11 +25,6 @@ function NewRecipe(props) {
   const [isPicture, setIsPicture] = useState(false);
 
 
-  //UseEffect
-  useEffect(() => {
-    props.picture.uri="";
-    }, [])
-
   //Fonction pour soumettre le nom de la recette
   const onSubmitRecipeName = (name) => {
     console.log('click détecté name', name)
@@ -95,7 +90,7 @@ function NewRecipe(props) {
     console.log('picture', props.picture.uri)
     let pictureUri = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png";
 
-    if(props.picture.uri !== "") {
+    if(props.picture.uri) {
       pictureUri = props.picture.uri
     }
 
@@ -118,6 +113,8 @@ function NewRecipe(props) {
     })
     console.log('apres fecth')
     const dataResult = await res.json();
+    console.log('dataresults', dataResult)
+    props.recipeId(dataResult)
   }
 
   //Variable pour afficher la picture
@@ -223,7 +220,7 @@ function NewRecipe(props) {
           {newIngredientsList.map((ingredient, i) => {
             return (
               <View style={styles.NewRecipeContainer}>
-                <Text style={styles.noRecipes}>{i + 1}.{ingredient.name}</Text>
+                <Text style={styles.noRecipes} key={i}>{i + 1}.{ingredient.name}</Text>
 
                 <Input
                   placeholder='Qty'
@@ -270,7 +267,7 @@ function NewRecipe(props) {
 
           {newStepsList.map((steps, i) => {
             return (
-              <Text style={styles.noRecipes}>{i + 1}.{steps}</Text>
+              <Text style={styles.noRecipes} key={i}>{i + 1}.{steps}</Text>
             )
           })}
 
@@ -305,7 +302,7 @@ function NewRecipe(props) {
       </ScrollView>
 
       <View>
-        <Confirmation propsSubmitMyRecipe={onSubmitRecipe} />
+        <Confirmation propsSubmitMyRecipe={onSubmitRecipe} navigation={props.navigation} />
       </View>
 
 
@@ -317,7 +314,15 @@ function mapStateToProps(state) {
   return { token: state.token, picture: state.picture }
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    recipeId: function (recipeId) {
+      dispatch({ type: 'saveRecipeId', recipeId })
+    }
+  }
+}
+
 export default connect(
-  mapStateToProps, null
+  mapStateToProps, mapDispatchToProps
 )(NewRecipe)
 
