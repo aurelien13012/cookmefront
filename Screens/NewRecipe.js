@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Header, Button, Text, Input, Card } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -17,31 +17,40 @@ function NewRecipe(props) {
   //UseState
   const [recipeName, setRecipeName] = useState('');
   const [newRecipeName, setNewRecipeName] = useState('');
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState(1);
   const [ingredientInput, setIngredientInput] = useState('');
   const [newIngredientsList, setNewIngredientList] = useState([]);
   const [stepInput, setStepInput] = useState('');
   const [newStepsList, setNewStepsList] = useState([]);
   const [isPicture, setIsPicture] = useState(false);
 
+
+  //UseEffect
+  useEffect(() => {
+    props.picture.uri="";
+    }, [])
+
+  //Fonction pour soumettre le nom de la recette
   const onSubmitRecipeName = (name) => {
     console.log('click détecté name', name)
     setNewRecipeName(name.toUpperCase())
     setRecipeName('')
   }
 
+  //Fonction pour augmenter ou baisser le nb de personnes
   const onIncreaseNumb = () => {
     setNum(num + 1)
   }
 
   const onDecreaseNumb = () => {
-    if (num === 0) {
-      setNum(0)
+    if (num === 1) {
+      setNum(1)
     } else {
       setNum(num - 1)
     }
   }
 
+  //Fonctions pour ajouter un ingredient associé a une quantité et une unit
   const onSubmitIngredient = (name) => {
     console.log('click ok', name)
     if (name.length > 0) {
@@ -68,6 +77,7 @@ function NewRecipe(props) {
     setNewIngredientList(newIngredientsListCopy)
   }
 
+  //Fonction pour ajouter steps
   const onSubmitSteps = (steps) => {
     console.log('click ok', steps)
     if (steps.length > 0) {
@@ -78,11 +88,20 @@ function NewRecipe(props) {
     }
   }
 
+  //Fonction pour valider recette et envoyer au back
   const onSubmitRecipe = async () => {
+    console.log('in function submitrecipe')
+    console.log('picturetype', typeof props.picture.uri)
+    console.log('picture', props.picture.uri)
+    let pictureUri = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png";
+
+    if(props.picture.uri !== "") {
+      pictureUri = props.picture.uri
+    }
     
     let data = new FormData();
     data.append('food', {
-      uri: props.picture.uri,
+      uri: pictureUri,
       type: 'image/jpeg',
       name: 'avatar.jpg',
     });
@@ -91,15 +110,17 @@ function NewRecipe(props) {
     data.append('userTokenFromFront', props.token)
     data.append('steps', JSON.stringify(newStepsList))
     data.append('ingredients', JSON.stringify(newIngredientsList))
-
+    console.log('avant fecth')
     const res = await fetch(`http://${env.ip}:3000/addRecipe`, {
       method: 'POST',
       body: data
 
     })
+    console.log('apres fecth')
     const dataResult = await res.json();
   }
 
+  //Variable pour afficher la picture
   let pictureDisplay;
   if (isPicture) {
     pictureDisplay =
