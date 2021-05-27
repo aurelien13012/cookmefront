@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   accordionTitle: {
     color: "#FF6F61",
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: "SourceSansPro_600SemiBold",
   },
   accordionItemsContainer: {
@@ -112,19 +112,19 @@ const styles = StyleSheet.create({
   },
   addRecipe: {
     backgroundColor: "#FF6F61",
-    color: "#FF6F61",
-    borderRadius: 50,
-    width: 100,
-    height: 100,
-    borderColor: "#FF6F61",
-    borderStyle: "solid",
-    borderWidth: 2,
-    padding: 20
+    // color: "#FF6F61",
+    // borderRadius: ,
+    // width: 60,
+    height: 70,
+    // borderColor: "#FF6F61",
+    // borderStyle: "solid",
+    // borderWidth: 2,
+    // padding: 20
   },
   addRecipeTitle: {
     color: "#fff",
     fontFamily: "SourceSansPro_600SemiBold",
-    fontSize: 40,
+    fontSize: 60,
   },
   addNew: {
     backgroundColor: "#FF6F61",
@@ -234,6 +234,7 @@ const styles = StyleSheet.create({
   },
   buttonRegularTitle: {
     fontFamily: 'SourceSansPro_600SemiBold',
+    fontSize: 20
   },
   buttonCancel: {
     borderRadius: 25,
@@ -242,6 +243,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     margin: 5,
+  },
+  containerUserInfo: {
+    marginLeft: 15,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  iconUserInfo : {
+    width: 30
   }
 });
 

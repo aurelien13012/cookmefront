@@ -36,34 +36,76 @@ function Account(props) {
       <Header
         centerComponent={{
           text: 'Mon compte',
-          style: styles.headerTitleNewRecipe
+          style: styles.headerTitle
         }}
         containerStyle={styles.headerContainer}
         centerContainerStyle={{ flex: 0 }}
       />
-      <Text style = {styles.itemMyRecipesTitle, styles.itemMyRecipes}>Mes informations personnelles</Text>
-      <Text>
-        <Icon
-          name='user'
-          size={24}
-          color='#FF6F61'
-        />
-        {infoUser.firstName}
-      </Text>
-      <Text>
-        <Icon
-          name='user'
-          size={24}
-          color='#FF6F61'
-        />
-        {infoUser.surname}</Text>
-      <Text>
-        <Icon
-          name='envelope'
-          size={24}
-          color='#FF6F61'
-        />
-        {infoUser.email}</Text>
+      <View
+        style={[styles.itemMyRecipes, {flex: 0, margin: 10}]}
+      >
+        <Text 
+          style = {[
+            styles.accordionTitle,
+            {
+              alignSelf: 'center',
+              marginTop: 5,
+              marginBottom: 10
+            }]}
+        >
+          Mes informations personnelles
+        </Text>
+        <View
+          style={styles.containerUserInfo}
+        >
+          <Icon
+            name='user'
+            size={24}
+            color='#FF6F61'
+            style={styles.iconUserInfo}
+          />
+          <Text
+            style={[styles.buttonRegularTitle, {marginLeft: 10}]}
+          >
+            {infoUser.firstName}
+          </Text>
+        
+        </View>
+        <View
+          style={styles.containerUserInfo}
+        >
+          <Icon
+            name='user'
+            size={24}
+            color='#FF6F61'
+            style={styles.iconUserInfo}
+          />
+          <Text
+            style={[styles.buttonRegularTitle, {marginLeft: 10}]}
+          >
+            {infoUser.surname}
+          </Text>
+        
+        </View>
+        <View
+          style={styles.containerUserInfo}
+        >
+          <Icon
+            name='envelope'
+            size={24}
+            color='#FF6F61'
+            style={styles.iconUserInfo}
+          />
+          <Text
+            style={[styles.buttonRegularTitle, {marginLeft: 10}]}
+          >
+            {infoUser.email}
+          </Text>
+        
+        </View>
+     
+      </View>
+
 
       <Button 
       titleStyle={styles.buttonRegularTitle}

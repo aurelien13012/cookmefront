@@ -149,7 +149,10 @@ function IngredientsList(props) {
   //// RENDER
   return (
     <View
-      style={styles.container}
+      style={{
+        flex: 1,
+        // backgroundColor: 'white'
+      }}
     >
       
       <Header
@@ -191,7 +194,8 @@ function IngredientsList(props) {
 
       <Button
         titleStyle={styles.buttonRegularTitle}
-        buttonStyle={styles.buttonRegular}
+        buttonStyle={[styles.buttonRegular, {marginTop: 10}]}
+        containerStyle={{backgroundColor: 'white'}}
         title='Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
         onPress={() => props.navigation.navigate('BottomNavigator',
           {

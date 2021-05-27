@@ -102,7 +102,10 @@ function MyRecipes(props) {
         titleStyle={styles.addRecipeTitle}
         buttonStyle={styles.addRecipe}
         onPress={() => props.navigation.navigate('New Recipe')}
-        />
+        overlayColor='green'
+        size='small'
+        // overlayColor='#fff' 
+      />
 
     </View>
   );
