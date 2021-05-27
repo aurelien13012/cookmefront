@@ -50,7 +50,7 @@ function NewRecipe(props) {
 
   //Fonctions pour ajouter un ingredient associé a une quantité et une unit
   const onSubmitIngredient = (name) => {
-    console.log('click ok', name)
+    // console.log('click ok', name)
     if (name.length > 0) {
       const listIngredient = [...newIngredientsList]
       listIngredient.push({ name, quantity: '', unit: '' })
@@ -61,8 +61,8 @@ function NewRecipe(props) {
 
   //Fonction pour changement quantité
   const onChangeQuantity = (quantity, i) => {
-    console.log('quantity', quantity)
-    console.log('i', i)
+    // console.log('quantity', quantity)
+    // console.log('i', i)
     const newIngredientsListCopy = [...newIngredientsList]
     newIngredientsListCopy[i].quantity = quantity
     setNewIngredientList(newIngredientsListCopy)
@@ -70,8 +70,8 @@ function NewRecipe(props) {
 
   //Fonction pour changement unité
   const onChangeUnit = (unit, i) => {
-    console.log('quantity', unit)
-    console.log('i', i)
+    // console.log('quantity', unit)
+    // console.log('i', i)
     const newIngredientsListCopy = [...newIngredientsList]
     newIngredientsListCopy[i].unit = unit
     setNewIngredientList(newIngredientsListCopy)
@@ -79,7 +79,7 @@ function NewRecipe(props) {
 
   //Fonction pour ajouter steps
   const onSubmitSteps = (steps) => {
-    console.log('click ok', steps)
+    // console.log('click ok', steps)
     if (steps.length > 0) {
       const listSteps = [...newStepsList]
       listSteps.push(steps)
