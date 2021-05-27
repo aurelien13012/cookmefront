@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     fontFamily: "SourceSansPro_600SemiBold",
     margin: 15,
     textAlign: "center",
-    flexWrap:'wrap'
   },
   addRecipe: {
     backgroundColor: "#FF6F61",

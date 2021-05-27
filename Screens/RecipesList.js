@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import { View, Text, ScrollView, Image,TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { SearchBar, Card, Header } from "react-native-elements";
-import { useIsFocused} from "@react-navigation/native";
-import { connect } from 'react-redux';
+import { useIsFocused } from "@react-navigation/native";
+import { connect } from "react-redux";
 
 import styles from "../stylesheets/styles";
 import env from "../env.json";
@@ -20,14 +20,16 @@ function RecipesList(props) {
     setSearchRecipesList(search);
   };
 
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
     // Charge tous les recettes de la bdd
     const getAllRecipes = async () => {
       //console.log('fetch')
-      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipesList`);
+      const rawData = await fetch(
+        `http://${env.ip}:3000/recipesList/recipesList`
+      );
       // console.log('afterFetch')
       // console.log('rawData', rawData)
       const data = await rawData.json();
@@ -37,12 +39,14 @@ function RecipesList(props) {
 
     const getSuggestedRecipe = async () => {
       console.log("fetch");
-      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${props.token}`
-      });
+      const rawData = await fetch(
+        `http://${env.ip}:3000/recipesList/recipeBook`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `userTokenFromFront=${props.token}`,
+        }
+      );
       console.log("afterFetch");
       const data = await rawData.json();
       // console.log("data", data);
@@ -56,22 +60,26 @@ function RecipesList(props) {
     getSuggestedRecipe();
   }, []);
 
-  useEffect(()=>{
-  
+  //useeffecte de mise à jour lorsque la page est réouverte
+  useEffect(() => {
     const getAllRecipes = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipesList`);
+      const rawData = await fetch(
+        `http://${env.ip}:3000/recipesList/recipesList`
+      );
       const data = await rawData.json();
       setRecipesList(data);
-    }
+    };
 
     const getSuggestedRecipe = async () => {
       console.log("fetch");
-      const rawData = await fetch(`http://${env.ip}:3000/recipesList/recipeBook`,
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${props.token}`
-      });
+      const rawData = await fetch(
+        `http://${env.ip}:3000/recipesList/recipeBook`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `userTokenFromFront=${props.token}`,
+        }
+      );
       console.log("afterFetch");
       const data = await rawData.json();
       console.log("data2", data);
@@ -80,52 +88,46 @@ function RecipesList(props) {
 
     getAllRecipes();
     getSuggestedRecipe();
-  },[isFocused])
+  }, [isFocused]);
 
   const displaySuggestedRecipe = () => {
-    if (suggestedList === null){
+    //affichage si aucune recette ne coorespond au ingredient du user
+    if (suggestedList === null) {
       return (
         <Card>
           <Card.Title>Recette suggérée :</Card.Title>
-              <Text style={styles.cardText}>Aucune recette ne correspond!</Text>
-              <Text style={styles.cardText}>Ajouter des ingredients</Text>
-              <Card.Image
-                style={styles.cardImage}
-                source={require("../assets/frigo.jpg")}
-                onPress={() => {props.navigation.navigate("Fridge")}}
-              ></Card.Image>
+          <Text style={styles.cardText}>Aucune recette ne correspond!</Text>
+          <Text style={styles.cardText}>Ajouter des ingredients</Text>
+          <Card.Image
+            style={styles.cardImage}
+            source={require("../assets/frigo.jpg")}
+            onPress={() => {
+              props.navigation.navigate("Fridge");
+            }}
+          ></Card.Image>
         </Card>
-      )
+      );
     }
+    //affichage si un recette correspond aux ingredients données
     return (
       <Card>
-          <Card.Title>Recette suggérée :</Card.Title>
-          <Card.Divider />
-              <Text style={styles.cardText}>{suggestedList.name}</Text>
-              <Card.Image
-                style={styles.cardImage}
-                source={{uri : suggestedList.pictures}}
-                onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(suggestedList._id)}}
-              ></Card.Image>
-        </Card>
-    )
-  }
-
-  //// DONNEES EN DUR
-
-  // const recipesListData = [
-  //   {
-  //     name: "Pate au beurre",
-  //     imgRecipe: require("../assets/pates-au-beurre.jpg"),
-  //   },
-  //   {
-  //     name: "Pate à la bolognaise",
-  //     imgRecipe: require("../assets/pates-bolognaise.jpg"),
-  //   },
-  // ];
+        <Card.Title>Recette suggérée :</Card.Title>
+        <Card.Divider />
+        <Text style={styles.cardText}>{suggestedList.name}</Text>
+        <Card.Image
+          style={styles.cardImage}
+          source={{ uri: suggestedList.pictures }}
+          onPress={() => {
+            props.navigation.navigate("Recipe");
+            props.recipeId(suggestedList._id);
+          }}
+        ></Card.Image>
+      </Card>
+    );
+  };
 
   return (
-    <View style={{ flex: 1 , backgroundColor: 'white'}}>
+    <View style={{ flex: 1, backgroundColor: "white" }}>
       {/* en-tête de page donnant le nom de la page */}
       <Header
         centerComponent={{
@@ -148,16 +150,6 @@ function RecipesList(props) {
       />
 
       <ScrollView>
-        {/* <Card>
-          <Card.Title>Recette suggérée :</Card.Title>
-          <Card.Divider />
-              <Text style={styles.cardText}>{}</Text>
-              <Card.Image
-                style={styles.cardImage}
-                source={{uri : suggestedList.pictures}}
-                onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(suggestedList._id)}}
-              ></Card.Image>
-        </Card> */}
         {displaySuggestedRecipe()}
 
         <Card style={styles.cardContainer}>
@@ -165,22 +157,20 @@ function RecipesList(props) {
           <Card.Divider />
           {recipesList.map((item, index) => (
             <TouchableOpacity
-              key={index} 
-              style={styles.cardLigne} 
-              onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(item._id)}}
+              key={index}
+              style={styles.cardLigne}
+              onPress={() => {
+                props.navigation.navigate("Recipe");
+                props.recipeId(item._id);
+              }}
             >
-              <Text 
-                style={styles.cardName}
-              >               
-                {item.name}
-              </Text>
+              <Text style={styles.cardName}>{item.name}</Text>
               <Image
                 style={styles.image}
                 resizeMode="cover"
                 source={{ uri: item.pictures }}
               />
             </TouchableOpacity>
-            
           ))}
         </Card>
       </ScrollView>
@@ -189,17 +179,15 @@ function RecipesList(props) {
 }
 
 function mapStateToProps(state) {
-  return { token: state.token }
+  return { token: state.token };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     recipeId: function (recipeId) {
-      dispatch({ type: 'saveRecipeId', recipeId })
-    }
-  }
+      dispatch({ type: "saveRecipeId", recipeId });
+    },
+  };
 }
 
-export default connect(
-  mapStateToProps, mapDispatchToProps
-)(RecipesList);
+export default connect(mapStateToProps, mapDispatchToProps)(RecipesList);
