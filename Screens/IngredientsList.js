@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Header, Button } from 'react-native-elements';
+import { Header, Button, FAB} from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { connect } from 'react-redux';
 
@@ -151,15 +151,16 @@ function IngredientsList(props) {
     <View
       style={styles.container}
     >
-      <ScrollView >
-        <Header
-          centerComponent={{
-            text: 'Mes ingrédients',
-            style: styles.headerTitle
-          }}
-          containerStyle={styles.headerContainer}
-        />
+      
+      <Header
+        centerComponent={{
+        text: 'Mes ingrédients',
+        style: styles.headerTitle
+        }}
+        containerStyle={styles.headerContainer}
+      />
 
+      <ScrollView >
       {categories.map((category, index) => {
         return(
           <List.Accordion
@@ -189,6 +190,9 @@ function IngredientsList(props) {
       </ScrollView>
 
       <Button title = 'Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
+          buttonStyle={styles.buttonRegular}
+          buttonTitle={styles.buttonRegularTitle}
+          placement= {"center"}
           onPress={()=> props.navigation.navigate('BottomNavigator', 
             {
               screen : 'Recipes',
