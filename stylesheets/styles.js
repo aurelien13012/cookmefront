@@ -113,15 +113,13 @@ const styles = StyleSheet.create({
   addRecipe: {
     backgroundColor: "#FF6F61",
     color: "#FF6F61",
-    marginTop: 100,
-    marginLeft: 125,
     borderRadius: 50,
     width: 100,
     height: 100,
     borderColor: "#FF6F61",
     borderStyle: "solid",
     borderWidth: 2,
-    padding: 20,
+    padding: 20
   },
   addRecipeTitle: {
     color: "#fff",
