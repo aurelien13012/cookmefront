@@ -123,7 +123,10 @@ function Login(props) {
       />
 
       {/* Bouton pour un user déja enregistré qui veut se connecter */}
-      <Button title="Se connecter" onPress={toggleOverlaySignIn} style={styles.buttonSignIn}/>
+      <Button 
+      titleStyle={styles.buttonRegularTitle}
+      buttonStyle={styles.buttonRegular}
+      title="Se connecter" onPress={toggleOverlaySignIn} style={styles.buttonSignIn}/>
       {/* overlay pour remplir ces infos mail et mot de passe */}
       <Overlay isVisible={visibleSignIn} onBackdropPress={toggleOverlaySignIn} fullScreen={true}>
         <View style={styles.inputView}>
@@ -159,15 +162,16 @@ function Login(props) {
           {/* bouton de validation */}
           <Button
             title="Valider"
-            buttonStyle={{ backgroundColor: "#FF6F61" }}
+            titleStyle={styles.buttonRegularTitle}
+            buttonStyle={styles.buttonRegular}
             onPress={() => handleSubmitSignIn()}
             type="solid"
           />
           {/* bouton d'annulation */}
           <Button 
-            style={styles.buttonCancel}
-            title="cancel"
-            buttonStyle={{ backgroundColor: "#FF6F61"}}
+            title="Cancel"
+            titleStyle={styles.buttonRegularTitle}
+            buttonStyle={styles.buttonRegular}
             onPress={() => toggleOverlaySignIn()}
             type="solid"
           />
@@ -175,7 +179,10 @@ function Login(props) {
       </Overlay>
       
       {/* Bouton pour un user qui veut s'enregistrer */}
-      <Button title="S'enregistrer" onPress={toggleOverlaySignUp} style={styles.buttonSignUp}/>
+      <Button 
+      titleStyle={styles.buttonRegularTitle}
+      buttonStyle={styles.buttonRegular}
+      title="S'enregistrer" onPress={toggleOverlaySignUp} style={styles.buttonSignUp}/>
       <Overlay isVisible={visibleSignUp} onBackdropPress={toggleOverlaySignUp} fullScreen={true}>
         <View style={styles.inputView}>
           <Input
@@ -236,14 +243,16 @@ function Login(props) {
           {tabErrorsSignup}
           <Button
             title="Valider"
-            buttonStyle={{ backgroundColor: "#FF6F61" }}
+            titleStyle={styles.buttonRegularTitle}
+            buttonStyle={styles.buttonRegular}
             onPress={() => handleSubmitSignup()}
             type="solid"
           />
           <Button 
             style={styles.buttonCancel}
             title="cancel"
-            buttonStyle={{ backgroundColor: "#FF6F61"}}
+            titleStyle={styles.buttonRegularTitle}
+            buttonStyle={styles.buttonRegular}
             onPress={() => toggleOverlaySignUp()}
             type="solid"
           />

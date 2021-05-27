@@ -65,7 +65,10 @@ function Account(props) {
         />
         {infoUser.email}</Text>
 
-      <Button title='Déconnexion'
+      <Button 
+      titleStyle={styles.buttonRegularTitle}
+      buttonStyle={styles.buttonRegular}
+      title='Déconnexion'
         onPress={() => props.navigation.navigate('Login')}
       />
     </View>

@@ -97,7 +97,6 @@ function MyRecipes(props) {
 
         </ScrollView>
       <FAB
-        style = {{ elevation: 0 }}
         placement = {'right'}
         title='+'//bouton pour le click pour ajouter une nouvelle recette
         titleStyle={styles.addRecipeTitle}

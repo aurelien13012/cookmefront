@@ -22,7 +22,7 @@ function IngredientsList(props) {
   useEffect(() => {
     // Charge tous les ingrédients de la bdd
     const getAllIngredients = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/ingredients/allIngredients`);  
+      const rawData = await fetch(`http://${env.ip}:3000/ingredients/allIngredients`);
       const data = await rawData.json();
       // Formate les données pour être facilement affichable
       const formatedData = formatData(data);
@@ -32,18 +32,18 @@ function IngredientsList(props) {
     // Charge les ingrédients de l'utilisateur
     const getMyFridge = async () => {
       const rawData = await fetch(`http://${env.ip}:3000/ingredients/myFridge`,
-      {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: `userTokenFromFront=${token}`
-      }); 
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `userTokenFromFront=${token}`
+        });
       const data = await rawData.json();
       return data;
     }
 
     // Fonction globale qui appelle les autres
     const getData = async () => {
-      const formatedData = await getAllIngredients(); 
+      const formatedData = await getAllIngredients();
       const myFridge = await getMyFridge();
 
       // Update la propriété "selected" si l'utilisateur à l'ingrédient dans son fridge
@@ -114,7 +114,7 @@ function IngredientsList(props) {
 
   // Selectionne/Déselectionne l'ingrédient
   const toggleIngredientSelected = (category, index) => {
-    const ingredientsListCopy = {...ingredientsList};
+    const ingredientsListCopy = { ...ingredientsList };
     ingredientsListCopy[category][index].selected = !ingredientsListCopy[category][index].selected;
 
     if (ingredientsListCopy[category][index].selected) {
@@ -129,21 +129,21 @@ function IngredientsList(props) {
   // Ajoute l'ingrédient au fridge de l'utilisateur en bdd
   const addIngredientToDB = async (name) => {
     await fetch(`http://${env.ip}:3000/ingredients/addToMyFridge`,
-    {
-      method: 'PUT',
-      headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: `nameFromFront=${name}&userTokenFromFront=${token}`
-    });  
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `nameFromFront=${name}&userTokenFromFront=${token}`
+      });
   }
 
   // Supprime l'ingrédient du fridge de l'utilisateur en bdd
   const removeIngredientFromDB = async (name) => {
     await fetch(`http://${env.ip}:3000/ingredients/deleteFromFridge`,
-    {
-      method: 'DELETE',
-      headers: {'Content-Type':'application/x-www-form-urlencoded'},
-      body: `nameFromFront=${name}&userTokenFromFront=${token}`
-    });  
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `nameFromFront=${name}&userTokenFromFront=${token}`
+      });
   }
 
   //// RENDER
@@ -160,42 +160,45 @@ function IngredientsList(props) {
           containerStyle={styles.headerContainer}
         />
 
-      {categories.map((category, index) => {
-        return(
-          <List.Accordion
-            title={category.name}
-            expanded={category.expanded}
-            onPress={() => toggleCategoryExpanded(index)}
-            style={styles.accordionContainer}
-            titleStyle={styles.accordionTitle}
-            key={index}
-          >
-            <View
-              style={styles.accordionItemsContainer}
+        {categories.map((category, index) => {
+          return (
+            <List.Accordion
+              title={category.name}
+              expanded={category.expanded}
+              onPress={() => toggleCategoryExpanded(index)}
+              style={styles.accordionContainer}
+              titleStyle={styles.accordionTitle}
+              key={index}
             >
-              {ingredientsList[category.name].map((ingredient, index) => (
-                <Button
-                  title={ingredient.name}
-                  buttonStyle={ingredient.selected ? styles.accordionItemSelected : styles.accordionItem}
-                  onPress={() => toggleIngredientSelected(category.name, index)}
-                  titleStyle={ingredient.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
-                  key={index}
-                />
-              ))}
-            </View>
-          </List.Accordion>
-        )
-      })}
+              <View
+                style={styles.accordionItemsContainer}
+              >
+                {ingredientsList[category.name].map((ingredient, index) => (
+                  <Button
+                    title={ingredient.name}
+                    buttonStyle={ingredient.selected ? styles.accordionItemSelected : styles.accordionItem}
+                    onPress={() => toggleIngredientSelected(category.name, index)}
+                    titleStyle={ingredient.selected ? styles.accordionItemTitleSelected : styles.accordionItemTitle}
+                    key={index}
+                  />
+                ))}
+              </View>
+            </List.Accordion>
+          )
+        })}
       </ScrollView>
 
-      <Button title = 'Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
-          onPress={()=> props.navigation.navigate('BottomNavigator', 
-            {
-              screen : 'Recipes',
-              params : {
-                screen : 'Recipes'
-              }
-            })}
+      <Button
+        titleStyle={styles.buttonRegularTitle}
+        buttonStyle={styles.buttonRegular}
+        title='Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
+        onPress={() => props.navigation.navigate('BottomNavigator',
+          {
+            screen: 'Recipes',
+            params: {
+              screen: 'Recipes'
+            }
+          })}
       />
     </View>
   );
