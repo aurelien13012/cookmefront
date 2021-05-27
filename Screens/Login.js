@@ -155,8 +155,8 @@ function Login(props) {
             type="solid"
           />
           {/* bouton d'annulation */}
-          <Button
-            title="Cancel"
+          <Button 
+            title="Retour"
             titleStyle={styles.buttonRegularTitle}
             buttonStyle={styles.buttonRegular}
             onPress={() => toggleOverlaySignIn()}
@@ -219,7 +219,7 @@ function Login(props) {
           />
           <Button
             style={styles.buttonCancel}
-            title="cancel"
+            title="Retour"
             titleStyle={styles.buttonRegularTitle}
             buttonStyle={styles.buttonRegular}
             onPress={() => toggleOverlaySignUp()}

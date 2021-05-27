@@ -141,7 +141,7 @@ function NewRecipe(props) {
       <Header
         centerComponent={{
           text: 'Je propose ma recette',
-          style: styles.headerTitleNewRecipe
+          style: styles.headerTitle
         }}
         containerStyle={styles.headerContainer}
         centerContainerStyle={{ flex: 0 }}

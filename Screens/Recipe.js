@@ -288,7 +288,7 @@ function Recipe(props) {
   return (
  
     <ScrollView    
-      style={{backgroundColor: 'white', height: '100%', flex: 1}}
+      style={{height: '100%', flex: 1}}
     > 
     {/* Conteneur principal    */}
 
@@ -394,7 +394,7 @@ function Recipe(props) {
                 fontSize: 18,
                 fontFamily: 'SourceSansPro_400Regular',
                 marginLeft: 10,
-                color: 'blue',
+                color: rate < 0.5 ? 'red' : 'blue',
                 marginTop: 5
               }}
             >
@@ -449,7 +449,8 @@ function Recipe(props) {
             type="antdesign"
             containerStyle={{
               marginLeft: 10,
-              marginTop: 0
+              marginTop: 0,
+              
             }}
             onPress={() => removePerson()}
           /> 
