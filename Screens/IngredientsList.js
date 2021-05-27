@@ -170,7 +170,9 @@ function IngredientsList(props) {
               title={category.name}
               expanded={category.expanded}
               onPress={() => toggleCategoryExpanded(index)}
-              style={styles.accordionContainer}
+              style={[styles.accordionContainer, {
+                marginBottom: 0
+              }]}
               titleStyle={styles.accordionTitle}
               key={index}
             >
@@ -194,8 +196,14 @@ function IngredientsList(props) {
 
       <Button
         titleStyle={styles.buttonRegularTitle}
-        buttonStyle={[styles.buttonRegular, {marginTop: 10}]}
-        containerStyle={{backgroundColor: 'white'}}
+        buttonStyle={[styles.buttonRegular, {
+          marginTop: 0, 
+          marginBottom: 0,
+          // marginLeft: 5,
+          // marginRight: 15,
+          // alignSelf: 'flex-start',
+          width: '93%'
+        }]}
         title='Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
         onPress={() => props.navigation.navigate('BottomNavigator',
           {

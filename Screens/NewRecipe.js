@@ -24,7 +24,7 @@ function NewRecipe(props) {
   //useEffect d'initialisation
   useEffect (() =>{
     // console.log('dans use effect recipe')
-    props.picture.uri = null
+    props.resetPicture({});
   },[])
 
 
@@ -141,7 +141,7 @@ function NewRecipe(props) {
       <Header
         centerComponent={{
           text: 'Je propose ma recette',
-          style: styles.headerTitleNewRecipe
+          style: styles.headerTitle
         }}
         containerStyle={styles.headerContainer}
         centerContainerStyle={{ flex: 0 }}
@@ -230,7 +230,6 @@ function NewRecipe(props) {
                 <Input
                   placeholder='qté'
                   autoCapitalize = 'none'
-                  type = 'number'
                   containerStyle={{ marginLeft: 50, width: '20%' }}
                   onChangeText={(val) => onChangeQuantity(val, i)}
                   value={ingredient.quantity}
@@ -239,7 +238,7 @@ function NewRecipe(props) {
                 <Input
                   placeholder='unité'
                   autoCapitalize = 'none'
-                  containerStyle={{ marginLeft: 35, width: '20%' }}
+                  containerStyle={{ marginLeft: 35, width: '25%' }}
                   onChangeText={(val) => onChangeUnit(val, i)}
                   value={ingredient.unit}
                 />
@@ -326,9 +325,13 @@ function mapDispatchToProps(dispatch) {
   return {
     recipeId: function (recipeId) {
       dispatch({ type: 'saveRecipeId', recipeId })
+    },
+    resetPicture: function (pictureData) {
+      dispatch({ type: 'addPicture', pictureData })
     }
   }
 }
+
 
 export default connect(
   mapStateToProps, mapDispatchToProps
