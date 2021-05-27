@@ -35,7 +35,7 @@ function Confirmation(props) {
         justifyContent: "center"
       }}
     >
-      <ActivityIndicator size="large" color="#FF6F61" />
+      <ActivityIndicator size={100} color="#FF6F61" />
     </View>;
   
   if (isLoaded) {
