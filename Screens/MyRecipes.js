@@ -27,6 +27,7 @@ function MyRecipes(props) {
     findMyRecipes()
   }, [])
 
+  //UseEffect au changement de isFocused
   useEffect(() => {
     console.log('in use effect')
     const findMyRecipes = async () => {
@@ -79,6 +80,7 @@ function MyRecipes(props) {
         }}
         containerStyle={styles.headerContainer}
       />
+
       {/* Barre de recherche */}
       <SearchBar
         round
@@ -104,7 +106,6 @@ function MyRecipes(props) {
         onPress={() => props.navigation.navigate('New Recipe')}
         overlayColor='green'
         size='small'
-        // overlayColor='#fff' 
       />
 
     </View>

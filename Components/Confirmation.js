@@ -7,16 +7,20 @@ import { connect } from 'react-redux';
 import styles from '../stylesheets/styles'
 
 function Confirmation(props) {
-  console.log("props", props);
-  console.log("props.navigation", props.navigation);
 
+  // console.log("props", props);
+  // console.log("props.navigation", props.navigation);
+
+  //Variables d'états
   const [visible, setVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  //Fonction pour affichage de l'overlay
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
+  //fonction pour clique sur bouton confirmation page newrecipe
   const handleClick = async () => {
     console.log('click soumettre recette okay');
     toggleOverlay();
@@ -131,14 +135,13 @@ function Confirmation(props) {
         >
           Votre recette est en ligne
         </Text>
+        
         <Button
           title="Voir ma recette"
           buttonStyle={styles.buttonRegular}
           titleStyle={styles.buttonRegularTitle}
           onPress={() => {
             props.navigation.navigate('Recipe'); 
-            // props.recipeId; 
-            // props.token;
             toggleOverlay();
           }}
 
