@@ -117,11 +117,11 @@ const BottomNavigator = () => {
         }
       }}
     >
-      <Tab.Screen name='Fridge' component={IngredientsList} />
-      <Tab.Screen name='Recipes' component={NavRecipe} />
-      <Tab.Screen name='Favorites' component={Favorites} />
-      <Tab.Screen name='My Recipes' component={NavMyRecipe} options={{unmountOnBlur: true}} />
-      <Tab.Screen name='My Account' component={NavAccount} />
+      <Tab.Screen name='Fridge' component={IngredientsList} options={{title: 'Ingrédients'}} />
+      <Tab.Screen name='Recipes' component={NavRecipe} options={{title: 'Recettes'}} />
+      <Tab.Screen name='Favorites' component={Favorites} options={{title: 'Favoris'}}/>
+      <Tab.Screen name='My Recipes' component={NavMyRecipe} options={{unmountOnBlur: true, title: 'Mes Recettes'}} />
+      <Tab.Screen name='My Account' component={Account} options={{title: 'Profil'}}/>
     </Tab.Navigator>
   )
 }
