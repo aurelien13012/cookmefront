@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Text, View} from "react-native";
+import { Text, View, Image} from "react-native";
 import { Header, Button, Overlay, Input } from "react-native-elements";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
@@ -114,21 +114,34 @@ function Login(props) {
   return (
     <View style = {{flex : 1}}>
       {/* en-tête de page donnant le nom de la page */}
-      <Header
+      {/* <Header
         centerComponent={{
           text: "Login",
           style: styles.headerTitle,
         }}
         containerStyle={styles.headerContainer}
-      />
+      /> */}
+
+      <View>
+        <Image
+          style={styles.logo}
+          source={ require("../assets/Logo-Cook-Me2.jpg")}
+        />
+      </View>
 
       {/* Bouton pour un user déja enregistré qui veut se connecter */}
       <Button 
-      titleStyle={styles.buttonRegularTitle}
-      buttonStyle={styles.buttonRegular}
-      title="Se connecter" onPress={toggleOverlaySignIn} style={styles.buttonSignIn}/>
+        titleStyle={styles.buttonRegularTitle}
+        buttonStyle={[styles.buttonRegular, { marginBottom: 20}]}
+        title="Se connecter" 
+        onPress={toggleOverlaySignIn}
+      />
       {/* overlay pour remplir ces infos mail et mot de passe */}
-      <Overlay isVisible={visibleSignIn} onBackdropPress={toggleOverlaySignIn} fullScreen={true}>
+      <Overlay 
+        isVisible={visibleSignIn} 
+        onBackdropPress={toggleOverlaySignIn}  
+        fullScreen={true}
+      >
         <View style={styles.inputView}>
           <Input
             containerStyle={{ marginBottom: 25 }}
@@ -180,10 +193,16 @@ function Login(props) {
       
       {/* Bouton pour un user qui veut s'enregistrer */}
       <Button 
-      titleStyle={styles.buttonRegularTitle}
-      buttonStyle={styles.buttonRegular}
-      title="S'enregistrer" onPress={toggleOverlaySignUp} style={styles.buttonSignUp}/>
-      <Overlay isVisible={visibleSignUp} onBackdropPress={toggleOverlaySignUp} fullScreen={true}>
+        titleStyle={styles.buttonRegularTitle}
+        buttonStyle={styles.buttonRegular}
+        title="S'enregistrer" 
+        onPress={toggleOverlaySignUp}
+      />
+      <Overlay 
+        isVisible={visibleSignUp} 
+        onBackdropPress={toggleOverlaySignUp} 
+        fullScreen={true}
+      >
         <View style={styles.inputView}>
           <Input
             containerStyle={{ marginBottom: 25 }}

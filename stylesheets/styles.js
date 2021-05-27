@@ -242,6 +242,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     margin: 5,
+  },
+  logo: {
+    marginTop: 70,
+    marginBottom: 40,
+    width: 300,
+    height: 300,
+    alignSelf: "center",
   }
 });
 

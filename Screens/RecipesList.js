@@ -178,7 +178,7 @@ function RecipesList(props) {
                 style={styles.image}
                 resizeMode="cover"
                 source={{ uri: item.pictures }}
-                />
+              />
             </TouchableOpacity>
             
           ))}

@@ -228,14 +228,17 @@ function NewRecipe(props) {
                 <Text style={styles.noRecipes} >{i + 1}.{ingredient.name}</Text>
 
                 <Input
-                  placeholder='Qty'
+                  placeholder='qté'
+                  autoCapitalize = 'none'
+                  type = 'number'
                   containerStyle={{ marginLeft: 50, width: '20%' }}
                   onChangeText={(val) => onChangeQuantity(val, i)}
                   value={ingredient.quantity}
                 />
 
                 <Input
-                  placeholder='Unit'
+                  placeholder='unité'
+                  autoCapitalize = 'none'
                   containerStyle={{ marginLeft: 35, width: '20%' }}
                   onChangeText={(val) => onChangeUnit(val, i)}
                   value={ingredient.unit}
