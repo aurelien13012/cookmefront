@@ -38,7 +38,7 @@ function Login(props) {
   const toggleOverlaySignUp = () => {
     setSignUpEmail('');
     setSignUpFirstName('');
-    setSignUpSurName('');
+    setSignUpSurname('');
     setSignUpPassword('');
     setErrorsSignup([])
     setVisibleSignUp(!visibleSignUp);
@@ -207,7 +207,7 @@ function Login(props) {
           <Input
             containerStyle={{ marginBottom: 25 }}
             placeholder="Email"
-            textContentType="emailAdress"
+            textContentType="emailAddress"
             autoCapitalize = 'none'
             leftIcon={
               <Icon

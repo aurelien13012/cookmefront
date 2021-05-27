@@ -72,7 +72,7 @@ function PictureScreen(props) {
       <Button
         onPress={async () => {
           if (camera) {
-            let photo = await camera.takePictureAsync({ quality: 0.3, base64: true });
+            let photo = await camera.takePictureAsync({ quality: 0.005, base64: true });
             props.onSnap({
               base64: photo.base64,
               uri: photo.uri
