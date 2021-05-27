@@ -8,24 +8,29 @@ import { Button, Overlay } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import styles from '../stylesheets/styles'
-import env from '../env.json';
+
 
 function PictureScreen(props) {
 
+  //Variable d'état
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.torch);
-  const [visible, setVisible] = useState(false);
 
+  //camera
   let camera = useRef(null);
+
+  //isFocused pour camera
   const isFocused = useIsFocused();
 
+  //useEffect d'initialisation
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
   }, []);
+
 
   let cameraDisplay;
   if (hasPermission && isFocused) {
@@ -64,9 +69,7 @@ function PictureScreen(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Overlay isVisible={visible} width="auto" height="auto">
-        <Text>Loading</Text>
-      </Overlay>
+
       {cameraDisplay}
 
       <Button

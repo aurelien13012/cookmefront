@@ -1,16 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView} from 'react-native';
 import { Header, Button, Text, Input, Card } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
 import env from '../env.json';
 
 import styles from '../stylesheets/styles';
 import Confirmation from '../Components/Confirmation';
-import PictureScreen from '../Components/PictureScreen';
-import picture from '../Reducers/picture';
 
 function NewRecipe(props) {
 
@@ -24,8 +21,9 @@ function NewRecipe(props) {
   const [newStepsList, setNewStepsList] = useState([]);
   const [isPicture, setIsPicture] = useState(false);
 
+  //useEffect d'initialisation
   useEffect (() =>{
-    console.log('dans use effect recipe')
+    // console.log('dans use effect recipe')
     props.picture.uri = null
   },[])
 
@@ -61,6 +59,7 @@ function NewRecipe(props) {
     }
   }
 
+  //Fonction pour changement quantité
   const onChangeQuantity = (quantity, i) => {
     console.log('quantity', quantity)
     console.log('i', i)
@@ -69,6 +68,7 @@ function NewRecipe(props) {
     setNewIngredientList(newIngredientsListCopy)
   }
 
+  //Fonction pour changement unité
   const onChangeUnit = (unit, i) => {
     console.log('quantity', unit)
     console.log('i', i)
@@ -90,9 +90,9 @@ function NewRecipe(props) {
 
   //Fonction pour valider recette et envoyer au back
   const onSubmitRecipe = async () => {
-    console.log('in function submitrecipe')
-    console.log('picturetype', typeof props.picture.uri)
-    console.log('picture', props.picture.uri)
+    // console.log('in function submitrecipe')
+    // console.log('picturetype', typeof props.picture.uri)
+    // console.log('picture', props.picture.uri)
     let pictureUri = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png";
 
     if(props.picture.uri) {
@@ -110,15 +110,15 @@ function NewRecipe(props) {
     data.append('userTokenFromFront', props.token)
     data.append('steps', JSON.stringify(newStepsList))
     data.append('ingredients', JSON.stringify(newIngredientsList))
-    console.log('avant fecth')
+    // console.log('avant fecth')
     const res = await fetch(`http://${env.ip}:3000/addRecipe`, {
       method: 'POST',
       body: data
 
     })
-    console.log('apres fecth')
+    // console.log('apres fecth')
     const dataResult = await res.json();
-    console.log('dataresults', dataResult)
+    // console.log('dataresults', dataResult)
     props.recipeId(dataResult)
   }
 
