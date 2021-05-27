@@ -229,6 +229,8 @@ const styles = StyleSheet.create({
   buttonRegular: {
     borderRadius: 15,
     backgroundColor: '#FF6F61',
+    marginBottom : 10,
+    alignSelf: "center"
   },
   buttonRegularTitle: {
     fontFamily: 'SourceSansPro_600SemiBold',

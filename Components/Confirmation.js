@@ -24,10 +24,10 @@ function Confirmation(props) {
 
   return (
     <View>
-
+      
       <Button
-        titleStyle={styles.itemMyRecipesTitle}
-        buttonStyle={styles.itemMyRecipes}
+        titleStyle={styles.buttonRegularTitle}
+        buttonStyle={styles.buttonRegular}
         title="Je valide ma recette" onPress={() => { handleClick() }} />
 
       <Overlay
