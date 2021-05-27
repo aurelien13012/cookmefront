@@ -220,54 +220,69 @@ function Recipe(props) {
 
   let iconsForOwner = [];
   if (isMyRecipe) {
-    iconsForOwner = [
-      <Icon
-        name="pencil" 
-        type="font-awesome"
-        color="#FF6F61"
-        size={28}
-        containerStyle={{
-          backgroundColor: 'white',
-          width: 44,
-          height: 44,
-          borderRadius: 22,
-          borderStyle: 'solid',
-          borderColor: '#FF6F61',
-          borderWidth: 2,
+    iconsForOwner =
+      <View
+        style={{
+          width: '100%',
           position: 'absolute',
           top: 50,
-          left: 280,
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          // backgroundColor: 'green',
+          paddingRight: 20
         }}
-        onPress={() => handleModifyRecipe()}
-        key={0}
-      />,
-      <Icon
-        name="trash" 
-        type="font-awesome"
-        color="#FF6F61"
-        size={28}
-        containerStyle={{
-          backgroundColor: 'white',
-          width: 44,
-          height: 44,
-          borderRadius: 22,
-          borderStyle: 'solid',
-          borderColor: '#FF6F61',
-          borderWidth: 2,
-          position: 'absolute',
-          top: 50,
-          left: 330,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-        onPress={() => handleDeleteRecipe(recipe._id)}
-        key={1}
-      />
-    ];   
+      >
+        <Icon
+          name="pencil" 
+          type="font-awesome"
+          color="#FF6F61"
+          size={28}
+          containerStyle={{
+            backgroundColor: 'white',
+            width: 44,
+            height: 44,
+            borderRadius: 22,
+            borderStyle: 'solid',
+            borderColor: '#FF6F61',
+            borderWidth: 2,
+            marginRight: 10,
+            // position: 'absolute',
+            // top: 50,
+            // left: 280,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          onPress={() => handleModifyRecipe()}
+          key={0}
+        />
+        <Icon
+          name="trash" 
+          type="font-awesome"
+          color="#FF6F61"
+          size={28}
+          containerStyle={{
+            backgroundColor: 'white',
+            width: 44,
+            height: 44,
+            borderRadius: 22,
+            borderStyle: 'solid',
+            borderColor: '#FF6F61',
+            borderWidth: 2,
+            // position: 'absolute',
+            // top: 50,
+            // left: 330,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          onPress={() => handleDeleteRecipe(recipe._id)}
+          key={1}
+        />
+      </View> 
+
   }
 
   return (

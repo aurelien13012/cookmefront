@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
-import { Header, SearchBar, ListItem, Button, Text } from 'react-native-elements';
-import { useIsFocused} from "@react-navigation/native";
+import { View, ScrollView } from 'react-native';
+import { Header, SearchBar, ListItem, Button, Text, FAB } from 'react-native-elements';
+import { useIsFocused } from "@react-navigation/native";
 import { connect } from 'react-redux';
 import env from '../env.json';
 
@@ -59,7 +59,7 @@ function MyRecipes(props) {
             title={item.name}
             titleStyle={styles.itemMyRecipesTitle}
             buttonStyle={styles.itemMyRecipes}
-            onPress={() => {props.navigation.navigate('Recipe'); props.recipeId(item._id)}}
+            onPress={() => { props.navigation.navigate('Recipe'); props.recipeId(item._id) }}
             key={i}
           />
         )
@@ -70,7 +70,7 @@ function MyRecipes(props) {
 
 
   return (
-    <View>
+    <View style={{flex:1}}>
       {/* en-tête de page donnant le nom de la page */}
       <Header
         centerComponent={{
@@ -91,14 +91,19 @@ function MyRecipes(props) {
         value={searchMyRecipesList}
       />
 
-      {getMyOwnRecipes()}
+      <ScrollView>
+        {getMyOwnRecipes()}
 
-      <Button
+
+        </ScrollView>
+      <FAB
+        style = {{ elevation: 0 }}
+        placement = {'right'}
         title='+'//bouton pour le click pour ajouter une nouvelle recette
         titleStyle={styles.addRecipeTitle}
         buttonStyle={styles.addRecipe}
         onPress={() => props.navigation.navigate('New Recipe')}
-      />
+        />
 
     </View>
   );
