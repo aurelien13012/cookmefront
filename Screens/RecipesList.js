@@ -125,7 +125,7 @@ function RecipesList(props) {
   // ];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 , backgroundColor: 'white'}}>
       {/* en-tête de page donnant le nom de la page */}
       <Header
         centerComponent={{
