@@ -3,6 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { Header, Button, FAB} from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { connect } from 'react-redux';
+import { useIsFocused} from "@react-navigation/native";
 
 import styles from '../stylesheets/styles'
 import env from '../env.json';
@@ -13,6 +14,8 @@ function IngredientsList(props) {
   const [ingredientsList, setIngredientsList] = useState({});
   const [categories, setCategories] = useState([]);
 
+  const isFocused = useIsFocused();
+
   /////// VARIABLES REDUX
   // const token = env.token;
   const token = props.token;
@@ -20,52 +23,56 @@ function IngredientsList(props) {
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
-    // Charge tous les ingrédients de la bdd
-    const getAllIngredients = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/ingredients/allIngredients`);
-      const data = await rawData.json();
-      // Formate les données pour être facilement affichable
-      const formatedData = formatData(data);
-      return formatedData;
-    }
-
-    // Charge les ingrédients de l'utilisateur
-    const getMyFridge = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/ingredients/myFridge`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: `userTokenFromFront=${token}`
-        });
-      const data = await rawData.json();
-      return data;
-    }
-
-    // Fonction globale qui appelle les autres
-    const getData = async () => {
-      const formatedData = await getAllIngredients();
-      const myFridge = await getMyFridge();
-
-      // Update la propriété "selected" si l'utilisateur à l'ingrédient dans son fridge
-      myFridge.map((fridgeIngredient) => {
-        const ingredientsNames = formatedData[fridgeIngredient.category].map((ingredient) => {
-          return ingredient.name
-        })
-        const index = ingredientsNames.indexOf(fridgeIngredient.name);
-        formatedData[fridgeIngredient.category][index].selected = true;
-      })
-
-      // Update la variable d'état
-      setIngredientsList(formatedData);
-      // Crée un array de catégories pour l'affichage
-      createCategories(formatedData);
-    }
-
     // Appel de la fonction
     getData();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    // Appel de la fonction
+    getData();
+  }, [isFocused]);
 
   ////// FUNCTION UTILITAIRES
+  // Charge tous les ingrédients de la bdd
+  const getAllIngredients = async () => {
+    const rawData = await fetch(`http://${env.ip}:3000/ingredients/allIngredients`);
+    const data = await rawData.json();
+    // Formate les données pour être facilement affichable
+    const formatedData = formatData(data);
+    return formatedData;
+  }
+
+  // Charge les ingrédients de l'utilisateur
+  const getMyFridge = async () => {
+    const rawData = await fetch(`http://${env.ip}:3000/ingredients/myFridge`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `userTokenFromFront=${token}`
+      });
+    const data = await rawData.json();
+    return data;
+  }
+
+  // Fonction globale qui appelle les autres
+  const getData = async () => {
+    const formatedData = await getAllIngredients();
+    const myFridge = await getMyFridge();
+
+    // Update la propriété "selected" si l'utilisateur à l'ingrédient dans son fridge
+    myFridge.map((fridgeIngredient) => {
+      const ingredientsNames = formatedData[fridgeIngredient.category].map((ingredient) => {
+        return ingredient.name
+      })
+      const index = ingredientsNames.indexOf(fridgeIngredient.name);
+      formatedData[fridgeIngredient.category][index].selected = true;
+    })
+
+    // Update la variable d'état
+    setIngredientsList(formatedData);
+    // Crée un array de catégories pour l'affichage
+    createCategories(formatedData);
+  }
   // Formate les données pour être affichées facilement
   const formatData = (data) => {
     // Le format est le suivant: {category: [{name: 'poire', selected: false}]}
