@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
   accordionItem: {
     backgroundColor: "#fff",
     color: "#FF6F61",
-    margin: 5,
+    marginTop: 10,
+    marginRight: 10,
     borderRadius: 10,
     borderColor: "#FF6F61",
     borderStyle: "solid",
@@ -50,7 +51,8 @@ const styles = StyleSheet.create({
   },
   accordionItemSelected: {
     backgroundColor: "#FF6F61",
-    margin: 5,
+    marginTop: 10,
+    marginRight: 10,
     borderRadius: 10,
     borderColor: "#FF6F61",
     borderStyle: "solid",
@@ -64,16 +66,16 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "SourceSansPro_600SemiBold",
   },
-  body: {
-    fontFamily: "SourceSansPro_400Regular_Italic",
-  },
+  // body: {
+  //   fontFamily: "SourceSansPro_400Regular_Italic",
+  // },
   cardText: {
     color: "#FF6F61",
     fontFamily: "SourceSansPro_600SemiBold",
     textAlign: "center",
   },
   cardImage: {
-    height: 100,
+    height: 150,
     width: "80%",
     marginLeft: 30,
   },
@@ -90,6 +92,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
+    borderColor: "#FF6F61",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10
   },
   itemMyRecipes: {
     backgroundColor: "#fff",
@@ -206,11 +213,15 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   inputView: {
-    width: "80%",
-    height: "50%",
-    marginTop: 120,
+    // width: "80%",
+    // height: "50%",
+    // marginTop: 120,
+    flex: 1,
+    justifyContent: "center",
     marginLeft: 20,
-    alignItems: "center",
+    marginRight: 20,
+    // backgroundColor: ''
+    // alignItems: "center",
   },
   buttonSignIn: {
     borderRadius: 30,
