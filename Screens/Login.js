@@ -124,9 +124,11 @@ function Login(props) {
 
       {/* Bouton pour un user déja enregistré qui veut se connecter */}
       <Button 
-      titleStyle={styles.buttonRegularTitle}
-      buttonStyle={styles.buttonRegular}
-      title="Se connecter" onPress={toggleOverlaySignIn} style={styles.buttonSignIn}/>
+        titleStyle={styles.buttonRegularTitle}
+        buttonStyle={styles.buttonRegular}
+        title="Se connecter" 
+        onPress={toggleOverlaySignIn}
+      />
       {/* overlay pour remplir ces infos mail et mot de passe */}
       <Overlay isVisible={visibleSignIn} onBackdropPress={toggleOverlaySignIn} fullScreen={true}>
         <View style={styles.inputView}>
