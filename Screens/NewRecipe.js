@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
 import { Header, Button, Text, Input, Card } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -25,7 +25,8 @@ function NewRecipe(props) {
   const [isPicture, setIsPicture] = useState(false);
 
   useEffect (() =>{
-    props.picture.uri = ""
+    console.log('dans use effect recipe')
+    props.picture.uri = null
   },[])
 
 

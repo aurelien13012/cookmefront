@@ -189,7 +189,13 @@ function IngredientsList(props) {
       </ScrollView>
 
       <Button title = 'Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
-          onPress={()=> props.navigation.navigate('BottomNavigator', {screen : 'Recipes'})}
+          onPress={()=> props.navigation.navigate('BottomNavigator', 
+            {
+              screen : 'Recipes',
+              params : {
+                screen : 'Recipes'
+              }
+            })}
       />
     </View>
   );
