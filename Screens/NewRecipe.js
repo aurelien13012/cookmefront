@@ -26,7 +26,7 @@ function NewRecipe(props) {
 
   useEffect (() =>{
     console.log('dans use effect recipe')
-    props.picture.uri = null
+    props.resetPicture({});
   },[])
 
 
@@ -325,9 +325,13 @@ function mapDispatchToProps(dispatch) {
   return {
     recipeId: function (recipeId) {
       dispatch({ type: 'saveRecipeId', recipeId })
+    },
+    resetPicture: function (pictureData) {
+      dispatch({ type: 'addPicture', pictureData })
     }
   }
 }
+
 
 export default connect(
   mapStateToProps, mapDispatchToProps
