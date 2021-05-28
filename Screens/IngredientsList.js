@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Header, Button, FAB} from 'react-native-elements';
+import { Header, Button } from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { connect } from 'react-redux';
-import { useIsFocused} from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
-import styles from '../stylesheets/styles'
+import styles from '../stylesheets/styles';
 import env from '../env.json';
 
 function IngredientsList(props) {
@@ -14,6 +14,7 @@ function IngredientsList(props) {
   const [ingredientsList, setIngredientsList] = useState({});
   const [categories, setCategories] = useState([]);
 
+  /////// VARIABLE ISFOCUS
   const isFocused = useIsFocused();
 
   /////// VARIABLES REDUX
@@ -23,12 +24,12 @@ function IngredientsList(props) {
   //////// USE EFFECTS
   // Charger les données
   useEffect(() => {
-    // Appel de la fonction
+    // Appel de la fonction pour récupérer les données et affecter les variables d'état
     getData();
   }, []);
 
+  // Recharger les données lorsqu'on revient sur l'écran
   useEffect(() => {
-    // Appel de la fonction
     getData();
   }, [isFocused]);
 
@@ -78,16 +79,16 @@ function IngredientsList(props) {
     // Le format est le suivant: {category: [{name: 'poire', selected: false}]}
     // On crée un objet de base
     let formatedData = {};
-    // pour chaque category trouvée, on crée un tableau
 
-    data.map((ingredient, index) => {
+    // pour chaque categorie, on crée une clé dans l'objet (avec le nom de la catégorie) et on lui associe un tableau vide
+    data.forEach((ingredient) => {
       formatedData[ingredient.category] = [];
     });
 
     // console.log('formated data en cours', formatedData);
 
-    // On remplit le tableau de chaque catégorie avec un objet {name, selected} pour chaque ingrédient correspondant
-    data.map((ingredient, index) => {
+    // On remplit le tableau associé à chaque clé catégorie avec un objet {name, selected} pour chaque ingrédient correspondant à cette catégorie
+    data.forEach((ingredient) => {
       formatedData[ingredient.category].push({
         name: ingredient.name,
         selected: false
@@ -97,13 +98,16 @@ function IngredientsList(props) {
     // console.log('IngredientsFromDB', data);
     // console.log('données formatées', formatedData);
 
+    // On retourne nos données formatées
     return formatedData;
   }
 
-  // Fonction pour créer un array de catégories avec la propriété "expanded" pour gérer les accordéons
+  // Fonction pour créer un array d'abjets de catégories avec les clés "name" et "expanded" pour gérer les accordéons
   const createCategories = (data) => {
+    // On crée un tableau contenant les clés en string de l'objet data
     const rawCategories = Object.keys(data);
-    const formatedCategories = rawCategories.map((category, index) => {
+    // On crér un nouveau tableau contenant les objets
+    const formatedCategories = rawCategories.map((category) => {
       return {
         name: category,
         expanded: false
@@ -114,8 +118,11 @@ function IngredientsList(props) {
 
   // Plie ou déplie l'accordéon
   const toggleCategoryExpanded = (index) => {
+    // Copie de la variable d'état pour pouvoir la modifier
     const categoriesCopy = [...categories];
+    // Modification de la clé selected de l'ingrédient cliqué
     categoriesCopy[index].expanded = !categoriesCopy[index].expanded;
+    // Update de la variable d'état
     setCategories(categoriesCopy);
   }
 
@@ -124,9 +131,10 @@ function IngredientsList(props) {
     const ingredientsListCopy = { ...ingredientsList };
     ingredientsListCopy[category][index].selected = !ingredientsListCopy[category][index].selected;
 
+    // Si l'ingrédient est maintenant sélectionné, on l'ajout en bdd dans le frigo du user
     if (ingredientsListCopy[category][index].selected) {
       addIngredientToDB(ingredientsListCopy[category][index].name);
-    } else {
+    } else { // Sinon, on l'enlève en bdd
       removeIngredientFromDB(ingredientsListCopy[category][index].name);
     }
 
@@ -155,17 +163,12 @@ function IngredientsList(props) {
 
   //// RENDER
   return (
-    <View
-      style={{
-        flex: 1,
-        // backgroundColor: 'white'
-      }}
-    >
+    <View style={{flex: 1}}>
       
       <Header
         centerComponent={{
-        text: 'Mes ingrédients',
-        style: styles.headerTitle
+          text: 'Mes ingrédients',
+          style: styles.headerTitle
         }}
         containerStyle={styles.headerContainer}
       />
@@ -206,9 +209,6 @@ function IngredientsList(props) {
         buttonStyle={[styles.buttonRegular, {
           marginTop: 0, 
           marginBottom: 0,
-          // marginLeft: 5,
-          // marginRight: 15,
-          // alignSelf: 'flex-start',
           width: '93%'
         }]}
         title='Valider'//bouton pour le click qui renvoit vers la liste des recettes adaptées aux aliments
@@ -218,7 +218,8 @@ function IngredientsList(props) {
             params: {
               screen: 'Recipes'
             }
-          })}
+          }
+        )}
       />
     </View>
   );
@@ -227,6 +228,5 @@ function IngredientsList(props) {
 function mapStateToProps(state) {
   return { token: state.token }
 }
-
 
 export default connect(mapStateToProps, null)(IngredientsList)
