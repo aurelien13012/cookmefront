@@ -22,7 +22,7 @@ function Confirmation(props) {
 
   //fonction pour clique sur bouton confirmation page newrecipe
   const handleClick = async () => {
-    console.log('click soumettre recette okay');
+    // console.log('click soumettre recette okay');
     toggleOverlay();
     await props.propsSubmitMyRecipe();
     setIsLoaded(true);
