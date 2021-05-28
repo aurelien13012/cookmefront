@@ -25,7 +25,7 @@ function Login(props) {
   const [listErrorsSignin, setErrorsSignin] = useState([]);
   const [listErrorsSignup, setErrorsSignup] = useState([]);
 
-  //affiche lorsque l'overlay n'apparait pas ou le contraire
+  //affiche lorsque l'overlay n'apparait pas ou le contraire et vide tous les champs
   const toggleOverlaySignIn = () => {
     setSignInEmail("");
     setSignInPassword("");
@@ -46,7 +46,6 @@ function Login(props) {
   const validate = (email) => {
     const expression =
       /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-
     return expression.test(String(email).toLowerCase());
   };
 
@@ -54,6 +53,8 @@ function Login(props) {
   let handleSubmitSignup = async () => {
     // console.log("signUpEmail", signUpEmail);
     // console.log("validate", validate(signUpEmail));
+
+    //vérifie que l'émail est dans le bon format si c'est le cas lance la route sinon message d'erreur
     if (validate(signUpEmail) === false) {
       setErrorsSignup(["adresse email non valide"]);
     } else {
@@ -67,7 +68,6 @@ function Login(props) {
 
       if (body.result == true) {
         props.addToken(body.token);
-        // setUserExists(true)
         props.navigation.navigate("BottomNavigator", { screen: "Fridge" });
         toggleOverlaySignUp();
       } else {
