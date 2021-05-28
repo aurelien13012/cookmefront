@@ -23,8 +23,8 @@ function Recipe(props) {
   const [rate, setRate] = useState(0.5);
   const [isMyRecipe, setIsMyRecipe] = useState(false);
 
-  const isFocused = useIsFocused();
-  console.log('recipeisFocused', isFocused)
+  // const isFocused = useIsFocused();
+  // console.log('recipeisFocused', isFocused)
   ///// VARIABLES REDUX
   //const idRecipe = '60a7b2d33a185c39987353d2';
   const idRecipe = props.recipeId;
@@ -47,15 +47,19 @@ function Recipe(props) {
       // console.log('user', userFromDB);
       setRecipe(recipeFromDB);
       setNbPerson(recipeFromDB.numOfPersons);
+
       const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
       setIsFav(isFavFromDB);
+
       const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
       setIsMyRecipe(isMyRecipeFromDB);
+
       setRate(0.5);
       if (recipeFromDB.nbVote > 0) {
         let newRate = recipeFromDB.nbLike / recipeFromDB.nbVote
         setRate(newRate)
       }
+
       const isLikedFromDB = userFromDB.likedIds.find(id => id === recipeFromDB._id);
       const isDislikedFromDB = userFromDB.dislikedIds.find(id => id === recipeFromDB._id);
       setIsLiked(isLikedFromDB);
@@ -133,13 +137,17 @@ function Recipe(props) {
     );
     const data = await rawData.json();
     // console.log('data', data);
-    setRecipe(data);
+    
     if (data.nbVote === 0) {
       setRate(0.5);
     } else {
       setRate(data.nbLike / data.nbVote);
     }
- 
+
+    const recipeCopy = {...recipe};
+    recipeCopy.nbLike = data.nbLike;
+    recipeCopy.nbVote = data.nbVote;
+    setRecipe(recipeCopy);
     // return data
   }
 
@@ -495,9 +503,10 @@ function Recipe(props) {
           {recipe.steps.map((step, index) => {
             return (
               <List.Item
+                key={index}
                 title={`${index+1}. ${step}`}
                 titleStyle={styles.body}
-                key={index}
+                titleNumberOfLines={5}
               />
             )
           })}
