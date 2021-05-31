@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { Image, Icon, LinearProgress } from 'react-native-elements';
 import { List } from 'react-native-paper';
 import { connect } from 'react-redux';
@@ -13,12 +13,18 @@ function Recipe(props) {
   // Pour les acccordéons
   const [ingredientsExpanded, setIngredientsExpanded] = useState(false);
   const [stepsExpanded, setStepsExpanded] = useState(false);
+  // const [picsExpanded, setPicsExpanded] = useState(false); // Fonctionnalité non implantée
+
+  // Pour les données de la recette
   const [recipe, setRecipe] = useState({});
+  // Pour l'apparence des boutons like et favoris
   const [isFav, setIsFav] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
+  // Pour les données dynamiques (aurait pu être extrait directement de "recipe" mais c'est plus simple comme ça)
   const [nbPerson, setNbPerson] = useState(4);
   const [rate, setRate] = useState(0.5);
+  // Pour afficher les boutons modifier et supprimer si la recette a été proposé par le user actuel
   const [isMyRecipe, setIsMyRecipe] = useState(false);
 
   ///// VARIABLES REDUX
@@ -28,58 +34,59 @@ function Recipe(props) {
   const token = props.token;
 
   useEffect(() => {
-    // console.log('recipeuseeffectinit')
-    const getRecipeData = async () => {
-      const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
-        {
-          method: 'POST',
-          headers: {'Content-Type':'application/x-www-form-urlencoded'},
-          body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
-        }
-      );  
-      const data = await rawData.json();
-      const recipeFromDB = data.recipe;
-      const userFromDB = data.user;
-      // console.log('recipe', recipeFromDB);
-      // console.log('user', userFromDB);
-      setRecipe(recipeFromDB);
-      setNbPerson(recipeFromDB.numOfPersons);
-
-      const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
-      setIsFav(isFavFromDB);
-
-      const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
-      setIsMyRecipe(isMyRecipeFromDB);
-
-      setRate(0.5);
-      if (recipeFromDB.nbVote > 0) {
-        let newRate = recipeFromDB.nbLike / recipeFromDB.nbVote
-        setRate(newRate)
-      }
-
-      const isLikedFromDB = userFromDB.likedIds.find(id => id === recipeFromDB._id);
-      const isDislikedFromDB = userFromDB.dislikedIds.find(id => id === recipeFromDB._id);
-      setIsLiked(isLikedFromDB);
-      setIsDisliked(isDislikedFromDB);
-      return data;
-    }
     getRecipeData();
   }, [])
 
-  // Ecran de chargement en attendant que le UseEffect s'effectue
-  if (Object.keys(recipe).length === 0) {
-    // console.log('in safe path');
-    return (
-      <View style={{flex:1, justifyContent:'center', alignItems: 'center'}}>
-        <Text>
-          Chargement...
-        </Text>
-      </View>
-    )
+  //////// FONCTIONS UTILITAIRES
+  // Fonction pour récupérer les données et affecter les variables d'état
+  const getRecipeData = async () => {
+    // Récupération des données
+    const rawData = await fetch(`http://${env.ip}:3000/recipe/readRecipe`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `idFromFront=${idRecipe}&userTokenFromFront=${token}`
+      }
+    );
+    const data = await rawData.json();
+    // Création des variables pour une meilleur lisiblité
+    const recipeFromDB = data.recipe;
+    const userFromDB = data.user;
+    // console.log('recipe', recipeFromDB);
+    // console.log('user', userFromDB);
+
+    // Affectation des variables d'états
+    setRecipe(recipeFromDB);
+    setNbPerson(recipeFromDB.numOfPersons);
+
+    // Variable booléen pour savoir si la recette fait partie des favoris du user
+    const isFavFromDB = userFromDB.favoritesIds.find(id => id === recipeFromDB._id);
+    setIsFav(isFavFromDB);
+
+    // True si fait partie des recettes proposées par le user
+    const isMyRecipeFromDB = userFromDB.recipesIds.find(id => id === recipeFromDB._id);
+    setIsMyRecipe(isMyRecipeFromDB);
+    
+    // Affecte la note de la recette
+    if (recipeFromDB.nbVote > 0) { // S'il y a au moins une note
+      // La note est un chiffre entre 0 et 1, égale au rapport like/vote
+      let newRate = recipeFromDB.nbLike / recipeFromDB.nbVote
+      setRate(newRate)
+    } else { // Si pas de vote, valeur de 0.5 par défault
+      setRate(0.5);
+    }
+
+    // True si fait partie des recette likées/dislikées du user
+    const isLikedFromDB = userFromDB.likedIds.find(id => id === recipeFromDB._id);
+    const isDislikedFromDB = userFromDB.dislikedIds.find(id => id === recipeFromDB._id);
+    setIsLiked(isLikedFromDB);
+    setIsDisliked(isDislikedFromDB);
   }
 
+  // Appelée quand click sur le coeur 
   const handleFavoriteButton = async () => {
     if (isFav) { // Si isFav = true à ce moment, cela veut dire que le user le retire de ses favoris
+      // Enlève la recette de la liste des favoris
       await fetch(`http://${env.ip}:3000/recipe/removeFromFavorites`,
         {
           method: 'DELETE',
@@ -88,6 +95,7 @@ function Recipe(props) {
         }
       );
     } else {
+      // Ajoute la recette dans la liste des favoris
       await fetch(`http://${env.ip}:3000/recipe/addToFavorites`,
         {
           method: 'POST',
@@ -96,11 +104,52 @@ function Recipe(props) {
         }
       ); 
     }
-    console.log('click on favorite');
+    // Toggle l'apparence du coeur
     setIsFav(!isFav);
   }
 
+  // Appelée quand click sur like
+  const handleLikeButton = () => {
+    // si le bouton est liké, on retire le like
+    if (isLiked) {
+      // console.log('remove like');
+      // updateDB
+      updateVoteInDB('removeLike');
+      // Modifie l'apparence du bouton
+      setIsLiked(false);
+      // return -> on stoppe la fonction ici
+      return;
+    }
+    // Sinon, on ajoute le like
+    // console.log('add like');
+    updateVoteInDB('like');
+    setIsLiked(true);
+    // Si le user avait déjà clické sur dislike avant
+    if (isDisliked) {
+      // On modifie l'apparence du bouton dislike
+      setIsDisliked(false)
+    }
+  }
+
+  // Appelée quand click sur dislike (inverse de handleLikeButton)
+  const handleDislikeButton = () => {
+    if (isDisliked) {
+      console.log('already disliked');
+      updateVoteInDB('removeDislike');
+      setIsDisliked(!isDisliked);
+      return;
+    }
+    // console.log('click on dislike');
+    updateVoteInDB('dislike');
+    setIsDisliked(!isDisliked);
+    if (isLiked) {
+      setIsLiked(false);
+    }
+  }
+
+  // Fonction appelé dans les hendleLike/handleDislike
   const updateVoteInDB = async (type) => {
+    // Envoi de la requête
     const rawData = await fetch(`http://${env.ip}:3000/recipe/updateVote`,
       {
         method: 'PUT',
@@ -109,97 +158,79 @@ function Recipe(props) {
       }
     );
     const data = await rawData.json();
-    // console.log('data', data);
     
+    // Update de la variable d'état du vote
     if (data.nbVote === 0) {
       setRate(0.5);
     } else {
       setRate(data.nbLike / data.nbVote);
     }
 
+    // Copie de la variable d'état pour la modifier
     const recipeCopy = {...recipe};
+    // Modifie uniquement les votes et les likes (pas nécessaire je pense)
     recipeCopy.nbLike = data.nbLike;
     recipeCopy.nbVote = data.nbVote;
+    // Ré-affecte la variable d'état
     setRecipe(recipeCopy);
-    // return data
   }
 
-  const handleLikeButton = () => {
-    if (isLiked) {
-      console.log('remove like');
-      updateVoteInDB('removeLike');
-      setIsLiked(!isLiked);
-      return;
-    }
-    console.log('click on like');
-    updateVoteInDB('like');
-    setIsLiked(!isLiked);
-    if (isDisliked) {
-      setIsDisliked(false)
-    }
-  }
-
-  const handleDislikeButton = () => {
-    if (isDisliked) {
-      console.log('already disliked');
-      updateVoteInDB('removeDislike');
-      setIsDisliked(!isDisliked);
-      return;
-    }
-    console.log('click on dislike');
-    updateVoteInDB('dislike');
-    setIsDisliked(!isDisliked);
-    if (isLiked) {
-      setIsLiked(false);
-    }
-  }
-
+  // Quand clique sur +
   const addPerson = () => {
-    console.log('click on +');
-
+    // console.log('click on +');
+    // Copie pour modifier
     let recipeCopy = {...recipe};
-    recipeCopy.ingredients.map((ingredient) => {
+    // On boucle sur les ingrédients de la recette et on modifie la quantité
+    recipeCopy.ingredients.forEach((ingredient) => {
       ingredient.quantity = ingredient.quantity / nbPerson * (nbPerson + 1)
     })
+    // On ré-affecte les variables d'états
     setRecipe(recipeCopy);
     setNbPerson(nbPerson+1);
   }
 
+  // Quand clique sur - (inverse de addPerson())
   const removePerson = () => {
-    console.log('click on -');
+    // console.log('click on -');
     if (nbPerson <= 1) {
       setNbPerson(1);
       return;
     }
     let recipeCopy = {...recipe};
-    recipeCopy.ingredients.map((ingredient) => {
+    recipeCopy.ingredients.forEach((ingredient) => {
       ingredient.quantity = ingredient.quantity / nbPerson * (nbPerson - 1)
     })
     setRecipe(recipeCopy);
     setNbPerson(nbPerson-1);
   }
 
+  // Appelée quand click sur "pencil" (modifier)
   const handleModifyRecipe = () => {
-    console.log('click on modify');
+    // console.log('click on modify');
   }
 
+  // Appelée quand click sur "trash" (supprimer)
   const handleDeleteRecipe = async (id) => {
-    console.log('click on delete');
+    // console.log('click on delete');
+    // Requete backend
     await fetch (`http://${env.ip}:3000/deleteMyRecipe/${id}`,
       {
         method: 'DELETE'
       }
     );
-    console.log('after fetch');
+    // Redirection
     props.navigation.navigate('BottomNavigator', {
       screen: 'My Recipes',
       params: {
         screen: 'My Recipes'
-      }});
-    console.log('after navigate');
+    }});
   }
 
-  let iconsForOwner = [];
+  ////// VARIABLES POUR AFFICHAGE
+  // Pour les icones modifier/supprimer (par défault vide)
+  let iconsForOwner;
+  
+  // Si la recette a été proposée par le user, on affecte les icones
   if (isMyRecipe) {
     iconsForOwner =
       <View
@@ -211,7 +242,6 @@ function Recipe(props) {
           flexDirection: 'row',
           justifyContent: 'flex-end',
           alignItems: 'center',
-          // backgroundColor: 'green',
           paddingRight: 20
         }}
       >
@@ -229,9 +259,6 @@ function Recipe(props) {
             borderColor: '#FF6F61',
             borderWidth: 2,
             marginRight: 10,
-            // position: 'absolute',
-            // top: 50,
-            // left: 280,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
@@ -252,9 +279,6 @@ function Recipe(props) {
             borderStyle: 'solid',
             borderColor: '#FF6F61',
             borderWidth: 2,
-            // position: 'absolute',
-            // top: 50,
-            // left: 330,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
@@ -263,7 +287,17 @@ function Recipe(props) {
           key={1}
         />
       </View> 
+  }
 
+  // Ecran de chargement en attendant que le UseEffect s'effectue
+  if (Object.keys(recipe).length === 0) { // Object.kets(object) renvoie un array avec les clés de l'objet
+    return (
+      <View style={{flex:1, justifyContent:'center', alignItems: 'center'}}>
+        <Text>
+          Chargement...
+        </Text>
+      </View>
+    )
   }
 
   return (
@@ -320,7 +354,7 @@ function Recipe(props) {
             />
           </View>
           
-          {/* 2eme ligne */}
+          {/* 2eme ligne avec le temps de la recette (supprimée)*/}
           {/* <View
             style={{
               display: 'flex',
@@ -389,7 +423,6 @@ function Recipe(props) {
                 marginLeft: 10,
                 marginTop: 2
               }}
-
             />
             <Icon
               onPress={() => handleDislikeButton()}
@@ -399,7 +432,6 @@ function Recipe(props) {
                 marginLeft: 10,
                 marginTop: 2
               }}
-
             />
           </View>
         </View>
@@ -485,7 +517,7 @@ function Recipe(props) {
           })}
         </List.Accordion>  
 
-        {/* Liste des photos */}
+        {/* Liste des photos (supprimée) */}
         {/* <List.Accordion
           title="Images"
           expanded={picsExpanded}
@@ -528,13 +560,12 @@ function Recipe(props) {
         </List.Accordion>   */}
 
       </View>
-    
-
 
     </ScrollView>
   );
 }
 
+// Récupération des variables REDUX
 function mapStateToProps(state) {
   return { 
     token: state.token,
