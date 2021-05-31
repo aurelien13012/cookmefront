@@ -8,7 +8,7 @@ import styles from "../stylesheets/styles";
 import env from "../env.json";
 
 function Account(props) {
-  const [infoUser, setInfoUser] = useState([]);
+  const [infoUser, setInfoUser] = useState({});
 
   useEffect(() => {
     //chargement de toutes les données du user
@@ -87,7 +87,7 @@ function Account(props) {
         </View>
       </View>
 
-      {/* Bouton pour se déloguer */}
+      {/* Bouton pour se déloguer il envoi directement sur la page login */}
       <Button
         titleStyle={styles.buttonRegularTitle}
         buttonStyle={styles.buttonRegular}

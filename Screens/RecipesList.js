@@ -13,7 +13,7 @@ function RecipesList(props) {
 
   const [recipesList, setRecipesList] = useState([]);
 
-  const [suggestedList, setSuggestedList] = useState([]);
+  const [suggestedList, setSuggestedList] = useState({});
 
   // fonction de la barre de recherche
   const updateSearch = (search) => {
@@ -50,7 +50,7 @@ function RecipesList(props) {
       console.log("afterFetch");
       const data = await rawData.json();
       // console.log("data", data);
-      setSuggestedList(data);
+      setSuggestedList(data.suggestedRecipe);
     };
 
     console.log("result", suggestedList);
@@ -71,7 +71,7 @@ function RecipesList(props) {
     };
 
     const getSuggestedRecipe = async () => {
-      console.log("fetch");
+      // console.log("fetch");
       const rawData = await fetch(
         `http://${env.ip}:3000/recipesList/recipeBook`,
         {
@@ -80,9 +80,9 @@ function RecipesList(props) {
           body: `userTokenFromFront=${props.token}`,
         }
       );
-      console.log("afterFetch");
+      // console.log("afterFetch");
       const data = await rawData.json();
-      console.log("data2", data);
+      // console.log("data2", data);
       setSuggestedList(data.suggestedRecipe);
     };
 
@@ -90,6 +90,7 @@ function RecipesList(props) {
     getSuggestedRecipe();
   }, [isFocused]);
 
+  //fonction pour la recette suggérée soit un résultat soit aucun, reporté dans le return final
   const displaySuggestedRecipe = () => {
     //affichage si aucune recette ne coorespond au ingredient du user
     if (suggestedList === null) {
@@ -97,30 +98,39 @@ function RecipesList(props) {
         <Card>
           <Card.Title style={styles.body}>Recette suggérée :</Card.Title>
           <Card.Divider />
-              <Text style={styles.cardText}>Aucune recette trouvée !</Text>
-              <Text style={styles.cardText}>Ajouter des aliments dans l'onglet Ingrédients !</Text>
-              <Card.Image
-                style={[styles.cardImage, {resizeMode: 'contain'}]}
-                source={require("../assets/frigo.jpg")}
-                onPress={() => {props.navigation.navigate("Fridge")}}
-              ></Card.Image>
+          <Text style={styles.cardText}>Aucune recette trouvée !</Text>
+          <Text style={styles.cardText}>
+            Ajouter des aliments dans l'onglet Ingrédients !
+          </Text>
+          <Card.Image
+            style={[styles.cardImage, { resizeMode: "contain" }]}
+            source={require("../assets/frigo.jpg")}
+            onPress={() => {
+              props.navigation.navigate("Fridge");
+            }}
+          ></Card.Image>
         </Card>
       );
     }
-    //affichage si un recette correspond aux ingredients données
+    //affichage si une recette correspond aux ingredients données
     return (
       <Card>
-          <Card.Title style={styles.body}>Recette suggérée :</Card.Title>
-          <Card.Divider />
-              <Text style={[styles.cardText, {marginBottom: 10, fontSize: 20}]}>{suggestedList.name}</Text>
-              <Card.Image
-                style={styles.cardImage}
-                source={{uri : suggestedList.pictures}}
-                onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(suggestedList._id)}}
-              ></Card.Image>
-        </Card>
-    )
-  }
+        <Card.Title style={styles.body}>Recette suggérée :</Card.Title>
+        <Card.Divider />
+        <Text style={[styles.cardText, { marginBottom: 10, fontSize: 20 }]}>
+          {suggestedList.name}
+        </Text>
+        <Card.Image
+          style={styles.cardImage}
+          source={{ uri: suggestedList.pictures }}
+          onPress={() => {
+            props.navigation.navigate("Recipe");
+            props.recipeId(suggestedList._id);
+          }}
+        ></Card.Image>
+      </Card>
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -152,29 +162,22 @@ function RecipesList(props) {
           <Card.Title style={styles.body}>Toutes les recettes :</Card.Title>
           <Card.Divider />
           {recipesList.map((item, index) => (
-            <View
-              key={index} 
-            >
+            <View key={index}>
               <TouchableOpacity
-                style={styles.cardLigne} 
-                onPress={() => {props.navigation.navigate("Recipe"); props.recipeId(item._id)}}
+                style={styles.cardLigne}
+                onPress={() => {
+                  props.navigation.navigate("Recipe");
+                  props.recipeId(item._id);
+                }}
               >
-                <Text 
-                  style={styles.cardName}
-                >               
-                  {item.name}
-                </Text>
+                <Text style={styles.cardName}>{item.name}</Text>
                 <Image
                   style={styles.image}
                   resizeMode="cover"
                   source={{ uri: item.pictures }}
                 />
-                
               </TouchableOpacity>
             </View>
-            
-            
-            
           ))}
         </Card>
       </ScrollView>
